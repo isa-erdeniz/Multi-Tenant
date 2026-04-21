@@ -35,19 +35,25 @@ def _process_makeup_session_impl(session_id: int) -> None:
 
         start = time.time()
 
+        from ai_engine.face_analyzer import get_face_context_for_prompt
+        face_context = get_face_context_for_prompt(session.input_image)
+
         look_name = session.applied_look.name if session.applied_look else "Belirtilmemiş"
         look_category = session.applied_look.category if session.applied_look else "Belirtilmemiş"
+
+        prompt = (
+            f"Kullanıcı bu makyaj görünümünü denemek istiyor:\n"
+            f"Look: {look_name}\n"
+            f"Kategori: {look_category}\n"
+        )
+        if face_context:
+            prompt += f"\nKullanıcı yüz bilgileri:\n{face_context}\n"
+        prompt += "\nBu look bu kullanıcıya uygun mu? Kısa değerlendirme yap."
 
         client = MEHLRClient()
         result = client.analyze(
             project=settings.MEHLR_PROJECT,
-            prompt=(
-                f"Kullanıcı bu makyaj görünümünü sanal olarak denemek istiyor:\n"
-                f"Look: {look_name}\n"
-                f"Kategori: {look_category}\n\n"
-                f"Bu makyaj kullanıcıya yakışır mı? "
-                f"Renk uyumu ve öneriler hakkında kısa bir değerlendirme yap."
-            ),
+            prompt=prompt,
             context={
                 "task": "virtual_makeup_feedback",
                 "session_id": session_id,

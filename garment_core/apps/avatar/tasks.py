@@ -32,19 +32,21 @@ def _process_avatar_session_impl(session_id: int) -> None:
 
         start = time.time()
 
+        from ai_engine.face_analyzer import get_face_context_for_prompt
+        face_context = get_face_context_for_prompt(session.input_selfie)
+
         style_name = session.style.name if session.style else "Gerçekçi"
         style_category = session.style.category if session.style else "Genel"
-        prompt_template = (session.style.prompt_template or "") if session.style else ""
 
-        if prompt_template:
-            prompt = prompt_template
-        else:
-            prompt = (
-                f"Kullanıcı selfie'sinden dijital avatar oluşturmak istiyor:\n"
-                f"Stil: {style_name} ({style_category})\n\n"
-                f"Bu avatar stili için uygun renk paleti, yüz özellikleri ve stil önerileri hakkında "
-                f"kısa bir değerlendirme yap."
-            )
+        prompt = (
+            f"Kullanıcı için AI avatar oluşturulacak.\n"
+            f"Stil: {style_name} ({style_category})\n"
+        )
+        if session.style and session.style.prompt_template:
+            prompt += f"Stil şablonu: {session.style.prompt_template}\n"
+        if face_context:
+            prompt += f"\nKullanıcı yüz bilgileri:\n{face_context}\n"
+        prompt += "\nBu stile uygun bir avatar açıklaması üret."
 
         client = MEHLRClient()
         result = client.analyze(
