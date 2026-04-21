@@ -1,0 +1,111 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Analitik Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-white">Kullanım Analitiği</h1>
+    <p class="text-gray-400 mt-1">Son {{ period_days }} günlük özet</p>
+  </div>
+
+  {# --- Özet Kartları --- #}
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    {% for row in events_by_type %}
+    <div class="bg-gray-800 rounded-xl p-4 border border-gray-700">
+      <p class="text-gray-400 text-xs uppercase tracking-wide mb-1">{{ row.event_type }}</p>
+      <p class="text-3xl font-bold text-white">{{ row.count }}</p>
+    </div>
+    {% empty %}
+    <div class="col-span-4 text-gray-500 text-sm">Son {{ period_days }} günde kayıt yok.</div>
+    {% endfor %}
+  </div>
+
+  {# --- Olay Türü Dağılımı Tablosu --- #}
+  {% if events_by_type %}
+  <div class="bg-gray-800 rounded-xl border border-gray-700 mb-8 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-700">
+      <h2 class="text-lg font-semibold text-white">Olay Türü Dağılımı</h2>
+    </div>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-gray-400 text-left border-b border-gray-700">
+          <th class="px-6 py-3">Olay Türü</th>
+          <th class="px-6 py-3 text-right">Toplam</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in events_by_type %}
+        <tr class="border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors">
+          <td class="px-6 py-3 text-white font-medium">
+            <span class="inline-flex items-center gap-2">
+              {% if row.event_type == "tryon" %}🧥
+              {% elif row.event_type == "makeup" %}💄
+              {% elif row.event_type == "hair" %}✂️
+              {% elif row.event_type == "avatar" %}🧑
+              {% elif row.event_type == "editor" %}🖼️
+              {% elif row.event_type == "stylist" %}👗
+              {% elif row.event_type == "wardrobe_add" %}👝
+              {% else %}📊{% endif %}
+              {{ row.event_type }}
+            </span>
+          </td>
+          <td class="px-6 py-3 text-right text-white font-semibold">{{ row.count }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {# --- Son 50 Olay --- #}
+  <div class="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-700">
+      <h2 class="text-lg font-semibold text-white">Son Olaylar</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-gray-400 text-left border-b border-gray-700">
+            <th class="px-6 py-3">Zaman</th>
+            <th class="px-6 py-3">Kullanıcı</th>
+            <th class="px-6 py-3">Olay Türü</th>
+            <th class="px-6 py-3">Oturum ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in recent_events %}
+          <tr class="border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors">
+            <td class="px-6 py-3 text-gray-300 whitespace-nowrap">
+              {{ event.created_at|date:"d M Y H:i" }}
+            </td>
+            <td class="px-6 py-3 text-white">
+              {% if event.user %}
+                {{ event.user.email|truncatechars:30 }}
+              {% else %}
+                <span class="text-gray-500">—</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-3">
+              <span class="inline-block bg-gray-700 text-gray-200 text-xs px-2 py-1 rounded-full">
+                {{ event.event_type }}
+              </span>
+            </td>
+            <td class="px-6 py-3 text-gray-400 font-mono text-xs">
+              {{ event.session_id|default:"—" }}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+              Henüz kayıt yok.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

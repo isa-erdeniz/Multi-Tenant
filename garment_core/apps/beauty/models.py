@@ -47,10 +47,17 @@ class MakeupProduct(TimeStampedModel):
 
 class MakeupSession(TimeStampedModel):
     """Kullanıcı makyaj deneme oturumu."""
+    STATUS_CHOICES = [
+        ("pending", "Bekliyor"),
+        ("processing", "İşleniyor"),
+        ("completed", "Tamamlandı"),
+        ("failed", "Hata"),
+    ]
+
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="makeup_sessions"
     )
-    input_image = models.ImageField(upload_to="beauty/input/%Y/%m/")
+    input_image = models.ImageField(upload_to="beauty/input/%Y/%m/", null=True, blank=True)
     applied_look = models.ForeignKey(
         MakeupLook, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -58,6 +65,8 @@ class MakeupSession(TimeStampedModel):
         upload_to="beauty/output/%Y/%m/", null=True, blank=True
     )
     products_json = models.JSONField(default=list)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    output_data = models.JSONField(default=dict)
 
     class Meta:
         verbose_name = "Makyaj Oturumu"

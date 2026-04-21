@@ -41,10 +41,17 @@ class HairColor(TimeStampedModel):
 
 class HairSession(TimeStampedModel):
     """Saç değiştirme oturumu."""
+    STATUS_CHOICES = [
+        ("pending", "Bekliyor"),
+        ("processing", "İşleniyor"),
+        ("completed", "Tamamlandı"),
+        ("failed", "Hata"),
+    ]
+
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="hair_sessions"
     )
-    input_image = models.ImageField(upload_to="hair/input/%Y/%m/")
+    input_image = models.ImageField(upload_to="hair/input/%Y/%m/", null=True, blank=True)
     applied_style = models.ForeignKey(
         HairStyle, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -54,6 +61,8 @@ class HairSession(TimeStampedModel):
     result_image = models.ImageField(
         upload_to="hair/output/%Y/%m/", null=True, blank=True
     )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    output_data = models.JSONField(default=dict)
 
     class Meta:
         verbose_name = "Saç Oturumu"
