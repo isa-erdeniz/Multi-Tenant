@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Style For Human{% endblock %}
+{% block content %}
+  <h1 style="color:{{ tenant.primary_color|default:'#c9a84c' }};">Style For Human</h1>
+  <p style="color:#9ca3af;">Tam gardırop yönetimi, kombin geçmişi ve favori parçalar. Veriler merkezde (Dressifye) birleşik profilde senkronize edilir.</p>
+  <p><a href="/mehlr/" style="color:{{ tenant.primary_color|default:'#c9a84c' }};">MEHLR →</a></p>
+{% endblock %}

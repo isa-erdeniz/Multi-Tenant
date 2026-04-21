@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Style Core{% endblock %}
+{% block content %}
+  <h1 style="color:{{ tenant.primary_color|default:'#4a90d9' }};">Style Core</h1>
+  <p style="color:#9ca3af;">Temel gardırop parçaları, günlük giyim ve renk tercihleri. Özet veri merkez tenant’a (Dressifye) aktarılır.</p>
+  <p><a href="/mehlr/" style="color:{{ tenant.primary_color|default:'#4a90d9' }};">MEHLR →</a></p>
+{% endblock %}
