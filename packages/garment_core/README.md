@@ -51,6 +51,35 @@ docker compose up --build
 
 - `VERSION` dosyası ile semver tutun; yayın öncesi `package.json` içindeki `version` ile eşleştirin.
 
+## Django garment_core ↔ packages/garment_core Köprüsü
+
+### Bu servis → Django
+
+Bu TypeScript servisi, her garment ingest'inde `ERDENIZ_SECURITY_INGEST_URL`'e POST yapar.
+Django tarafında `erdeniz_security` paketi bu isteği `/erdeniz-security/ingest/` endpoint'inde karşılar.
+
+`.env` içinde:
+```
+ERDENIZ_SECURITY_INGEST_URL=https://<garment-core-django>.railway.app/erdeniz-security/ingest/
+ERDENIZ_SECURITY_MODE=audit   # off | audit | enforce
+GARMENT_CORE_WEBHOOK_SECRET=<Django-ile-paylasilan-secret>
+```
+
+### Django → Bu servis (push)
+
+Django `wardrobe/tasks.py` içinde MEHLR analizi tamamlandıktan sonra `GarmentCoreTSClient`
+aracılığıyla bu servisteki `/webhook/mehlr` endpoint'ine HMAC-imzalı POST gönderir.
+
+**Django Railway Variables panelinde şu değerlerin set edilmesi gerekir:**
+```
+GARMENT_CORE_TS_ENABLED=True
+GARMENT_CORE_TS_URL=https://<garment-core-ts>.railway.app
+GARMENT_CORE_WEBHOOK_SECRET=<TS ile paylaşılan secret — .env içindeki ile aynı>
+GARMENT_CORE_TS_API_KEY=<bu servisten üretilen platform API key>
+```
+
+API key üretmek için: `npm run db:create-api-key`
+
 ## Mevcut kodunuzu taşıma
 
 Giriş noktası `src/index.ts` (derleme çıktısı `dist/index.js`). Drizzle şeması `src/db/schema/` altındadır.

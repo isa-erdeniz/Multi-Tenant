@@ -323,6 +323,12 @@ MEHLR_URL = env.str("MEHLR_URL", default="")
 MEHLR_API_KEY = env.str("MEHLR_API_KEY", default="")
 MEHLR_PROJECT = env.str("MEHLR_PROJECT", default="garment_core")
 
+# packages/garment_core TypeScript API
+GARMENT_CORE_TS_ENABLED = env.bool("GARMENT_CORE_TS_ENABLED", default=False)
+GARMENT_CORE_TS_URL = env.str("GARMENT_CORE_TS_URL", default="")
+GARMENT_CORE_WEBHOOK_SECRET = env.str("GARMENT_CORE_WEBHOOK_SECRET", default="")
+GARMENT_CORE_TS_API_KEY = env.str("GARMENT_CORE_TS_API_KEY", default="")
+
 # django-cryptography: isteğe bağlı anahtar (boşsa SECRET_KEY türetilir)
 CRYPTOGRAPHY_KEY = env.str("CRYPTOGRAPHY_KEY", default="")
 

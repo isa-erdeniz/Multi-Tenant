@@ -40,6 +40,15 @@ urlpatterns = [
 if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:
     urlpatterns.insert(0, path("__debug__/", include("debug_toolbar.urls")))
 
+# erdeniz_security paketi kuruluysa ingest endpoint'ini aç
+if "erdeniz_security" in settings.INSTALLED_APPS:
+    urlpatterns += [
+        path(
+            "erdeniz-security/",
+            include("erdeniz_security.urls", namespace="erdeniz_security"),
+        ),
+    ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

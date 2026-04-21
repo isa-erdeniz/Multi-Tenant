@@ -86,6 +86,50 @@ def _run_ai_analysis(garment):
     garment.save(update_fields=["ai_analysis", "ai_analyzed_at"])
     logger.info(f"Garment {garment.id} analiz edildi.")
 
+    _push_to_garment_core_ts(garment)
+
+
+def _push_to_garment_core_ts(garment) -> None:
+    """Garment analizi tamamlandıktan sonra TS evrensel havuza push et."""
+    try:
+        from apps.core.clients.garment_core_ts_client import GarmentCoreTSClient
+
+        tenant = getattr(garment.user, "tenant", None)
+        tenant_slug = tenant.slug if tenant else "default"
+
+        garment_data = {
+            "id": garment.pk,
+            "name": garment.name,
+            "color": garment.color or "",
+            "brand": garment.brand or "",
+            "category": garment.category.name if garment.category else "",
+            "category_slug": garment.category.slug if garment.category else "",
+            "season": garment.get_season_display() if hasattr(garment, "get_season_display") else "",
+            "tags": garment.tags if garment.tags else [],
+            "ai_style": garment.ai_style or "",
+            "ai_occasion": garment.ai_occasion or [],
+            "image_url": garment.image.url if garment.image else "",
+        }
+
+        client = GarmentCoreTSClient()
+        result = client.push_garment(
+            tenant_slug=tenant_slug,
+            garment_data=garment_data,
+            external_ref=f"django-{garment.pk}",
+        )
+
+        if result.get("success"):
+            logger.info("Garment %s TS API'ye başarıyla push edildi", garment.pk)
+        else:
+            logger.warning(
+                "Garment %s TS push başarısız: %s", garment.pk, result.get("error")
+            )
+    except Exception as e:
+        # TS push başarısız olsa bile ana task'ı durdurma
+        logger.warning(
+            "TS push beklenmeyen hata (garment %s): %s", getattr(garment, "pk", "?"), e
+        )
+
 
 try:
     from celery import shared_task
