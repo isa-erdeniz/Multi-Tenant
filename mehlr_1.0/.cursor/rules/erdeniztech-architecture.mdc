@@ -1,0 +1,49 @@
+---
+description: ErdenizTech Lead Architect — 4 domain veri birleştirme (Hair Infinity, Style Core, Style For Human, Dressifye merkez), güvenlik, AI.
+alwaysApply: true
+---
+
+# ErdenizTech Multi-Tenant & AI Security Hub
+
+Tek **Railway** instance; dört domain aynı backend’e bağlanır, veri **Dressifye (Garment-Core / master)** altında birleşir.
+
+## Mimari özet
+
+```
+hairinfinitye.com  →  saç / bakım verisi (tenant slug: `hairinfinity`)
+stylecoree.com      →  temel stil / günlük kombin
+styleforhuman.com   →  tam gardırop / kombin geçmişi
+        └──────────────┴────────────────┘
+                    sync (Celery: sync_data_to_master)
+                           │
+              dressifye.com (master) — birleşik profil, AI önerileri
+```
+
+- **Ortak kullanıcı:** Tüm sitelerde aynı `user_external_id` (Dressifye tarafında `DressifyeUser.external_id`).
+- **Model:** `Tenant.data_type` ∈ `hair` | `style_basic` | `fashion` | `master`; kaynak tenant’lar `sync_to_tenant` → merkez `dressifye`.
+- **İz kaydı:** `CrossTenantData` (kaynak, hedef, payload, `is_processed`).
+
+## 1. Tenant ve güvenlik
+
+- **Tenant:** `TenantMiddleware` → `HTTP_HOST` → `request.tenant` + thread-local (`get_current_tenant`).
+- **Güvenlik:** `ErdenizSecurityMiddleware` dışta; tam WAF için opsiyonel `erdeniz_security`.
+- **AI:** `ai_prompt_prefix` / `ai_temperature` ile marka tonu; master’da birleşik bağlam `DressifyeUser.profile_data["cross_tenant_sources"]`.
+
+## 2. Kodlama
+
+- **Şablonlar:** `templates/tenants/{slug}/` (dressifye, **hairinfinity**, stylecoree, styleforhuman), sonra kök `templates/`.
+- **Ayarlar:** `config/settings.py`, `decouple`/env; yeni domainler `ALLOWED_HOSTS` / `CSRF_TRUSTED_ORIGINS` ile.
+- **Tenant modelleri:** `apps/tenant/models.py` (`Tenant`, `CrossTenantData`).
+
+## 3. Varsayılan tenant
+
+Eşleşme veya kayıt yoksa **`dressifye`** (slug) varsayılan kabul edilir.
+
+## 4. Glob’lar
+
+| Alan | Glob |
+|------|------|
+| AI motoru | `mehlr/**/*.py` |
+| Tenant / sync | `apps/tenant/**/*.py` |
+| Güvenlik | `apps/tenant/middleware.py` |
+| Global | `config/*.py` |

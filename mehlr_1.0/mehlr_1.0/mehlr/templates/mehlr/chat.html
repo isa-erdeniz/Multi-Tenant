@@ -1,0 +1,116 @@
+{% extends "mehlr/base.html" %}
+{% load static %}
+
+{% block title %}Sohbet{% endblock %}
+
+{% block content %}
+<div class="flex flex-col h-[calc(100vh-12rem)]">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-bold text-mehlr-primary">MEHLR Sohbet</h1>
+    {% include "mehlr/components/project_selector.html" %}
+    <a href="{% url 'mehlr:dashboard' %}" class="text-sm text-gray-500 hover:text-mehlr-accent">Dashboard</a>
+  </div>
+
+  <div id="mehlr-messages" class="flex-1 overflow-y-auto space-y-4 mb-4 p-4 bg-white rounded-xl border border-gray-100 min-h-[200px]">
+    {% for message in conversation.messages.all %}
+      {% include "mehlr/components/chat_message.html" with message=message rendered_content=message.content %}
+    {% empty %}
+      <p class="text-gray-500 text-center py-8">Mesaj yok. Aşağıdan sorunuzu yazın.</p>
+    {% endfor %}
+  </div>
+
+  <div id="mehlr-loading" class="hidden mb-4 p-3 bg-mehlr-primary/10 rounded-lg text-mehlr-primary">
+    Düşünüyorum...
+  </div>
+
+  <form id="mehlr-chat-form" class="flex gap-2">
+    {% csrf_token %}
+    <input type="hidden" name="conversation_id" id="mehlr-conv-id" value="{{ conversation.id|default:'' }}">
+    <input type="hidden" name="project_slug" id="mehlr-project-slug">
+    <textarea name="content" id="mehlr-input" rows="2" placeholder="Sorunuzu yazın..." maxlength="4000" class="flex-1 rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-mehlr-accent focus:border-mehlr-accent resize-none"></textarea>
+    <button type="submit" class="px-6 py-3 bg-mehlr-primary text-white rounded-lg hover:bg-mehlr-accent transition font-medium">Gönder</button>
+  </form>
+</div>
+
+<script>
+(function() {
+  const form = document.getElementById('mehlr-chat-form');
+  const input = document.getElementById('mehlr-input');
+  const convId = document.getElementById('mehlr-conv-id');
+  const projectSlug = document.getElementById('mehlr-project-slug');
+  const projectSelect = document.getElementById('mehlr-project-select');
+  const messagesEl = document.getElementById('mehlr-messages');
+  const loadingEl = document.getElementById('mehlr-loading');
+  const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  if (projectSelect) {
+    projectSelect.addEventListener('change', function() { projectSlug.value = this.value; });
+    projectSlug.value = projectSelect.value || '';
+  }
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const content = input.value.trim();
+    if (!content) return;
+
+    const userBubble = document.createElement('div');
+    userBubble.className = 'rounded-lg p-4 bg-mehlr-accent/20 ml-8 text-right';
+    userBubble.innerHTML = '<p class="text-xs text-gray-500 mb-1">Siz — az önce</p><p>' + content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>';
+    messagesEl.appendChild(userBubble);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    input.value = '';
+    loadingEl.classList.remove('hidden');
+
+    const body = JSON.stringify({
+      content: content,
+      conversation_id: convId.value || null,
+      project_slug: projectSlug.value || null,
+      csrfmiddlewaretoken: csrf
+    });
+
+    try {
+      const res = await fetch('{% url "mehlr:api_chat_send" %}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+        body: body
+      });
+      const data = await res.json();
+      loadingEl.classList.add('hidden');
+
+      if (data.status === 'success') {
+        if (!convId.value) convId.value = data.conversation_id;
+        if (data.content_html) {
+          const wrap = document.createElement('div');
+          wrap.className = 'rounded-lg p-4 bg-mehlr-primary/10 mr-8 text-left';
+          wrap.innerHTML = data.content_html;
+          messagesEl.appendChild(wrap);
+        } else {
+          const wrap = document.createElement('div');
+          wrap.className = 'rounded-lg p-4 bg-mehlr-primary/10 mr-8 text-left';
+          wrap.innerHTML = '<p class="text-xs text-gray-500 mb-1">MEHLR — az önce</p><div class="prose prose-sm max-w-none">' + data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</div>';
+          messagesEl.appendChild(wrap);
+        }
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        if (data.conversation_id && !window.location.pathname.includes('/chat/')) {
+          window.history.replaceState({}, '', '/mehlr/chat/' + data.conversation_id + '/');
+        }
+      } else {
+        const err = document.createElement('div');
+        err.className = 'rounded-lg p-4 bg-red-50 text-red-700 mr-8';
+        err.textContent = data.message || 'Bir hata oluştu.';
+        messagesEl.appendChild(err);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+    } catch (err) {
+      loadingEl.classList.add('hidden');
+      const errEl = document.createElement('div');
+      errEl.className = 'rounded-lg p-4 bg-red-50 text-red-700 mr-8';
+      errEl.textContent = 'Bağlantı hatası: ' + err.message;
+      messagesEl.appendChild(errEl);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+  });
+})();
+</script>
+{% endblock %}

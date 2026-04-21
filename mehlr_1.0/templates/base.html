@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ tenant.name|default:"ErdenizTech" }}{% endblock %}</title>
+  {% if tenant and tenant.primary_color %}
+  <meta name="theme-color" content="{{ tenant.primary_color }}">
+  {% endif %}
+  {% block extra_head %}{% endblock %}
+</head>
+<body style="margin:0;font-family:system-ui,sans-serif;color:#e8e6e3;background-color:#0a0a0a;background-image:url('{% static "mehlr/img/Gemini_Generated_Image_n8044sn8044sn804.png" %}');background-size:cover;background-position:center;background-attachment:fixed;background-repeat:no-repeat;">
+  {% block navbar %}{% include "components/navbar.html" %}{% endblock %}
+  <main style="max-width:960px;margin:0 auto;padding:2rem;">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

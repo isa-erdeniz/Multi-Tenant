@@ -1,0 +1,69 @@
+services:
+  gateway:
+    image: caddy:2-alpine
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./gateway/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./dressifye:/srv/dressifye:ro
+      - ./styleforhuman:/srv/styleforhuman:ro
+      - ./stylecoree:/srv/stylecoree:ro
+      - ./hairinfinitye:/srv/hairinfinitye:ro
+    depends_on:
+      - garment-core
+      - garment-core-django
+      - mehlr
+    restart: unless-stopped
+
+  # ortak domain / küçük API (node/express)
+  garment-core:
+    build: ./packages/garment_core
+    environment:
+      PORT: "8080"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  # garment_core ana backend (Django)
+  garment-core-django:
+    build: ./garment_core
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./garment_core:/app
+    env_file:
+      - ./garment_core/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - garment-db
+      - garment-redis
+
+  garment-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: garment_core
+      POSTGRES_PASSWORD: garment_core
+      POSTGRES_DB: garment_core
+    ports:
+      - "5432:5432"
+    volumes:
+      - garment_postgres_data:/var/lib/postgresql/data
+
+  garment-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  mehlr:
+    build: ./mehlr_1.0
+    environment:
+      PORT: "8001"
+    env_file:
+      - ./mehlr_1.0/.env
+    ports:
+      - "8001:8001"
+    command: sh -c "python manage.py migrate --no-input && gunicorn config.wsgi:application --workers 2 --threads 4 --bind 0.0.0.0:8001 --log-level info"
+    restart: unless-stopped
+
+volumes:
+  garment_postgres_data:

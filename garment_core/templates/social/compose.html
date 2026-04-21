@@ -1,0 +1,28 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Paylaş — Garment Core{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto">
+  <h1 class="text-2xl font-bold text-white mb-2">Kombin paylaş</h1>
+  {% if not outfits %}
+  <p class="text-gray-400 text-sm mb-4">Önce gardıropta kombin oluşturmalısınız.</p>
+  <a href="{% url 'wardrobe:index' %}" class="text-brand-gold hover:underline">Gardıroba git</a>
+  {% else %}
+  <form method="post" action="{% url 'social:post_create' %}" class="space-y-4">
+    {% csrf_token %}
+    <div>
+      <label class="block text-sm text-gray-400 mb-1">Kombin</label>
+      <select name="outfit_id" required class="w-full rounded-lg bg-gray-800 border border-gray-600 text-white p-2">
+        {% for o in outfits %}
+        <option value="{{ o.pk }}">{{ o.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm text-gray-400 mb-1">Açıklama</label>
+      <textarea name="caption" rows="4" class="w-full rounded-lg bg-gray-800 border border-gray-600 text-white p-2"></textarea>
+    </div>
+    <button type="submit" class="w-full py-3 bg-brand-gold text-gray-900 rounded-xl font-semibold">Paylaş</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

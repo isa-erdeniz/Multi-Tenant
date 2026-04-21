@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Ödeme — Garment Core{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-6 py-12">
+
+  <div class="text-center mb-8">
+    <h1 class="text-2xl font-serif italic mb-2" style="color: #f5f0e8;">
+      Güvenli Ödeme
+    </h1>
+    <p class="text-sm" style="color: #555;">
+      {{ plan.name }} — {{ payment_currency_symbol }}{{ amount }}
+      / {% if period == 'yearly' %}yıl{% else %}ay{% endif %}
+    </p>
+  </div>
+
+  <div class="rounded-2xl overflow-hidden"
+       style="background: #141414; border: 1px solid #2a2a2a;">
+    {{ form_content|safe }}
+  </div>
+
+  <p class="text-center text-xs mt-6" style="color: #333;">
+    🔒 256-bit SSL şifreli · iyzico güvencesiyle
+  </p>
+
+</div>
+{% endblock %}

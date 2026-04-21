@@ -1,0 +1,34 @@
+{% extends "mehlr/base.html" %}
+
+{% block title %}Raporlar{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold text-mehlr-primary mb-6">Analiz Raporları</h1>
+
+{% if reports %}
+  <ul class="space-y-3">
+    {% for report in reports %}
+      <li class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:border-mehlr-accent transition">
+        <a href="{% url 'mehlr:report_detail' report.pk %}" class="block">
+          <span class="font-medium text-mehlr-text">{{ report.title }}</span>
+          <span class="text-gray-500 text-sm block mt-1">{{ report.project.name }} · {{ report.get_report_type_display }} · {{ report.created_at|date:"d.m.Y H:i" }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if page_obj.has_other_pages %}
+    <nav class="mt-6 flex justify-center gap-2">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">Önceki</a>
+      {% endif %}
+      <span class="px-4 py-2 text-gray-600">Sayfa {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">Sonraki</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+{% else %}
+  <p class="text-gray-500">Henüz rapor yok. Sohbetten "rapor üret" diyerek veya API ile rapor oluşturabilirsiniz.</p>
+{% endif %}
+{% endblock %}

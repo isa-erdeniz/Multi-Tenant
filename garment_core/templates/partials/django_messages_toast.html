@@ -1,0 +1,20 @@
+{# Django messages framework → garmentCoreToast (toast.js yüklendikten sonra çalışır) #}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var t = window.garmentCoreToast;
+    if (!t) return;
+    {% for message in messages %}
+    {% if 'error' in message.tags %}
+    t.error("{{ message|escapejs }}");
+    {% elif 'success' in message.tags %}
+    t.success("{{ message|escapejs }}");
+    {% elif 'warning' in message.tags %}
+    t.warning("{{ message|escapejs }}");
+    {% elif 'debug' in message.tags %}
+    t.info("{{ message|escapejs }}");
+    {% else %}
+    t.info("{{ message|escapejs }}");
+    {% endif %}
+    {% endfor %}
+});
+</script>

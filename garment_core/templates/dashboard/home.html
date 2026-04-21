@@ -1,0 +1,283 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Ana Sayfa - Garment Core{% endblock %}
+
+{% block content %}
+{% if trial_expired %}
+<div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+    <span class="text-2xl shrink-0" aria-hidden="true">⏰</span>
+    <div class="min-w-0 flex-1">
+      <h3 class="font-semibold text-amber-400">7 günlük denemeniz doldu</h3>
+      <p class="text-gray-400 text-sm">AI kombinlerine ve tüm özelliklere devam etmek için planınızı yükseltin.</p>
+    </div>
+    <a href="{% url 'payments:upgrade' %}" class="shrink-0 inline-flex justify-center bg-brand-gold hover:bg-amber-400 text-gray-900 px-4 py-2 rounded-lg font-medium transition-colors">
+      Plan Yükselt
+    </a>
+  </div>
+</div>
+{% endif %}
+
+<!-- Plan ve aylık kota -->
+<section class="mb-8 rounded-2xl border border-gray-700 bg-gray-800/60 p-5">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+            <h2 class="text-lg font-semibold text-white">Abonelik ve kota</h2>
+            <p class="text-sm text-gray-400 mt-1">
+                {% if sub and sub.plan %}
+                Aktif plan: <span class="text-brand-gold font-medium">{{ sub.plan.name }}</span>
+                {% if sub.status == 'trial' and trial_days_left > 0 %}
+                <span class="text-gray-500">·</span> <span class="text-amber-400/90">Deneme: {{ trial_days_left }} gün</span>
+                {% endif %}
+                {% elif effective_plan %}
+                Plan: <span class="text-gray-200">{{ effective_plan.name }}</span>
+                {% else %}
+                <span class="text-gray-500">Plan atanmadı</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <div>
+                <span class="text-gray-500">Sanal deneme</span>
+                <span class="text-white ml-1 font-medium">{% if quota_remaining.tryon is None %}Sınırsız{% else %}{{ quota_remaining.tryon }} kalan{% endif %}</span>
+            </div>
+            <div>
+                <span class="text-gray-500">Editör</span>
+                <span class="text-white ml-1 font-medium">{% if quota_remaining.editor is None %}Sınırsız{% else %}{{ quota_remaining.editor }} kalan{% endif %}</span>
+            </div>
+            <div>
+                <span class="text-gray-500">Stil danışmanlığı</span>
+                <span class="text-white ml-1 font-medium">{% if quota_remaining.style_session is None %}Sınırsız{% else %}{{ quota_remaining.style_session }} kalan{% endif %}</span>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-3 shrink-0">
+            <a href="{% url 'subscriptions:plan_list' %}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:border-brand-gold hover:text-brand-gold text-sm transition-colors">Planlar</a>
+            <a href="{% url 'subscriptions:detail' %}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-brand-gold/15 text-brand-gold border border-brand-gold/30 hover:bg-brand-gold/25 text-sm transition-colors">Abonelik detayı</a>
+        </div>
+    </div>
+</section>
+
+<!-- Hero -->
+<section class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 mb-8 border border-gray-700">
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-white mb-2">
+                Hoş geldin, {{ welcome_name }}! 👋
+            </h1>
+            <p class="text-gray-400">
+                Gardırobunuzda <span class="text-brand-gold font-semibold">{{ garment_count }}</span> kıyafet var.
+                Bugün ne giymek istersiniz?
+            </p>
+        </div>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 bg-gray-800/50 px-4 py-3 rounded-xl border border-gray-700 w-full lg:w-auto">
+            <div class="flex items-center gap-3">
+                <div class="text-3xl" aria-hidden="true">{{ weather_emoji }}</div>
+                <div>
+                    <p class="text-sm text-gray-400">{{ weather_city }}</p>
+                    <p class="text-xl font-bold text-white">
+                        {% if weather_temp is not None %}{{ weather_temp }}°C{% else %}—{% endif %}
+                    </p>
+                </div>
+            </div>
+            <div class="hidden sm:block w-px h-10 bg-gray-700 shrink-0"></div>
+            <div class="sm:max-w-xs">
+                <p class="text-sm text-gray-300">{{ weather_tip }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Hızlı aksiyonlar -->
+<section class="grid md:grid-cols-3 gap-4 mb-8">
+    <a href="{% url 'wardrobe:add' %}" class="group bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-brand-gold rounded-xl p-6 transition-all">
+        <div class="w-12 h-12 bg-brand-gold/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <span class="text-2xl" aria-hidden="true">➕</span>
+        </div>
+        <h3 class="text-lg font-semibold text-white mb-1">Kıyafet Ekle</h3>
+        <p class="text-sm text-gray-400">Fotoğraf yükle, AI analiz etsin</p>
+    </a>
+    <a href="{% url 'styling:new' %}" class="group bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-brand-gold rounded-xl p-6 transition-all">
+        <div class="w-12 h-12 bg-brand-gold/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <span class="text-2xl" aria-hidden="true">✨</span>
+        </div>
+        <h3 class="text-lg font-semibold text-white mb-1">Kombin Oluştur</h3>
+        <p class="text-sm text-gray-400">AI size özel kombinler üretsin</p>
+    </a>
+    <a href="{% url 'tryon:index' %}" class="group bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-brand-gold rounded-xl p-6 transition-all">
+        <div class="w-12 h-12 bg-brand-gold/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <span class="text-2xl" aria-hidden="true">👁️</span>
+        </div>
+        <h3 class="text-lg font-semibold text-white mb-1">Sanal Deneme</h3>
+        <p class="text-sm text-gray-400">Üzerinizde görün, karar verin</p>
+    </a>
+</section>
+
+<!-- Son eklenenler -->
+<section class="mb-8">
+    <div class="flex justify-between items-center mb-4 gap-2">
+        <h2 class="text-xl font-bold text-white">Son Eklenenler</h2>
+        <a href="{% url 'wardrobe:index' %}" class="text-brand-gold hover:text-amber-400 text-sm font-medium shrink-0">
+            Tümünü Gör →
+        </a>
+    </div>
+    {% if recent_garments %}
+    <div class="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4">
+        {% for garment in recent_garments %}
+        <a href="{% url 'wardrobe:edit' garment.pk %}" class="group relative bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700 hover:border-gray-600 transition-all block">
+            <div class="aspect-square bg-gray-700 rounded-lg flex items-center justify-center text-2xl sm:text-3xl mb-2 overflow-hidden group-hover:scale-[1.02] transition-transform">
+                {% if garment.image %}
+                <img src="{{ garment.image.url }}" alt="" class="w-full h-full object-cover">
+                {% else %}
+                <span aria-hidden="true">{{ garment.category.icon|default:"👗" }}</span>
+                {% endif %}
+            </div>
+            <p class="text-xs text-gray-400 text-center truncate">{{ garment.category.name|default:garment.name }}</p>
+            <div class="absolute inset-0 bg-gray-900/80 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none group-hover:pointer-events-auto">
+                <span class="text-xs text-brand-gold font-medium">Düzenle</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="rounded-xl border border-gray-700 bg-gray-800/50 p-8 text-center">
+        <p class="text-gray-400 text-sm mb-3">Henüz kıyafet eklemediniz.</p>
+        <a href="{% url 'wardrobe:add' %}" class="text-brand-gold text-sm font-medium hover:text-amber-400">İlk parçanızı ekleyin →</a>
+    </div>
+    {% endif %}
+</section>
+
+<!-- AI önerileri -->
+<section class="mb-8">
+    <div class="flex justify-between items-center mb-4 gap-2">
+        <h2 class="text-xl font-bold text-white">AI Önerileri</h2>
+        <button type="button" id="dashboard-refresh-suggestions" class="text-brand-gold hover:text-amber-400 text-sm font-medium inline-flex items-center gap-1">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Yenile
+        </button>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4">
+        {% for card in ai_cards %}
+        {% if card.type == "session" %}
+        {% with s=card.session %}
+        <div class="bg-gray-800 rounded-xl p-4 border border-gray-700">
+            <div class="flex gap-3 mb-3 flex-wrap">
+                {% for g in s.garments_suggested.all|slice:":3" %}
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gray-700 rounded-lg flex items-center justify-center text-xl sm:text-2xl overflow-hidden shrink-0">
+                    {% if g.image %}
+                    <img src="{{ g.image.url }}" alt="" class="w-full h-full object-cover">
+                    {% else %}
+                    <span aria-hidden="true">{{ g.category.icon|default:"👗" }}</span>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <div class="w-14 h-14 bg-gray-700 rounded-lg flex items-center justify-center text-2xl">✨</div>
+                {% endfor %}
+            </div>
+            <h3 class="font-semibold text-white mb-1 line-clamp-2">{{ s.get_title }}</h3>
+            <p class="text-sm text-gray-400 mb-3 line-clamp-2">{{ s.user_prompt|truncatechars:120 }}</p>
+            <div class="flex gap-2">
+                <a href="{% url 'styling:result' s.pk %}" class="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-medium text-center transition-colors">
+                    🤍 Beğen
+                </a>
+                <a href="{% url 'tryon:index' %}" class="flex-1 py-2 bg-brand-gold hover:bg-amber-400 text-gray-900 rounded-lg text-sm font-medium text-center transition-colors">
+                    👁️ Dene
+                </a>
+            </div>
+        </div>
+        {% endwith %}
+        {% else %}
+        <div class="bg-gray-800 rounded-xl p-4 border border-gray-700">
+            <div class="flex gap-3 mb-3">
+                {% for icon in card.icons %}
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gray-700 rounded-lg flex items-center justify-center text-xl sm:text-2xl">{{ icon }}</div>
+                {% endfor %}
+            </div>
+            <h3 class="font-semibold text-white mb-1">{{ card.title }}</h3>
+            <p class="text-sm text-gray-400 mb-3">{{ card.description }}</p>
+            <div class="flex gap-2">
+                <a href="{% url 'styling:new' %}" class="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-medium text-center transition-colors">
+                    🤍 Beğen
+                </a>
+                <a href="{% url 'tryon:index' %}" class="flex-1 py-2 bg-brand-gold hover:bg-amber-400 text-gray-900 rounded-lg text-sm font-medium text-center transition-colors">
+                    👁️ Dene
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Kullanım -->
+<section class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+        <h3 class="font-semibold text-white">Kullanım İstatistikleri</h3>
+        {% if sub and sub.plan %}
+        <span class="text-xs bg-brand-gold/10 text-brand-gold px-2 py-1 rounded">{{ sub.plan.name }}</span>
+        {% elif is_trial %}
+        <span class="text-xs bg-brand-gold/10 text-brand-gold px-2 py-1 rounded">Deneme</span>
+        {% else %}
+        <span class="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">Plan</span>
+        {% endif %}
+    </div>
+    <div class="space-y-4">
+        <div>
+            <div class="flex justify-between text-sm mb-1 gap-2">
+                <span class="text-gray-400">Kıyafet limiti</span>
+                <span class="text-white font-medium">
+                    {{ garment_count }}{% if garment_limit %}/{{ garment_limit }}{% else %}<span class="text-gray-400 font-normal"> / sınırsız</span>{% endif %}
+                </span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-2">
+                {% if garment_limit %}
+                <div class="bg-brand-gold h-2 rounded-full transition-all" style="width: {{ garment_usage_pct }}%"></div>
+                {% else %}
+                <div class="bg-emerald-500 h-2 rounded-full w-full"></div>
+                {% endif %}
+            </div>
+        </div>
+        <div>
+            <div class="flex justify-between text-sm mb-1 gap-2">
+                <span class="text-gray-400">Sanal deneme</span>
+                <span class="text-white font-medium">
+                    {% if tryon_limit %}{{ tryon_used }}/{{ tryon_limit }} bu ay{% else %}{{ tryon_used }} <span class="text-gray-400 font-normal">/ sınırsız</span>{% endif %}
+                </span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-2">
+                {% if tryon_limit %}
+                <div class="bg-emerald-500 h-2 rounded-full transition-all" style="width: {{ tryon_usage_pct }}%"></div>
+                {% else %}
+                <div class="bg-emerald-500 h-2 rounded-full w-full"></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if show_upgrade_cta and not trial_expired %}
+    <p class="text-xs text-gray-500 mt-4">
+        Limitiniz dolmak üzere.
+        <a href="{% url 'payments:upgrade' %}" class="text-brand-gold hover:underline">Yükselt →</a>
+    </p>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    var btn = document.getElementById('dashboard-refresh-suggestions');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+        var svg = btn.querySelector('svg');
+        if (svg) svg.classList.add('animate-spin');
+        window.setTimeout(function () {
+            if (svg) svg.classList.remove('animate-spin');
+            window.location.reload();
+        }, 600);
+    });
+})();
+</script>
+{% endblock %}

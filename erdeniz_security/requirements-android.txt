@@ -1,0 +1,5 @@
+# Termux / Android için minimal bağımlılıklar
+cryptography>=42.0.0
+argon2-cffi>=23.1.0
+django>=4.2
+python-decouple>=3.8

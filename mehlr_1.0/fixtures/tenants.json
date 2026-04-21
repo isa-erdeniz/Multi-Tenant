@@ -1,0 +1,82 @@
+[
+  {
+    "model": "tenant.tenant",
+    "pk": 1,
+    "fields": {
+      "name": "Dressifye",
+      "domain": "dressifye.com",
+      "slug": "dressifye",
+      "data_type": "master",
+      "sync_to_tenant": null,
+      "logo_url": "",
+      "primary_color": "#c9a84c",
+      "favicon": "",
+      "features": {"tryon": true, "ai_stylist": true, "editor": true},
+      "ai_prompt_prefix": "[Dressifye] Tüm marka verilerini birleştirerek gardırop, saç profili ve stil öner. ",
+      "ai_temperature": 0.7,
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tenant.tenant",
+    "pk": 2,
+    "fields": {
+      "name": "Hair Infinity",
+      "domain": "hairinfinitye.com",
+      "slug": "hairinfinity",
+      "data_type": "hair",
+      "sync_to_tenant": 1,
+      "logo_url": "",
+      "primary_color": "#a78bfa",
+      "favicon": "",
+      "features": {"hair_analysis": true, "product_recommendation": true},
+      "ai_prompt_prefix": "Sen bir saç ve yüz analiz uzmanısın. Kullanıcının saç rengi ve yüz şekline göre en uygun aksesuarları ve kıyafet yaka tiplerini belirle.",
+      "ai_temperature": 0.68,
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tenant.tenant",
+    "pk": 3,
+    "fields": {
+      "name": "Style Core",
+      "domain": "stylecoree.com",
+      "slug": "stylecoree",
+      "data_type": "style_basic",
+      "sync_to_tenant": 1,
+      "logo_url": "",
+      "primary_color": "#4a90d9",
+      "favicon": "",
+      "features": {"basic_style": true},
+      "ai_prompt_prefix": "[StyleCoree] Temel gardırop ve günlük kombin odaklı öner. ",
+      "ai_temperature": 0.7,
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tenant.tenant",
+    "pk": 4,
+    "fields": {
+      "name": "Style For Human",
+      "domain": "styleforhuman.com",
+      "slug": "styleforhuman",
+      "data_type": "fashion",
+      "sync_to_tenant": 1,
+      "logo_url": "",
+      "primary_color": "#8b7355",
+      "favicon": "",
+      "features": {"full_wardrobe": true},
+      "ai_prompt_prefix": "[StyleForHuman] Tam gardırop ve kombin geçmişi bağlamında öner. ",
+      "ai_temperature": 0.65,
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+]

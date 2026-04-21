@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load dict_extras %}
+{% block title %}Kombin Önerisi — Garment Core{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 py-10"
+     x-data="styleResult({{ session.pk }}, '{{ session.status|escapejs }}')"
+     x-init="init()">
+
+  <div style="display:none">{% csrf_token %}</div>
+
+  <div class="flex items-center justify-between mb-8">
+    <a href="{% url 'styling:index' %}"
+       class="text-sm hover:underline" style="color: #555;">
+      ← Stil Önerileri
+    </a>
+
+    {% if session.status == 'completed' %}
+    <button @click="toggleSave()"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm transition-all"
+            :style="saved
+              ? 'background: rgba(201,168,76,0.15); color: #c9a84c; border: 1px solid #c9a84c;'
+              : 'background: #1e1e1e; color: #888; border: 1px solid #2a2a2a;'">
+      <span x-text="saved ? '★ Kaydedildi' : '☆ Kaydet'"></span>
+    </button>
+    {% endif %}
+  </div>
+
+  <!-- İstek özeti -->
+  <div class="p-4 rounded-xl mb-8"
+       style="background: #141414; border: 1px solid #2a2a2a;">
+    <p class="text-xs mb-1" style="color: #555;">İsteğiniz</p>
+    <p class="text-sm" style="color: #f5f0e8;">{{ session.user_prompt }}</p>
+    {% if session.context %}
+    <div class="flex gap-3 mt-2 flex-wrap">
+      {% if session.context.occasion %}
+      <span class="text-xs px-2 py-0.5 rounded-full"
+            style="background: #1e1e1e; color: #666;">
+        {{ session.context.occasion }}
+      </span>
+      {% endif %}
+      {% if session.context.weather %}
+      <span class="text-xs px-2 py-0.5 rounded-full"
+            style="background: #1e1e1e; color: #666;">
+        {{ session.context.weather }}
+      </span>
+      {% endif %}
+      {% if session.context.mood %}
+      <span class="text-xs px-2 py-0.5 rounded-full"
+            style="background: #1e1e1e; color: #666;">
+        {{ session.context.mood }}
+      </span>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- İşleniyor -->
+  <div x-show="status !== 'completed' && status !== 'failed'"
+       class="text-center py-20">
+    <div class="w-12 h-12 rounded-full border-2 border-t-transparent mx-auto mb-6 animate-spin"
+         style="border-color: #c9a84c; border-top-color: transparent;"></div>
+    <p class="text-sm mb-3" style="color: #f5f0e8;">AI kombininizi hazırlıyor...</p>
+    <div class="w-48 mx-auto rounded-full h-1" style="background: #1e1e1e;">
+      <div class="h-1 rounded-full transition-all duration-500"
+           style="background: #c9a84c;"
+           :style="'width:' + progress + '%'"></div>
+    </div>
+  </div>
+
+  <!-- Hata -->
+  <div x-show="status === 'failed'" class="text-center py-20">
+    <p class="text-4xl mb-4">😕</p>
+    <p class="text-sm mb-4" style="color: #ff6b6b;">
+      Bir hata oluştu. Tekrar deneyin.
+    </p>
+    <a href="{% url 'styling:new' %}"
+       class="inline-block px-6 py-3 rounded-xl text-sm font-medium"
+       style="background: #c9a84c; color: #0a0a0a;">
+      Tekrar Dene
+    </a>
+  </div>
+
+  <!-- Tamamlandı -->
+  {% if session.status == 'completed' and session.suggested_outfit %}
+  <div x-show="status === 'completed'">
+
+    {% if session.suggested_outfit.style_notes %}
+    <div class="p-5 rounded-2xl mb-6"
+         style="background: rgba(201,168,76,0.05); border: 1px solid rgba(201,168,76,0.15);">
+      <p class="text-xs mb-2" style="color: #c9a84c;">✦ AI Değerlendirmesi</p>
+      <p class="text-sm leading-relaxed" style="color: #f5f0e8;">
+        {{ session.suggested_outfit.style_notes }}
+      </p>
+    </div>
+    {% endif %}
+
+    {% if session.suggested_outfit.outfit %}
+    <h2 class="text-lg font-medium mb-4" style="color: #f5f0e8;">
+      Önerilen Kombin
+    </h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+      {% for item in session.suggested_outfit.outfit %}
+      {% with garment=garment_map|get_item:item.garment_id %}
+      {% if garment %}
+      <a href="{% url 'wardrobe:detail' garment.pk %}"
+         class="rounded-2xl overflow-hidden transition-all"
+         style="background: #141414; border: 1px solid #2a2a2a;"
+         onmouseover="this.style.borderColor='#3a3a3a'"
+         onmouseout="this.style.borderColor='#2a2a2a'">
+        <div class="aspect-square" style="background: #1e1e1e;">
+          {% if garment.image %}
+          <img src="{{ garment.image.url }}" alt="{{ garment.name }}"
+               class="w-full h-full object-cover">
+          {% else %}
+          <div class="w-full h-full flex items-center justify-center text-3xl">
+            {{ garment.category.icon|default:"👗" }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="p-3">
+          <p class="text-xs mb-0.5" style="color: #c9a84c;">
+            {{ item.role|title }}
+          </p>
+          <p class="text-sm truncate" style="color: #f5f0e8;">
+            {{ garment.name }}
+          </p>
+          {% if item.note %}
+          <p class="text-xs mt-1" style="color: #555;">{{ item.note }}</p>
+          {% endif %}
+        </div>
+      </a>
+      {% endif %}
+      {% endwith %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="flex gap-3">
+      <a href="{% url 'styling:new' %}"
+         class="flex-1 py-3 rounded-xl text-sm text-center transition-all"
+         style="background: #1e1e1e; color: #f5f0e8; border: 1px solid #2a2a2a;">
+        Yeni Öneri Al
+      </a>
+    </div>
+
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+function styleResult(sessionId, initialStatus) {
+  return {
+    status:   initialStatus,
+    progress: initialStatus === 'completed' ? 100 : 20,
+    saved:    {{ session.is_saved|yesno:"true,false" }},
+    pollTimer: null,
+
+    init() {
+      if (this.status !== 'completed' && this.status !== 'failed') {
+        this.startPolling();
+      }
+    },
+
+    startPolling() {
+      this.pollTimer = setInterval(async () => {
+        try {
+          const res  = await fetch('/stil/' + sessionId + '/durum/');
+          const data = await res.json();
+          this.status   = data.status;
+          this.progress = data.progress;
+
+          if (data.status === 'completed' || data.status === 'failed') {
+            clearInterval(this.pollTimer);
+            if (data.status === 'completed') {
+              window.location.reload();
+            }
+          }
+        } catch (e) {
+          console.error('Polling hatası:', e);
+        }
+      }, 2000);
+    },
+
+    async toggleSave() {
+      const token = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+      const res = await fetch('/stil/' + sessionId + '/kaydet/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': token,
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await res.json();
+      this.saved = data.is_saved;
+    },
+  };
+}
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+<a href="{% url 'styling:result' session.pk %}"
+   class="flex items-center gap-4 p-4 rounded-xl transition-all block"
+   style="background: #141414; border: 1px solid #2a2a2a;"
+   onmouseover="this.style.borderColor='#3a3a3a'"
+   onmouseout="this.style.borderColor='#2a2a2a'">
+
+  <!-- Kıyafet küçük resimleri -->
+  <div class="flex -space-x-3">
+    {% for garment in session.garments_suggested.all|slice:":3" %}
+    <div class="w-10 h-10 rounded-full overflow-hidden border-2 flex-shrink-0"
+         style="border-color: #0a0a0a; background: #1e1e1e;">
+      {% if garment.image %}
+      <img src="{{ garment.image.url }}" class="w-full h-full object-cover">
+      {% else %}
+      <div class="w-full h-full flex items-center justify-center text-sm">
+        {{ garment.category.icon|default:"👗" }}
+      </div>
+      {% endif %}
+    </div>
+    {% empty %}
+    <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+         style="background: #1e1e1e;">
+      <span class="text-lg">✨</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Bilgi -->
+  <div class="flex-1 min-w-0">
+    <p class="text-sm font-medium truncate" style="color: #f5f0e8;">
+      {{ session.get_title }}
+    </p>
+    <p class="text-xs mt-0.5" style="color: #555;">
+      {{ session.created_at|date:"d M Y" }}
+    </p>
+  </div>
+
+  <!-- Durum -->
+  <div>
+    {% if session.status == 'completed' %}
+      {% if session.is_saved %}
+      <span class="text-xs" style="color: #c9a84c;">★</span>
+      {% endif %}
+    {% elif session.status == 'processing' %}
+    <span class="text-xs" style="color: #888;">İşleniyor...</span>
+    {% elif session.status == 'failed' %}
+    <span class="text-xs" style="color: #ff6b6b;">Başarısız</span>
+    {% endif %}
+  </div>
+
+</a>

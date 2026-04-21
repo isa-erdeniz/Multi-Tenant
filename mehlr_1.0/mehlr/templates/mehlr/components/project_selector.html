@@ -1,0 +1,21 @@
+{% load mehlr_tags %}
+<div class="project-selector flex gap-2 items-center flex-wrap mb-2">
+  <label class="text-sm font-medium text-gray-600">Proje:</label>
+  <select name="project_slug" id="mehlr-project-select" class="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:ring-2 focus:ring-mehlr-accent focus:border-mehlr-accent">
+    <option value="">Genel</option>
+    {% for item in projects_with_meta %}
+      <option value="{{ item.project.slug }}" {% if item.is_active %}selected{% endif %}>
+        {{ item.display_name }}{% if item.domain %} ({{ item.domain }}){% endif %}
+      </option>
+    {% empty %}
+      {% for project in projects %}
+        <option value="{{ project.slug }}" {% if conversation and conversation.project_id == project.id %}selected{% endif %}>{{ project.name }}</option>
+      {% endfor %}
+    {% endfor %}
+  </select>
+  {% if not projects_with_meta and not projects %}
+    <p class="text-gray-400 text-sm">Aktif proje yok.</p>
+  {% endif %}
+</div>
+
+<div id="project-meta-panel" class="text-xs text-gray-500 mt-1"></div>

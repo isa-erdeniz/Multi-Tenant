@@ -1,0 +1,41 @@
+{% load mehlr_tags %}
+<div class="message rounded-lg p-4 {% if message.role == 'user' %}bg-mehlr-accent/20 ml-8 text-right{% else %}bg-mehlr-primary/10 mr-8 text-left{% endif %}">
+  <p class="text-xs text-gray-500 mb-1">
+    {% if message.role == 'user' %}Siz{% else %}MEHLR{% endif %} — {{ message.created_at|timesince }} önce
+  </p>
+  <div class="message__content prose prose-sm max-w-none {% if message.role == 'user' %}text-right{% endif %}">
+    {% if message.role == 'assistant' %}
+      {% if rendered_content %}{{ rendered_content|safe }}{% else %}{{ message.content|markdown_to_html|safe }}{% endif %}
+    {% else %}
+      {{ message.content }}
+    {% endif %}
+  </div>
+
+  {% if message.role == 'assistant' %}
+    <div class="message__meta text-xs text-gray-400 mt-1 flex gap-3 flex-wrap">
+      {% if tokens_used %}
+        <span>🔢 {{ tokens_used }} token</span>
+      {% elif message.tokens_used %}
+        <span>🔢 {{ message.tokens_used }} token</span>
+      {% endif %}
+      {% if elapsed %}
+        <span>⏱ {{ elapsed }}s</span>
+      {% elif message.processing_time %}
+        <span>⏱ {{ message.processing_time|floatformat:1 }}s</span>
+      {% endif %}
+      {% if quality_score %}
+        <span class="px-1.5 py-0.5 rounded {{ quality_score|quality_badge }}">Kalite: {{ quality_score }}/100</span>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if warnings %}
+    <div class="message__warnings text-xs text-yellow-500 mt-1">
+      {% for w in warnings %}⚠ {{ w }} {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if error %}
+    <p class="text-xs text-red-500 mt-1">{{ error }}</p>
+  {% endif %}
+</div>

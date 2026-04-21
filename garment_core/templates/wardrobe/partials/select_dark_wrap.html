@@ -1,0 +1,9 @@
+{# Native <select> + custom chevron (dark garment form). Expects: field #}
+<div class="relative garment-core-select-wrap">
+    {{ field }}
+    <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400" aria-hidden="true">
+        <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </span>
+</div>

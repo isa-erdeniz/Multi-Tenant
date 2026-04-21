@@ -1,0 +1,12 @@
+[phases.install]
+cmds = [
+  "python3 -m ensurepip --upgrade",
+  "python3 -m pip install --upgrade pip",
+  "python3 -m pip install -r requirements.txt"
+]
+
+[phases.build]
+cmds = ["python3 manage.py collectstatic --no-input"]
+
+[start]
+cmd = "python3 -m gunicorn config.wsgi:application --workers 2 --threads 4 --bind 0.0.0.0:$PORT --log-level info"

@@ -1,0 +1,10 @@
+{% load mehlr_tags %}
+<div class="report-card bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+  <a href="{% url 'mehlr:report_detail' report.pk %}" class="block">
+    <span class="font-medium text-mehlr-text">{{ report.title }}</span>
+    <span class="text-gray-500 text-sm block mt-1">{{ report.project.name }} · {{ report.created_at|date:"d.m.Y H:i" }}</span>
+    {% if just_created %}
+      <span class="text-green-600 text-xs mt-1 block">Yeni oluşturuldu</span>
+    {% endif %}
+  </a>
+</div>

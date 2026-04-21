@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Giriş Yap — Garment Core{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center px-4"
+     style="background: #0a0a0a;">
+  
+  <div class="w-full max-w-md">
+    
+    <!-- Logo -->
+    <div class="text-center mb-10">
+      <a href="{% url 'core:landing' %}"
+         class="text-3xl font-serif italic"
+         style="color: #c9a84c;">garment core</a>
+      <p class="mt-2 text-sm" style="color: #888;">Stilinizi keşfedin</p>
+    </div>
+    
+    <!-- Kart -->
+    <div class="rounded-2xl p-8" 
+         style="background: #141414; border: 1px solid #2a2a2a;">
+      
+      <h1 class="text-xl font-medium mb-6" style="color: #f5f0e8;">
+        Giriş Yap
+      </h1>
+      
+      <!-- Flash mesajlar -->
+      {% for message in messages %}
+      <div class="mb-4 px-4 py-3 rounded-lg text-sm"
+           style="background: #2a1a1a; color: #ff6b6b; border: 1px solid #3a2a2a;">
+        {{ message }}
+      </div>
+      {% endfor %}
+      
+      <!-- Form -->
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+        
+        <div>
+          <label class="block text-xs mb-2" style="color: #888;">
+            E-posta
+          </label>
+          <input type="email" name="email" required
+                 placeholder="ornek@email.com"
+                 value="{{ form.email.value|default:'' }}"
+                 class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                 style="background: #1e1e1e; border: 1px solid #2a2a2a; 
+                        color: #f5f0e8;"
+                 onfocus="this.style.borderColor='#c9a84c'"
+                 onblur="this.style.borderColor='#2a2a2a'">
+        </div>
+        
+        <div>
+          <label class="block text-xs mb-2" style="color: #888;">
+            Şifre
+          </label>
+          <input type="password" name="password" required
+                 placeholder="••••••••"
+                 class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                 style="background: #1e1e1e; border: 1px solid #2a2a2a; 
+                        color: #f5f0e8;"
+                 onfocus="this.style.borderColor='#c9a84c'"
+                 onblur="this.style.borderColor='#2a2a2a'">
+        </div>
+        
+        <button type="submit"
+                class="w-full py-3 rounded-xl font-medium text-sm transition-all"
+                style="background: #c9a84c; color: #0a0a0a;"
+                onmouseover="this.style.background='#d4b560'"
+                onmouseout="this.style.background='#c9a84c'">
+          Giriş Yap
+        </button>
+      </form>
+      
+      <p class="mt-6 text-center text-sm" style="color: #555;">
+        Hesabınız yok mu?
+        <a href="{% url 'account_signup' %}"
+           style="color: #c9a84c;" 
+           class="ml-1 hover:underline">
+          Ücretsiz başlayın
+        </a>
+      </p>
+      
+    </div>
+    
+    <!-- Ana sayfaya dön -->
+    <div class="text-center mt-6">
+      <a href="{% url 'core:landing' %}"
+         class="text-xs hover:underline"
+         style="color: #444;">
+        ← Ana sayfaya dön
+      </a>
+    </div>
+    
+  </div>
+</div>
+{% endblock %}

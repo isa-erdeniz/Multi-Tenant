@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-black: #0a0a0a;
+  --color-ivory: #f5f0e8;
+  --color-gold: #c9a84c;
+}
+
+.bg-brand-black {
+  background-color: var(--color-black);
+}
+.bg-brand-ivory {
+  background-color: var(--color-ivory);
+}
+.text-brand-gold {
+  color: var(--color-gold);
+}
+.border-brand-gold {
+  border-color: var(--color-gold);
+}
+
+/* Gardırop kıyafet ekle — native select: varsayılan ok gizli, şablonda SVG chevron */
+.garment-core-select-wrap select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 2.75rem;
+}
+.garment-core-select-wrap select::-ms-expand {
+  display: none;
+}
+/* Açılır liste — tarayıcıya göre değişir; zararsız varsayılanlar */
+.garment-core-select-wrap option {
+  background-color: #1f2937;
+  color: #fff;
+}

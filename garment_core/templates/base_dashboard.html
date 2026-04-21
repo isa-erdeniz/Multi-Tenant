@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block extra_head %}
+{{ block.super }}
+<style>[x-cloak]{display:none!important}</style>
+{% endblock %}
+{% block body_class %}bg-gray-900 text-white min-h-screen{% endblock %}
+
+{% block site_nav %}
+<nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/95 backdrop-blur-md border-b border-gray-800 text-white"
+     x-data="{ dashOpen: false, userOpen: false }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center gap-8">
+                <a href="{% url 'core:dashboard' %}" class="text-brand-gold font-bold text-xl shrink-0">Garment Core</a>
+                <div class="hidden md:flex items-center gap-1">
+                    <a href="{% url 'core:dashboard' %}"
+                       class="px-3 py-2 rounded-lg text-sm font-medium text-white bg-gray-800/80 border border-gray-700">
+                        Ana Sayfa
+                    </a>
+                    <a href="{% url 'wardrobe:index' %}"
+                       class="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/60">
+                        Gardırobum
+                    </a>
+                    <a href="{% url 'styling:index' %}"
+                       class="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/60">
+                        Kombinler
+                    </a>
+                    <a href="{% url 'tryon:index' %}"
+                       class="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/60">
+                        Sanal Deneme
+                    </a>
+                    <a href="{% url 'social:feed' %}"
+                       class="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/60">
+                        Topluluk
+                    </a>
+                    <a href="{% url 'catalog:brand_list' %}"
+                       class="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/60">
+                        Katalog
+                    </a>
+                    <a href="{% url 'profiles:profile' %}"
+                       class="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/60">
+                        Profil
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button type="button"
+                        class="hidden sm:flex p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 border border-transparent hover:border-gray-700"
+                        aria-label="Bildirimler">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                </button>
+
+                <div class="relative">
+                    <button type="button"
+                            @click="userOpen = !userOpen"
+                            @click.outside="userOpen = false"
+                            class="flex items-center gap-2 p-1 rounded-full border border-gray-700 hover:border-gray-600 bg-gray-800/50"
+                            aria-expanded="false"
+                            :aria-expanded="userOpen">
+                        {% if profile and profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" alt="" class="w-8 h-8 rounded-full object-cover">
+                        {% else %}
+                        <span class="w-8 h-8 rounded-full bg-brand-gold/20 text-brand-gold flex items-center justify-center text-sm font-semibold">
+                            {{ user.email|slice:":1"|upper }}
+                        </span>
+                        {% endif %}
+                        <svg class="w-4 h-4 text-gray-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div x-show="userOpen"
+                         x-transition
+                         x-cloak
+                         class="absolute right-0 mt-2 w-48 py-1 rounded-xl bg-gray-800 border border-gray-700 shadow-xl z-50">
+                        <a href="{% url 'profiles:profile' %}" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700/80">Profil</a>
+                        <a href="{% url 'profiles:edit' %}" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700/80">Ayarlar</a>
+                        <a href="{% url 'account_logout' %}" class="block px-4 py-2 text-sm text-red-300 hover:bg-gray-700/80 border-t border-gray-700 mt-1 pt-2">Çıkış</a>
+                    </div>
+                </div>
+
+                <button type="button"
+                        @click="dashOpen = !dashOpen"
+                        class="md:hidden p-2 rounded-lg text-gray-300 hover:bg-gray-800"
+                        aria-label="Menü">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path x-show="!dashOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        <path x-show="dashOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div x-show="dashOpen" x-transition class="md:hidden pb-4 border-t border-gray-800 pt-2">
+            <a href="{% url 'core:dashboard' %}" class="block px-3 py-2 rounded-lg text-white bg-gray-800">Ana Sayfa</a>
+            <a href="{% url 'wardrobe:index' %}" class="block px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800">Gardırobum</a>
+            <a href="{% url 'styling:index' %}" class="block px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800">Kombinler</a>
+            <a href="{% url 'tryon:index' %}" class="block px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800">Sanal Deneme</a>
+            <a href="{% url 'social:feed' %}" class="block px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800">Topluluk</a>
+            <a href="{% url 'catalog:brand_list' %}" class="block px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800">Katalog</a>
+            <a href="{% url 'profiles:profile' %}" class="block px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800">Profil</a>
+            <a href="{% url 'account_logout' %}" class="block px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-800">Çıkış</a>
+        </div>
+    </div>
+</nav>
+{% endblock site_nav %}
+
+{% block main_class %}max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 pt-20 pb-24 md:pb-8{% endblock %}

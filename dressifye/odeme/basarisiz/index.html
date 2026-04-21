@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="stylesheet" href="/css/site-background.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme tamamlanamadı — Dressifye</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                        secondary: '#F7931E',
+                        dark: '#0A0A0A'
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .glass-effect { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+    <script src="/js/cart.js" defer></script>
+</head>
+<body class="bg-dark text-white font-sans antialiased min-h-screen flex flex-col pt-20">
+    <nav class="fixed w-full z-50 glass-effect border-b border-white/10 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <span class="text-2xl font-bold">Dressifye</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 max-w-lg mx-auto px-4 py-12 text-center">
+        <div class="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </div>
+        <h1 class="text-3xl font-bold mb-3">Ödeme tamamlanamadı</h1>
+        <p class="text-gray-400 mb-2">İşlem banka veya kart sağlayıcısı tarafından sonlandırılmış olabilir. Lütfen bilgilerinizi kontrol edip tekrar deneyin.</p>
+        <p class="text-sm text-gray-500 mb-8">Sistem hazırlık aşamasındaysa canlı tahsilat yerine yukarıdaki mesaj gösterilir; iyzico entegrasyonu aktif olduğunda gerçek hata kodları kullanıcıya güvenli şekilde iletilir.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/odeme/" class="inline-flex justify-center px-8 py-3 rounded-full bg-primary hover:bg-secondary text-white font-semibold transition">Tekrar dene</a>
+            <a href="/sepet/" class="inline-flex justify-center px-8 py-3 rounded-full border border-white/20 hover:border-primary text-white font-medium transition">Sepete dön</a>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block main_class %}max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10{% endblock %}
+{% block content %}
+<article class="max-w-3xl mx-auto text-gray-800 leading-relaxed space-y-6">
+    <header class="border-b border-gray-200 pb-6">
+        <h1 class="text-3xl font-semibold text-brand-black font-display">{% block legal_heading %}{% endblock %}</h1>
+        <p class="text-sm text-gray-500 mt-2">Son güncelleme: Nisan 2026</p>
+    </header>
+    {% block legal_body %}{% endblock %}
+</article>
+{% endblock %}

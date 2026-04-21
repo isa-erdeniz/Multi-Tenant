@@ -1,0 +1,46 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Aboneliğim — Garment Core{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold text-white mb-6">Aboneliğim</h1>
+
+  <div class="rounded-2xl border border-gray-700 bg-gray-800 p-6 mb-6">
+    <dl class="space-y-3 text-sm">
+      <div class="flex justify-between gap-4">
+        <dt class="text-gray-400">Durum</dt>
+        <dd class="text-white font-medium">{{ subscription.get_status_display }}</dd>
+      </div>
+      <div class="flex justify-between gap-4">
+        <dt class="text-gray-400">Plan</dt>
+        <dd class="text-white">{% if subscription.plan %}{{ subscription.plan.name }}{% else %}—{% endif %}</dd>
+      </div>
+      {% if subscription.end_date %}
+      <div class="flex justify-between gap-4">
+        <dt class="text-gray-400">Bitiş</dt>
+        <dd class="text-white">{{ subscription.end_date|date:"d.m.Y H:i" }}</dd>
+      </div>
+      {% endif %}
+    </dl>
+  </div>
+
+  <div class="flex flex-wrap gap-3">
+    <a href="{% url 'payments:upgrade' %}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-brand-gold hover:bg-amber-400 text-gray-900 font-medium">
+      Plan değiştir / yükselt
+    </a>
+    <a href="{% url 'subscriptions:plan_list' %}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-gray-600 text-white hover:bg-gray-700">
+      Tüm planlar
+    </a>
+  </div>
+
+  {% if subscription.status == 'active' or subscription.status == 'trial' %}
+  <form method="post" action="{% url 'subscriptions:cancel' %}" class="mt-10 pt-8 border-t border-gray-700">
+    {% csrf_token %}
+    <p class="text-sm text-gray-400 mb-3">Aboneliği iptal etmek veritabanında durumu günceller; tekrar eden ödemeler için iyzico panelinden kontrol edin.</p>
+    <button type="submit" class="text-sm text-red-400 hover:text-red-300 underline">
+      Aboneliği iptal et
+    </button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

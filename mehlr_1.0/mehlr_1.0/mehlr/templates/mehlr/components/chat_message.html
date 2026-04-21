@@ -1,0 +1,16 @@
+{% load mehlr_tags %}
+<div class="rounded-lg p-4 {% if message.role == 'user' %}bg-mehlr-accent/20 ml-8 text-right{% else %}bg-mehlr-primary/10 mr-8 text-left{% endif %}">
+  <p class="text-xs text-gray-500 mb-1">
+    {% if message.role == 'user' %}Siz{% else %}MEHLR{% endif %} — {{ message.created_at|timesince }} önce
+  </p>
+  <div class="prose prose-sm max-w-none {% if message.role == 'user' %}text-right{% endif %}">
+    {% if message.role == 'assistant' %}
+      {% if rendered_content %}{{ rendered_content|safe }}{% else %}{{ message.content|markdown_to_html|safe }}{% endif %}
+    {% else %}
+      {{ message.content }}
+    {% endif %}
+  </div>
+  {% if message.role == 'assistant' and message.tokens_used %}
+    <p class="text-xs text-gray-400 mt-2">{{ message.tokens_used }} token · {{ message.processing_time|floatformat:1 }}s</p>
+  {% endif %}
+</div>

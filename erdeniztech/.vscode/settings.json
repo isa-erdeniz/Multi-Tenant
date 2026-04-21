@@ -1,0 +1,4 @@
+{
+  "terminal.integrated.envFile": "${workspaceFolder}/.env",
+  "python.terminal.activateEnvironment": false
+}

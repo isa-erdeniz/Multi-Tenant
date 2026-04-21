@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Ana Sayfa — {{ tenant.name|default:"ErdenizTech" }}{% endblock %}
+{% block content %}
+  <h1 style="font-size:1.75rem;margin-bottom:.5rem;">Hoş geldiniz</h1>
+  <p style="color:#9ca3af;line-height:1.6;">
+    Bu alan varsayılan açılış sayfasıdır. Tenant kaydı ve domain eşlemesi için
+    <code>fixtures/tenants.json</code> veya yönetim panelini kullanın.
+  </p>
+  <p><a href="/mehlr/" style="color:{{ tenant.primary_color|default:'#c9a84c' }};">MEHLR panosuna git →</a></p>
+{% endblock %}

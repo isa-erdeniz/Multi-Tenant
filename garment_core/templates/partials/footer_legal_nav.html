@@ -1,0 +1,7 @@
+{# Ortak yasal linkler — link_class ile stil verin #}
+<ul class="space-y-2 text-sm">
+    <li><a href="{% url 'legal:mesafeli_satis' %}" class="{{ link_class }}">Mesafeli Satış Sözleşmesi</a></li>
+    <li><a href="{% url 'legal:iptal_iade' %}" class="{{ link_class }}">İptal ve İade</a></li>
+    <li><a href="{% url 'legal:gizlilik' %}" class="{{ link_class }}">Gizlilik Politikası</a></li>
+    <li><a href="{% url 'legal:kvkk' %}" class="{{ link_class }}">KVKK</a></li>
+</ul>

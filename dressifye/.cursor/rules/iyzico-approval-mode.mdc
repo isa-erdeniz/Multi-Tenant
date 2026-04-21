@@ -1,0 +1,13 @@
+---
+description: iyzico onay sürecinde statik sitede ödeme UX’i (onay modu + demo akışı)
+globs: index.html,sepet/**/*.html,odeme/**/*.html,js/cart.js
+---
+
+# iyzico onay modu (Dressifye statik site)
+
+- **Sepet** `localStorage` (`dressifye_cart_v1`) ile tutulur; gerçek ödeme yoksa bile tam akış görünür.
+- **Güvenli Öde** ana davranışı: “Ödeme sistemi hazırlanıyor” modalı (API/anahtar yokken teknik hata gösterme).
+- **İnceleme için demo**: `/odeme/` sayfasındaki “İnceleme için demo: ödemeyi tamamla” bağlantısı sepeti temizleyip `/odeme/basarili/?demo=1` gösterir; canlı tahsilat değildir.
+- **iyzico Checkout Form** embed edildiğinde: placeholder alanları kaldırıp gerçek formu aynı bölümde göster; 3DS banka yönlendirmesi iyzico akışına bırakılır.
+- **Yasal**: footer’dan `/legal/mesafeli-satis/`, `/legal/iptal-iade/`, `/legal/gizlilik/` güncel tutulmalı.
+- **HTTPS**: üretimde Cloudflare Pages + TLS zorunlu; ödeme sayfasında kullanıcıya hatırlatma metni mevcut.

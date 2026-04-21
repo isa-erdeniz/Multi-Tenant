@@ -1,0 +1,10 @@
+/* mehlr_1.0 — ErdenizTech AI Engine */
+:root {
+  --mehlr-primary: #1E3A5F;
+  --mehlr-accent: #00B4D8;
+  --mehlr-bg: #F8FAFC;
+  --mehlr-text: #1E293B;
+}
+
+.prose-mehlr h1 { color: var(--mehlr-primary); }
+.prose-mehlr a { color: var(--mehlr-accent); }

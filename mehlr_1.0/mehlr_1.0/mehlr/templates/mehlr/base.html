@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}mehlr_1.0{% endblock %} | ErdenizTech AI Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mehlr: { primary: '#1E3A5F', accent: '#00B4D8', bg: '#F8FAFC', text: '#1E293B' },
+            success: '#10B981', warning: '#F59E0B', error: '#EF4444'
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  {% block extra_head %}{% endblock %}
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+  </style>
+</head>
+<body class="bg-mehlr-bg text-mehlr-text min-h-screen">
+  <header class="bg-mehlr-primary text-white shadow">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="{% url 'mehlr:dashboard' %}" class="text-xl font-semibold flex items-center gap-2">
+        <span class="w-8 h-8 rounded bg-mehlr-accent flex items-center justify-center text-mehlr-primary font-bold">M</span>
+        mehlr_1.0 | ErdenizTech AI Engine
+      </a>
+      <nav class="flex gap-4">
+        <a href="{% url 'mehlr:dashboard' %}" class="hover:text-mehlr-accent transition">Dashboard</a>
+        <a href="{% url 'mehlr:chat' %}" class="hover:text-mehlr-accent transition">Sohbet</a>
+        <a href="{% url 'mehlr:reports' %}" class="hover:text-mehlr-accent transition">Raporlar</a>
+        {% if user.is_authenticated %}
+          <span class="text-gray-300">{{ user.get_username }}</span>
+          <a href="/admin/logout/?next=/mehlr/" class="text-gray-300 hover:text-white">Çıkış</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="border-t border-gray-200 mt-12 py-4 text-center text-sm text-gray-500">
+    mehlr_1.0 — ErdenizTech. "Veriyle düşün, akılla hareket et."
+  </footer>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

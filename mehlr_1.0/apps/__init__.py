@@ -1,0 +1,1 @@
+# ErdenizTech uygulama paketleri

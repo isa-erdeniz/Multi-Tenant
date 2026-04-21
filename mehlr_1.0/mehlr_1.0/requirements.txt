@@ -1,0 +1,6 @@
+# mehlr_1.0 — ErdenizTech AI Engine
+Django>=5.0,<6
+python-decouple>=3.8
+django-htmx>=1.17.0
+markdown>=3.5
+google-generativeai>=0.3.0

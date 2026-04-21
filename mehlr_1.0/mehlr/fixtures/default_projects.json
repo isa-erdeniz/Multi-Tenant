@@ -1,0 +1,30 @@
+[
+  {
+    "model": "mehlr.project",
+    "pk": null,
+    "fields": {
+      "name": "Dressifye",
+      "slug": "dressifye",
+      "description": "AI destekli sanal giyinme odası platformu. Kıyafet önerisi, beden analizi ve stil eşleştirme.",
+      "project_type": "fashion_ai",
+      "context_prompt": "Dressifye — AI destekli sanal giyinme odası. Kıyafet ve aksesuar önerisi, beden analizi, stil eşleştirme. hairinfinitye, styleforhuman, stylecoree verileriyle entegre. B2B SaaS API.",
+      "data_schema": {"analytics": true, "recommendations": true, "automation": true},
+      "api_endpoint": "",
+      "is_active": true
+    }
+  },
+  {
+    "model": "mehlr.project",
+    "pk": null,
+    "fields": {
+      "name": "Evidence & Transparency",
+      "slug": "evidenceandtransparency",
+      "description": "Dijital kanıt yönetimi ve kurumsal şeffaflık platformu.",
+      "project_type": "evidence_management",
+      "context_prompt": "evidenceandtransparency — Dijital kanıt yönetimi ve kurumsal şeffaflık. Kanıt yükleme, sınıflandırma, zaman damgası, denetim raporları.",
+      "data_schema": {"analytics": true, "recommendations": true, "automation": true},
+      "api_endpoint": "",
+      "is_active": true
+    }
+  }
+]

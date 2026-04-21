@@ -1,0 +1,52 @@
+---
+description: MEHLR ↔ Dressifye entegrasyon mimarisi, adımlar ve kodlama kuralları
+globs: mehlr/**/*.py,config/settings.py
+alwaysApply: false
+---
+
+# MEHLR ↔ Dressifye Entegrasyon Talimatları
+
+Senior Python/Django ve AI Engine perspektifiyle MEHLR (AI motoru) ve Dressifye (ana uygulama) arasındaki entegrasyonu bu kurallara göre tasarla ve uygula.
+
+## 1. Mimari Prensipler
+
+- **Stateless AI:** MEHLR bir AI motorudur; veriyi Dressifye’dan çeker ve işler.
+- **Shadow Models:** MEHLR tarafında `DressifyeUser` ve `DressifyeGarment` modelleri senkronizasyon/cache amaçlı kullanılır.
+- **Strict JSON:** AI yanıtları `PROJECT_PROMPTS["dressifye"]` formatına uygun ve JSON olarak dönmelidir.
+- **Security:** Tüm inter-service iletişim `INTER_SERVICE_API_KEY` ile header üzerinden doğrulanır.
+
+## 2. Teknik Stack ve Dosya Yapısı
+
+- **Framework:** Django, Django Rest Framework (DRF)
+- **Async Tasks:** Celery + Redis (senkronizasyon)
+- **AI:** OpenAI/Gemini — `mehlr/services/ai_engine.py`
+
+## 3. Kodlama Kuralları
+
+- **Type Hinting:** Fonksiyonlarda tip belirtimleri zorunlu.
+- **Error Handling:** API çağrılarında `try-except` ve anlamlı loglama (structlog/logging).
+- **Client Pattern:** Tüm Dressifye HTTP çağrıları `mehlr/integrations/dressifye_client.py` içinde kapsüllenir.
+
+## 4. Uygulama Adımları (sırayla)
+
+1. `mehlr/models.py` — `DressifyeUser`, `DressifyeGarment`, `OutfitRecommendation` modelleri.
+2. `mehlr/integrations/dressifye_client.py` — `requests` veya `httpx` ile Dressifye API client.
+3. `mehlr/services/context_manager.py` — `get_dressifye_context(user_id)` ile gardırop verisini prompt’a enjekte et.
+4. `mehlr/api/dressifye.py` — recommend, analyze, webhook endpoint’leri.
+5. `mehlr/tasks.py` — Celery ile periyodik senkronizasyon.
+
+## 5. Veri Eşleştirme
+
+Dressifye’daki `external_id` alanları MEHLR’de `models.CharField(unique=True)` ile eşleştirilir; veri tutarlılığı birincil önceliktir.
+
+## 6. Settings (entegrasyon başında)
+
+Aşağıdakiler `config/settings.py` / ortam değişkenlerinde tanımlı olmalıdır:
+
+- `DRESSIFYE_API_URL`
+- `DRESSIFYE_API_KEY`
+- `INTER_SERVICE_API_KEY`
+
+## Kullanım Notu
+
+Aşamalı ilerle: önce modeller, sonra client, sonra context ve API. Her adımda ilgili dosyaları `@` ile referans ver; gerektiğinde test dosyası ekle.

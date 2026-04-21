@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="tr" x-data="{ lang: 'tr', menuOpen: false }">
+<head>
+    <link rel="stylesheet" href="/css/site-background.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title x-text="lang === 'tr' ? 'Dressifye - AI Stil Danışmanın' : 'Dressifye - Your AI Style Consultant'"></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                        secondary: '#F7931E',
+                        dark: '#0A0A0A',
+                        gray: {
+                            850: '#1F1F1F',
+                            900: '#121212'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-pulse-slow {
+            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+    <script src="/js/cart.js" defer></script>
+    <script src="/js/landing-pricing.js" defer></script>
+</head>
+<body class="bg-dark text-white font-sans antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-effect border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold">Dressifye</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-300 hover:text-primary transition" x-text="lang === 'tr' ? 'Özellikler' : 'Features'"></a>
+                    <a href="#how-it-works" class="text-gray-300 hover:text-primary transition" x-text="lang === 'tr' ? 'Nasıl Çalışır' : 'How It Works'"></a>
+                    <a href="/fiyatlandirma/" class="text-gray-300 hover:text-primary transition" x-text="lang === 'tr' ? 'Abonelik' : 'Subscribe'"></a>
+                    <a href="#pricing" class="text-gray-300 hover:text-primary transition" x-text="lang === 'tr' ? 'Fiyatlandırma' : 'Pricing'"></a>
+
+                    <a href="/sepet/" class="relative p-2 rounded-lg hover:bg-white/5 transition" title="Sepet" aria-label="Sepet">
+                        <span class="text-2xl leading-none">🛒</span>
+                        <span data-cart-badge class="absolute -top-0.5 -right-0.5 min-w-[1.25rem] h-5 px-1 flex items-center justify-center rounded-full bg-primary text-white text-xs font-bold hidden">0</span>
+                    </a>
+
+                    <!-- Language Toggle -->
+                    <button @click="lang = lang === 'tr' ? 'en' : 'tr'" 
+                            class="flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 hover:border-primary transition">
+                        <span class="text-sm font-medium" x-text="lang === 'tr' ? '🇹🇷 TR' : '🇬🇧 EN'"></span>
+                    </button>
+
+                    <a href="#pricing" class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-full font-medium transition transform hover:scale-105 inline-block">
+                        <span x-text="lang === 'tr' ? 'Başla' : 'Get Started'"></span>
+                    </a>
+                </div>
+
+                <!-- Mobile: sepet + menu -->
+                <div class="md:hidden flex items-center gap-1">
+                    <a href="/sepet/" class="relative p-2 rounded-lg hover:bg-white/5" aria-label="Sepet">
+                        <span class="text-xl">🛒</span>
+                        <span data-cart-badge class="absolute top-0 right-0 min-w-[1.1rem] h-4 px-0.5 flex items-center justify-center rounded-full bg-primary text-white text-[10px] font-bold hidden">0</span>
+                    </a>
+                    <button @click="menuOpen = !menuOpen" class="text-gray-300 hover:text-white p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="menuOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             class="md:hidden glass-effect border-t border-white/10">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <a href="#features" class="block px-3 py-2 text-gray-300 hover:text-primary" x-text="lang === 'tr' ? 'Özellikler' : 'Features'"></a>
+                <a href="#how-it-works" class="block px-3 py-2 text-gray-300 hover:text-primary" x-text="lang === 'tr' ? 'Nasıl Çalışır' : 'How It Works'"></a>
+                <a href="/fiyatlandirma/" class="block px-3 py-2 text-gray-300 hover:text-primary" x-text="lang === 'tr' ? 'Abonelik' : 'Subscribe'"></a>
+                <a href="#pricing" class="block px-3 py-2 text-gray-300 hover:text-primary" x-text="lang === 'tr' ? 'Fiyatlandırma' : 'Pricing'"></a>
+                <a href="/sepet/" class="block px-3 py-2 text-gray-300 hover:text-primary">🛒 <span x-text="lang === 'tr' ? 'Sepet' : 'Cart'"></span></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+        <!-- Background Effects -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+                        <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                        <span class="text-primary text-sm font-medium" x-text="lang === 'tr' ? 'Yapay Zeka Destekli' : 'AI Powered'"></span>
+                    </div>
+
+                    <h1 class="text-5xl lg:text-7xl font-bold leading-tight mb-6">
+                        <span x-text="lang === 'tr' ? 'Kişisel Stil' : 'Your Personal'"></span>
+                        <br>
+                        <span class="gradient-text" x-text="lang === 'tr' ? 'Danışmanın' : 'Style Consultant'"></span>
+                    </h1>
+
+                    <p class="text-xl text-gray-400 mb-8 max-w-2xl" 
+                       x-text="lang === 'tr' ? 'AI teknolojisi ile sanal ortamda kıyafet dene, stil önerileri al ve kişisel moda asistanınla tanış.' : 'Try on clothes virtually with AI technology, get style recommendations, and meet your personal fashion assistant.'">
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button class="bg-primary hover:bg-secondary text-white px-8 py-4 rounded-full font-semibold text-lg transition transform hover:scale-105 flex items-center justify-center gap-2">
+                            <span x-text="lang === 'tr' ? 'Ücretsiz Dene' : 'Try Free'"></span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </button>
+                        <button class="border border-white/20 hover:border-primary text-white px-8 py-4 rounded-full font-semibold text-lg transition flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span x-text="lang === 'tr' ? 'Demo İzle' : 'Watch Demo'"></span>
+                        </button>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-8 mt-12 pt-8 border-t border-white/10">
+                        <div>
+                            <div class="text-3xl font-bold text-primary">50K+</div>
+                            <div class="text-gray-400 text-sm" x-text="lang === 'tr' ? 'Kullanıcı' : 'Users'"></div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-primary">1M+</div>
+                            <div class="text-gray-400 text-sm" x-text="lang === 'tr' ? 'Deneme' : 'Try-ons'"></div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-primary">98%</div>
+                            <div class="text-gray-400 text-sm" x-text="lang === 'tr' ? 'Memnuniyet' : 'Satisfaction'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Content -->
+                <div class="relative">
+                    <div class="relative w-full aspect-square max-w-lg mx-auto">
+                        <!-- Main Image Placeholder -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl border border-white/10 overflow-hidden animate-float">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="w-32 h-32 mx-auto mb-4 bg-primary/20 rounded-full flex items-center justify-center">
+                                        <svg class="w-16 h-16 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-gray-400">AI Virtual Try-on</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Cards -->
+                        <div class="absolute -left-8 top-1/4 glass-effect p-4 rounded-2xl animate-float" style="animation-delay: 1s;">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium" x-text="lang === 'tr' ? 'Mükemmel Uyum!' : 'Perfect Fit!'"></div>
+                                    <div class="text-xs text-gray-400">AI Analysis</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="absolute -right-8 bottom-1/4 glass-effect p-4 rounded-2xl animate-float" style="animation-delay: 2s;">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium">4.9/5</div>
+                                    <div class="text-xs text-gray-400" x-text="lang === 'tr' ? 'Stil Puanı' : 'Style Score'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4" x-text="lang === 'tr' ? 'Neden Dressifye?' : 'Why Dressifye?'"></h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto" 
+                   x-text="lang === 'tr' ? 'Yapay zeka teknolojisi ile moda deneyimini tamamen değiştiriyoruz.' : 'We are completely transforming the fashion experience with AI technology.'">
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-effect p-8 rounded-3xl hover:border-primary/50 transition border border-transparent">
+                    <div class="w-14 h-14 bg-primary/20 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" x-text="lang === 'tr' ? 'Sanal Giysi Deneme' : 'Virtual Try-on'"></h3>
+                    <p class="text-gray-400" 
+                       x-text="lang === 'tr' ? 'Evinden çıkmadan kıyafetleri sanal olarak dene, gerçekçi görüntülerle nasıl durduğunu gör.' : 'Try on clothes virtually from home, see how they look with realistic images.'">
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-effect p-8 rounded-3xl hover:border-primary/50 transition border border-transparent">
+                    <div class="w-14 h-14 bg-secondary/20 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" x-text="lang === 'tr' ? 'AI Stil Önerileri' : 'AI Style Recommendations'"></h3>
+                    <p class="text-gray-400" 
+                       x-text="lang === 'tr' ? 'Yapay zeka sana özel stil önerileri sunar, vücut tipine ve tarzına uygun kombinler oluşturur.' : 'AI offers personalized style recommendations, creates combinations suitable for your body type and style.'">
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-effect p-8 rounded-3xl hover:border-primary/50 transition border border-transparent">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3" x-text="lang === 'tr' ? 'Zaman Tasarrufu' : 'Save Time'"></h3>
+                    <p class="text-gray-400" 
+                       x-text="lang === 'tr' ? 'Mağaza mağaza dolaşma, online olarak dene ve beğendiklerini kolayca satın al.' : 'Don't wander from store to store, try online and easily buy what you like.'">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4" x-text="lang === 'tr' ? 'Nasıl Çalışır?' : 'How It Works?'"></h2>
+                <p class="text-gray-400 text-lg" x-text="lang === 'tr' ? '3 basit adımda mükemmel stiline kavuş.' : 'Achieve your perfect style in 3 simple steps.'"></p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Connection Line -->
+                <div class="hidden md:block absolute top-1/2 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-primary to-secondary -translate-y-1/2 z-0"></div>
+
+                <!-- Step 1 -->
+                <div class="relative z-10 text-center">
+                    <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold border-4 border-dark">1</div>
+                    <h3 class="text-xl font-semibold mb-3" x-text="lang === 'tr' ? 'Fotoğraf Yükle' : 'Upload Photo'"></h3>
+                    <p class="text-gray-400" x-text="lang === 'tr' ? 'Kendi fotoğrafını yükle veya manken seç.' : 'Upload your own photo or choose a model.'"></p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative z-10 text-center">
+                    <div class="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold border-4 border-dark">2</div>
+                    <h3 class="text-xl font-semibold mb-3" x-text="lang === 'tr' ? 'Kıyafet Dene' : 'Try Clothes'"></h3>
+                    <p class="text-gray-400" x-text="lang === 'tr' ? 'Beğendiğin kıyafetleri sanal olarak dene.' : 'Virtually try on clothes you like.'"></p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 text-center">
+                    <div class="w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold border-4 border-dark">3</div>
+                    <h3 class="text-xl font-semibold mb-3" x-text="lang === 'tr' ? 'Satın Al' : 'Purchase'"></h3>
+                    <p class="text-gray-400" x-text="lang === 'tr' ? 'Mükemmel uyumu bul ve güvenle satın al.' : 'Find the perfect fit and buy with confidence.'"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4" x-text="lang === 'tr' ? 'Fiyatlandırma' : 'Pricing'"></h2>
+                <p class="text-gray-400 text-lg" x-text="lang === 'tr' ? 'İhtiyacına uygun planı seç.' : 'Choose the plan that fits your needs.'"></p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto items-start">
+                <!-- Starter — D1 tier_slug starter -->
+                <div id="card-starter" class="glass-effect p-8 rounded-3xl border border-white/10">
+                    <h3 class="text-xl font-semibold mb-2" x-text="lang === 'tr' ? 'Başlangıç' : 'Starter'"></h3>
+                    <div class="text-4xl font-bold mb-6"><span id="landing-price-starter">₺0</span><span class="text-lg text-gray-400">/ay</span></div>
+                    <ul class="feature-list space-y-4 mb-8 text-gray-300">
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span x-text="lang === 'tr' ? 'Aylık 5 deneme' : '5 try-ons per month'"></span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span x-text="lang === 'tr' ? 'Temel stil önerileri' : 'Basic style recommendations'"></span>
+                        </li>
+                    </ul>
+                    <button type="button" id="btn-cart-starter" onclick="addToCart('starter-plan', 49)" class="w-full py-3 rounded-full border border-white/20 hover:border-primary transition" x-text="lang === 'tr' ? 'Sepete Ekle' : 'Add to cart'"></button>
+                </div>
+
+                <!-- Elite — D1 tier_slug elite (Popüler) -->
+                <div id="card-elite" class="glass-effect p-8 rounded-3xl border-2 border-primary relative transform md:scale-105 z-10">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-sm font-medium" x-text="lang === 'tr' ? 'Popüler' : 'Popular'"></div>
+                    <h3 class="text-xl font-semibold mb-2" x-text="lang === 'tr' ? 'Elite' : 'Elite'"></h3>
+                    <a href="/fiyatlandirma/" class="text-sm text-primary hover:underline mb-2 inline-block" x-text="lang === 'tr' ? 'Tüm planlar →' : 'All plans →'"></a>
+                    <div class="text-4xl font-bold mb-6"><span id="landing-price-elite">₺249</span><span class="text-lg text-gray-400">/ay</span></div>
+                    <ul class="feature-list space-y-4 mb-8 text-gray-300">
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span x-text="lang === 'tr' ? 'Sınırsız deneme' : 'Unlimited try-ons'"></span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span x-text="lang === 'tr' ? 'Gelişmiş AI önerileri' : 'Advanced AI recommendations'"></span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span x-text="lang === 'tr' ? 'Öncelikli destek' : 'Priority support'"></span>
+                        </li>
+                    </ul>
+                    <button type="button" id="btn-cart-elite" onclick="addToCart('elite-plan', 249)" class="w-full py-3 rounded-full bg-primary hover:bg-secondary transition text-white font-medium" x-text="lang === 'tr' ? 'Sepete Ekle' : 'Add to cart'"></button>
+                </div>
+
+                <!-- Platinum — D1 tier_slug platinum -->
+                <div id="card-platinum" class="glass-effect p-8 rounded-3xl border border-white/10 md:col-span-2 lg:col-span-1">
+                    <h3 class="text-xl font-semibold mb-2" x-text="lang === 'tr' ? 'Platinum' : 'Platinum'"></h3>
+                    <a href="/urun/pro/" class="text-sm text-primary hover:underline mb-2 inline-block" x-text="lang === 'tr' ? 'Ürün detayı →' : 'Product details →'"></a>
+                    <div class="text-4xl font-bold mb-6"><span id="landing-price-platinum">₺899</span><span class="text-lg text-gray-400">/ay</span></div>
+                    <ul class="feature-list space-y-4 mb-8 text-gray-300">
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span x-text="lang === 'tr' ? 'Tüm Elite özellikleri' : 'Everything in Elite'"></span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span x-text="lang === 'tr' ? 'API erişimi' : 'API access'"></span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span x-text="lang === 'tr' ? 'Öncelikli SLA' : 'Priority SLA'"></span>
+                        </li>
+                    </ul>
+                    <button type="button" id="btn-cart-platinum" onclick="addToCart('platinum-plan', 899)" class="w-full py-3 rounded-full border border-white/20 hover:border-primary transition" x-text="lang === 'tr' ? 'Sepete Ekle' : 'Add to cart'"></button>
+                </div>
+            </div>
+
+            <!-- Diamond / Kurumsal — kartların altında; D1 tier_slug diamond -->
+            <div id="enterprise-section" class="mt-20 max-w-6xl mx-auto">
+                <div class="relative overflow-hidden rounded-3xl border border-amber-500/25 bg-gradient-to-br from-gray-950 via-black to-gray-950 shadow-[0_0_80px_-20px_rgba(245,158,11,0.35)]">
+                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(245,158,11,0.12),transparent_50%)] pointer-events-none"></div>
+                    <div class="relative grid lg:grid-cols-2 gap-10 lg:gap-14 p-8 md:p-12 lg:p-14">
+                        <div>
+                            <p class="text-amber-400/90 text-xs font-semibold tracking-[0.2em] uppercase mb-3">Diamond</p>
+                            <h3 class="text-2xl md:text-3xl font-bold text-white mb-3" x-text="lang === 'tr' ? 'Size özel çözümler mi arıyorsunuz?' : 'Looking for a tailored solution?'"></h3>
+                            <div class="mb-8 space-y-3">
+                                <p id="enterprise-blurb-tr" class="text-gray-400 text-base leading-relaxed" x-show="lang === 'tr'">Özel entegrasyon, API ve ekip genişliğine göre çözümler. Standart paketlerin ötesinde, markanıza özel kurulum.</p>
+                                <p id="enterprise-blurb-en" class="text-gray-400 text-base leading-relaxed" x-show="lang === 'en'">Custom integrations, API access, and solutions sized for your team. Beyond standard plans—a setup tailored to your brand.</p>
+                            </div>
+                            <ul class="feature-list space-y-4 text-gray-200">
+                                <li class="flex items-center gap-3">
+                                    <svg class="w-5 h-5 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span x-text="lang === 'tr' ? 'Platinum ve üzeri yetenekler' : 'Platinum-tier capabilities'"></span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <svg class="w-5 h-5 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span x-text="lang === 'tr' ? 'API erişimi' : 'API access'"></span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <svg class="w-5 h-5 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span x-text="lang === 'tr' ? 'Özel entegrasyon' : 'Custom integration'"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="flex flex-col justify-center items-start lg:items-end text-left lg:text-right gap-6 border-t lg:border-t-0 lg:border-l border-amber-500/15 pt-10 lg:pt-0 lg:pl-14">
+                            <div>
+                                <p class="text-gray-500 text-sm mb-2" x-text="lang === 'tr' ? 'Kurumsal plan' : 'Enterprise plan'"></p>
+                                <div class="text-4xl md:text-5xl font-bold tabular-nums">
+                                    <span id="landing-price-enterprise-usd" class="hidden bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent"></span>
+                                    <span id="landing-price-enterprise-text" class="bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent" x-text="lang === 'tr' ? 'Özel' : 'Custom'">Özel</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mt-2" x-text="lang === 'tr' ? 'Fiyat teklif üzerinden' : 'Pricing on request'"></p>
+                            </div>
+                            <div class="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3 w-full lg:w-auto lg:max-w-md">
+                                <button type="button" id="btn-cart-enterprise" onclick="addToCart('enterprise-plan', 0)" class="w-full sm:flex-1 px-8 py-4 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold transition shadow-lg shadow-amber-500/20" x-text="lang === 'tr' ? 'Teklif iste' : 'Request proposal'"></button>
+                                <a href="/fiyatlandirma/" class="w-full sm:flex-1 text-center px-8 py-4 rounded-full border border-amber-500/40 text-amber-100 hover:bg-amber-500/10 font-medium transition" x-text="lang === 'tr' ? 'Abonelik sayfası' : 'Subscription page'"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6" x-text="lang === 'tr' ? 'Hemen Stilini Yenile' : 'Upgrade Your Style Now'"></h2>
+            <p class="text-xl text-gray-300 mb-8" x-text="lang === 'tr' ? '50.000+ kullanıcıya katıl ve AI destekli moda deneyimini keşfet.' : 'Join 50,000+ users and discover the AI-powered fashion experience.'"></p>
+            <button class="bg-white text-dark px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition transform hover:scale-105">
+                <span x-text="lang === 'tr' ? 'Ücretsiz Başla' : 'Start Free'"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-white/10 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold">Dressifye</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4" x-text="lang === 'tr' ? 'AI destekli kişisel stil danışmanlığı platformu.' : 'AI-powered personal style consulting platform.'"></p>
+                    <p class="text-gray-400 text-sm" x-text="lang === 'tr' ? 'İletişim' : 'Contact'"></p>
+                    <a href="mailto:destek@dressifye.com" class="text-primary hover:underline text-sm">destek@dressifye.com</a>
+                    <p class="text-gray-500 text-sm mt-2" x-text="lang === 'tr' ? 'İzmir, Türkiye' : 'Izmir, Turkey'"></p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4" x-text="lang === 'tr' ? 'Ürün' : 'Product'"></h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#features" class="hover:text-primary transition" x-text="lang === 'tr' ? 'Özellikler' : 'Features'"></a></li>
+                        <li><a href="#pricing" class="hover:text-primary transition" x-text="lang === 'tr' ? 'Fiyatlandırma' : 'Pricing'"></a></li>
+                        <li><a href="/urun/pro/" class="hover:text-primary transition">Pro plan</a></li>
+                        <li><a href="/sepet/" class="hover:text-primary transition" x-text="lang === 'tr' ? 'Sepet' : 'Cart'"></a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4" x-text="lang === 'tr' ? 'Ödeme' : 'Payments'"></h4>
+                    <p class="text-gray-400 text-sm mb-2" x-text="lang === 'tr' ? 'Güvenli ödeme altyapısı:' : 'Secure payments powered by:'"></p>
+                    <a href="https://www.iyzico.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white font-semibold tracking-tight hover:text-primary transition">
+                        <span>iyzico</span>
+                    </a>
+                    <p class="text-gray-500 text-xs mt-2" x-text="lang === 'tr' ? 'Ödemeler HTTPS üzerinden güvenli bağlantı ile iletilmelidir.' : 'Payments must be sent over HTTPS.'"></p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4" x-text="lang === 'tr' ? 'Yasal' : 'Legal'"></h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="/legal/mesafeli-satis/" class="hover:text-primary transition" x-text="lang === 'tr' ? 'Mesafeli Satış Sözleşmesi' : 'Distance sales'"></a></li>
+                        <li><a href="/legal/iptal-iade/" class="hover:text-primary transition" x-text="lang === 'tr' ? 'İptal ve İade Koşulları' : 'Refund policy'"></a></li>
+                        <li><a href="/legal/gizlilik/" class="hover:text-primary transition" x-text="lang === 'tr' ? 'Gizlilik Politikası' : 'Privacy policy'"></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-400 text-sm">© 2026 Dressifye. <span x-text="lang === 'tr' ? 'Tüm hakları saklıdır.' : 'All rights reserved.'"></span></p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-400 hover:text-primary transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Fotoğraf Düzenleme — Garment Core{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+  <h1 class="text-2xl font-display text-brand-black mb-6">Fotoğraf Düzenleme</h1>
+  <p class="text-gray-600 mb-8">
+    Kırpma, döndürme, filtreler ve efektler ile fotoğraflarınızı düzenleyin.
+  </p>
+  <div class="rounded-xl border-2 border-dashed border-gray-300 p-12 text-center bg-brand-ivory">
+    <p class="text-gray-500 mb-4">Fotoğraf yükleyin veya sürükleyip bırakın</p>
+    <input type="file" accept="image/*" class="text-sm">
+  </div>
+</div>
+{% endblock %}

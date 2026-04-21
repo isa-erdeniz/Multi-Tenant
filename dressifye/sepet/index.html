@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="stylesheet" href="/css/site-background.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepet — Dressifye</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                        secondary: '#F7931E',
+                        dark: '#0A0A0A',
+                        gray: { 850: '#1F1F1F', 900: '#121212' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .glass-effect { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+    <script src="/js/cart.js" defer></script>
+</head>
+<body class="bg-dark text-white font-sans antialiased min-h-screen pt-20 pb-12">
+    <nav class="fixed w-full z-50 glass-effect border-b border-white/10 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <span class="text-2xl font-bold">Dressifye</span>
+                </a>
+                <div class="flex items-center gap-6">
+                    <a href="/#pricing" class="text-gray-300 hover:text-primary text-sm">Fiyatlandırma</a>
+                    <a href="/sepet/" class="relative p-2 rounded-lg hover:bg-white/5 transition" aria-label="Sepet">
+                        <span class="text-2xl">🛒</span>
+                        <span data-cart-badge class="absolute -top-0.5 -right-0.5 min-w-[1.25rem] h-5 px-1 flex items-center justify-center rounded-full bg-primary text-white text-xs font-bold hidden">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4">
+        <h1 class="text-3xl font-bold mb-2">Sepetiniz</h1>
+        <p class="text-gray-400 text-sm mb-8">Abonelik planlarınızı buradan yönetin; ödeme adımına geçmek için aşağıdaki butonu kullanın.</p>
+
+        <div id="cart-empty" class="glass-effect rounded-2xl p-10 text-center hidden">
+            <p class="text-gray-400 mb-6">Sepetiniz boş.</p>
+            <a href="/#pricing" class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary hover:bg-secondary text-white font-medium transition">Planları incele</a>
+        </div>
+
+        <div id="cart-filled" class="hidden">
+            <ul id="cart-lines" class="space-y-4 mb-8"></ul>
+
+            <div class="glass-effect rounded-2xl p-6 mb-6">
+                <div class="flex justify-between items-center text-lg font-semibold">
+                    <span>Toplam</span>
+                    <span id="cart-total">$0</span>
+                </div>
+                <p id="cart-note" class="text-sm text-gray-500 mt-2 hidden">Kurumsal plan için fiyat teklifi ödeme adımında veya iletişimle netleştirilir.</p>
+            </div>
+
+            <a href="/odeme/" id="checkout-btn" class="block w-full text-center py-4 rounded-full bg-primary hover:bg-secondary text-white font-semibold transition">Ödemeye Geç</a>
+        </div>
+    </div>
+
+    <script>
+        function formatUsd(n) {
+            return (
+                '$' +
+                Number(n).toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                })
+            );
+        }
+
+        function render() {
+            var items = window.dressifyeCart.getItems();
+            var emptyEl = document.getElementById('cart-empty');
+            var filledEl = document.getElementById('cart-filled');
+            var linesEl = document.getElementById('cart-lines');
+            var totalEl = document.getElementById('cart-total');
+            var noteEl = document.getElementById('cart-note');
+
+            if (!items.length) {
+                emptyEl.classList.remove('hidden');
+                filledEl.classList.add('hidden');
+                return;
+            }
+            emptyEl.classList.add('hidden');
+            filledEl.classList.remove('hidden');
+
+            var hasEnterprise = items.some(function (i) { return i.id === 'enterprise-plan'; });
+            noteEl.classList.toggle('hidden', !hasEnterprise);
+
+            linesEl.innerHTML = '';
+            items.forEach(function (item) {
+                var p = window.dressifyeCart.getProduct(item.id);
+                if (!p) return;
+                var linePrice = window.dressifyeCart.lineTotal(item);
+                var priceLabel = p.priceOnRequest
+                    ? 'Quote on request'
+                    : formatUsd(linePrice);
+
+                var li = document.createElement('li');
+                li.className = 'glass-effect rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4';
+                li.innerHTML =
+                    '<div><div class="font-semibold">' + p.nameTr + '</div>' +
+                    '<div class="text-sm text-gray-400">' + priceLabel + '</div></div>' +
+                    '<div class="flex items-center gap-3">' +
+                    '<label class="sr-only">Adet</label>' +
+                    '<input type="number" min="1" max="99" value="' + item.qty + '" data-id="' + item.id + '" class="qty w-16 px-2 py-1 rounded-lg bg-gray-850 border border-white/10 text-center text-white" />' +
+                    '<button type="button" data-remove="' + item.id + '" class="text-red-400 hover:text-red-300 text-sm">Kaldır</button>' +
+                    '</div>';
+                linesEl.appendChild(li);
+            });
+
+            var total = window.dressifyeCart.getTotal();
+            totalEl.textContent =
+                hasEnterprise && total === 0
+                    ? '$0 (enterprise quote)'
+                    : formatUsd(total);
+
+            linesEl.querySelectorAll('.qty').forEach(function (input) {
+                input.addEventListener('change', function () {
+                    window.dressifyeCart.setQty(input.getAttribute('data-id'), input.value);
+                    render();
+                });
+            });
+            linesEl.querySelectorAll('[data-remove]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    window.dressifyeCart.remove(btn.getAttribute('data-remove'));
+                    render();
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', render);
+        window.addEventListener('dressifye-cart-updated', render);
+    </script>
+</body>
+</html>

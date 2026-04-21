@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "erdeniz-security"
+version = "1.0.0"
+description = "ErdenizTech merkezi güvenlik paketi — tek katman, iş + kişisel"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+authors = [{ name = "ErdenizTech" }]
+dependencies = [
+    "cryptography>=42.0.0",
+    "argon2-cffi>=23.1.0",
+    "bcrypt>=4.1.0",
+    "django>=4.2",
+    "django-encrypted-model-fields>=0.6.5",
+    "django-axes>=6.3.0",
+    "django-cors-headers>=4.3.0",
+    "django-ratelimit>=4.1.0",
+    "python-decouple>=3.8",
+    "pywin32>=306; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+dev = ["bandit>=1.7.0", "safety>=3.0.0", "pytest-django>=4.5.0", "pytest>=7.0.0"]
+jwt = ["djangorestframework>=3.15.0", "djangorestframework-simplejwt>=5.3.0"]
+windows = ["pywin32>=306"]
+minimal = ["cryptography>=42.0.0", "argon2-cffi>=23.1.0", "django>=4.2", "python-decouple>=3.8"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["erdeniz_security*"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "erdeniz_security.tests.settings"
+python_files = ["test_*.py"]

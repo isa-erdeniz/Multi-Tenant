@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="stylesheet" href="/css/site-background.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme — Dressifye</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                        secondary: '#F7931E',
+                        dark: '#0A0A0A',
+                        gray: { 850: '#1F1F1F', 900: '#121212' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .glass-effect { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+    <script src="/js/cart.js" defer></script>
+</head>
+<body class="bg-dark text-white font-sans antialiased min-h-screen pt-20 pb-12">
+    <nav class="fixed w-full z-50 glass-effect border-b border-white/10 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <span class="text-2xl font-bold">Dressifye</span>
+                </a>
+                <a href="/sepet/" class="relative p-2 rounded-lg hover:bg-white/5 transition" aria-label="Sepet">
+                    <span class="text-2xl">🛒</span>
+                    <span data-cart-badge class="absolute -top-0.5 -right-0.5 min-w-[1.25rem] h-5 px-1 flex items-center justify-center rounded-full bg-primary text-white text-xs font-bold hidden">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-lg mx-auto px-4">
+        <h1 class="text-3xl font-bold mb-2">Güvenli ödeme</h1>
+        <p class="text-gray-400 text-sm mb-8">Plan özeti ve kart bilgileri. Canlı iyzico ödeme formu, API anahtarları tanımlandığında burada yüklenecektir.</p>
+
+        <div id="empty-redirect" class="hidden glass-effect rounded-2xl p-8 text-center">
+            <p class="text-gray-400 mb-4">Sepetiniz boş. Önce bir plan ekleyin.</p>
+            <a href="/#pricing" class="inline-block px-6 py-3 rounded-full bg-primary hover:bg-secondary text-white font-medium">Fiyatlandırma</a>
+        </div>
+
+        <div id="checkout-main" class="hidden space-y-6">
+            <div class="glass-effect rounded-2xl p-6">
+                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">Sipariş özeti</h2>
+                <ul id="summary-lines" class="space-y-3 text-sm"></ul>
+                <div class="border-t border-white/10 mt-4 pt-4 flex justify-between font-semibold">
+                    <span>Toplam</span>
+                    <span id="summary-total"></span>
+                </div>
+            </div>
+
+            <div class="glass-effect rounded-2xl p-6 border border-white/10">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">iyzico</span>
+                    <span class="text-sm text-gray-300">Güvenli ödeme altyapısı</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-4">Ödeme formu yerleşimi: Checkout Form / ödeme sayfası entegrasyonu. 3D Secure doğrulaması gerçek ödemede bankanızın yönlendirmesiyle tamamlanır.</p>
+                <div class="space-y-3">
+                    <label class="block text-sm text-gray-400">Kart üzerindeki isim</label>
+                    <input type="text" autocomplete="cc-name" placeholder="Ad Soyad" disabled class="w-full px-4 py-3 rounded-lg bg-gray-850 border border-white/10 text-gray-400 cursor-not-allowed" />
+                    <label class="block text-sm text-gray-400">Kart numarası</label>
+                    <input type="text" inputmode="numeric" placeholder="•••• •••• •••• ••••" disabled class="w-full px-4 py-3 rounded-lg bg-gray-850 border border-white/10 text-gray-400 cursor-not-allowed" />
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm text-gray-400">Son kullanma</label>
+                            <input type="text" placeholder="AA/YY" disabled class="w-full px-4 py-3 rounded-lg bg-gray-850 border border-white/10 text-gray-400 cursor-not-allowed" />
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400">CVC</label>
+                            <input type="text" placeholder="•••" disabled class="w-full px-4 py-3 rounded-lg bg-gray-850 border border-white/10 text-gray-400 cursor-not-allowed" />
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs text-amber-200/80 mt-4">Onay modu: Canlı tahsilat için iyzico API bilgileri yapılandırıldığında alanlar etkinleştirilecektir.</p>
+            </div>
+
+            <button type="button" id="btn-pay" class="w-full py-4 rounded-full bg-primary hover:bg-secondary text-white font-semibold transition">Güvenli Öde</button>
+            <p class="text-center text-xs text-gray-500">Bu site HTTPS üzerinden sunulmalıdır; ödeme bilgileri yalnızca güvenli bağlantıda iletilmelidir.</p>
+            <button type="button" id="btn-demo-complete" class="w-full py-2 text-sm text-gray-500 hover:text-primary underline">İnceleme için demo: ödemeyi tamamla</button>
+        </div>
+    </div>
+
+    <div id="approvalModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-gray-900 border border-primary/30 p-8 rounded-2xl max-w-md w-full text-center">
+            <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2">Ödeme sistemi hazırlanıyor</h3>
+            <p class="text-gray-400 mb-2">iyzico entegrasyonumuz onay aşamasındadır. Canlı tahsilat, API anahtarları tanımlandığında etkinleşecektir.</p>
+            <p class="text-primary font-medium mb-6">Çok yakında tam aktif olacaktır.</p>
+            <button type="button" id="modal-close" class="w-full py-3 bg-white text-gray-900 rounded-full font-bold">Anladım</button>
+        </div>
+    </div>
+
+    <script>
+        function formatUsd(n) {
+            return (
+                '$' +
+                Number(n).toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                })
+            );
+        }
+
+        function render() {
+            var items = window.dressifyeCart.getItems();
+            var emptyEl = document.getElementById('empty-redirect');
+            var mainEl = document.getElementById('checkout-main');
+            if (!items.length) {
+                emptyEl.classList.remove('hidden');
+                mainEl.classList.add('hidden');
+                return;
+            }
+            emptyEl.classList.add('hidden');
+            mainEl.classList.remove('hidden');
+
+            var ul = document.getElementById('summary-lines');
+            ul.innerHTML = '';
+            var hasOnRequest = false;
+            items.forEach(function (item) {
+                var p = window.dressifyeCart.getProduct(item.id);
+                if (!p) return;
+                if (p.priceOnRequest) hasOnRequest = true;
+                var line = window.dressifyeCart.lineTotal(item);
+                var priceText = p.priceOnRequest ? 'Quote on request' : formatUsd(line);
+                var li = document.createElement('li');
+                li.className = 'flex justify-between gap-4';
+                li.innerHTML = '<span>' + p.nameTr + ' × ' + item.qty + '</span><span>' + priceText + '</span>';
+                ul.appendChild(li);
+            });
+            var total = window.dressifyeCart.getTotal();
+            var totalText =
+                hasOnRequest && total === 0
+                    ? '$0 + enterprise quote'
+                    : formatUsd(total);
+            document.getElementById('summary-total').textContent = totalText;
+        }
+
+        function openModal() {
+            document.getElementById('approvalModal').classList.remove('hidden');
+        }
+        function closeModal() {
+            document.getElementById('approvalModal').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            render();
+            document.getElementById('btn-pay').addEventListener('click', openModal);
+            document.getElementById('modal-close').addEventListener('click', closeModal);
+            document.getElementById('approvalModal').addEventListener('click', function (e) {
+                if (e.target === this) closeModal();
+            });
+            document.getElementById('btn-demo-complete').addEventListener('click', function () {
+                window.dressifyeCart.clear();
+                window.location.href = '/odeme/basarili/?demo=1';
+            });
+        });
+        window.addEventListener('dressifye-cart-updated', render);
+    </script>
+</body>
+</html>

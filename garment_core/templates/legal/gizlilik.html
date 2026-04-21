@@ -1,0 +1,34 @@
+{% extends "legal/base_legal.html" %}
+{% block title %}Gizlilik Politikası — Garment Core{% endblock %}
+{% block legal_heading %}Gizlilik Politikası{% endblock %}
+{% block legal_body %}
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">1. Genel</h2>
+    <p>Garment Core, kişisel verilerinizi 6698 sayılı KVKK ve ilgili mevzuata uygun işler. Bu metin, hangi verilerin toplandığını ve nasıl kullanıldığını özetler.</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">2. Toplanan veriler</h2>
+    <ul class="list-disc pl-6 space-y-2">
+        <li>Kimlik ve iletişim: e-posta, ad-soyad (profilde paylaşıldıysa).</li>
+        <li>Hesap ve kullanım: oturum bilgileri, özellik kullanımı, analitik olayları.</li>
+        <li>İçerik: yüklediğiniz <strong>fotoğraflar</strong>, gardırop ve stil ile ilgili veriler.</li>
+        <li>Ödeme: kart bilgileri Garment Core sunucularında saklanmaz; ödeme kuruluşu (ör. iyzico) tarafından işlenir.</li>
+    </ul>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">3. Amaçlar</h2>
+    <p>Hizmetin sunulması, güvenlik, faturalandırma, iyileştirme, yasal yükümlülükler ve açık rıza kapsamındaki iletişim.</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">4. Üçüncü taraflar</h2>
+    <p>Ödeme (iyzico), e-posta / altyapı sağlayıcıları, bulut ve barındırma (ör. AWS veya eşdeğeri) ile sınırlı veri paylaşımı yapılabilir. Sağlayıcılar sözleşmeyle gizlilik ve güvenlik yükümlülüğü altındadır.</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">5. Çerezler</h2>
+    <p>Oturum, tercih ve ölçüm için çerezler kullanılabilir. Tarayıcı ayarlarınızdan çerezleri kısıtlayabilirsiniz; bazı özellikler etkilenebilir.</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">6. Haklarınız</h2>
+    <p>KVKK kapsamındaki talepler için <a href="{% url 'legal:kvkk' %}" class="text-brand-gold hover:underline">KVKK Aydınlatma Metni</a> ve <a href="mailto:destek@garmentcore.com" class="text-brand-gold hover:underline">destek@garmentcore.com</a>.</p>
+</section>
+{% endblock %}

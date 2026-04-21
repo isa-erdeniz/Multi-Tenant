@@ -1,0 +1,20 @@
+# database_id: Cloudflare Dashboard > Storage & Databases > D1 > dressifye-db > Database ID
+# database_id yanlışsa Cloudflare D1 sayfasından doğru UUID ile güncelle.
+
+name = "dressifye"
+main = "index.js"
+compatibility_date = "2026-04-08"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dressifye-db"
+database_id = "193a55ca-7006-41be-89b3-3b2e1c165f4a"
+
+[assets]
+directory = "./"
+binding = "ASSETS"
+
+# Cloudflare Dashboard → Workers → dressifye → Variables (veya wrangler secret)
+# Örnek: https://garment-core-production.up.railway.app  (sonunda / yok)
+[vars]
+GARMENT_CORE_API_URL = "http://127.0.0.1:8000"

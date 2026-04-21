@@ -1,0 +1,25 @@
+# Wrangler [assets] directory="./" için: bu dosya .gitignore sözdizimini kullanır.
+# https://developers.cloudflare.com/workers/static-assets/binding/#ignoring-assets
+
+# Yapılandırma — sitede yayınlanmamalı
+.assetsignore
+.cfignore
+wrangler.toml
+.gitignore
+
+.git/
+node_modules/
+.env
+.env.*
+*.log
+.DS_Store
+.vscode/
+.idea/
+coverage/
+dist/
+build/
+.wrangler/
+.venv/
+venv/
+.cursor/
+d1/

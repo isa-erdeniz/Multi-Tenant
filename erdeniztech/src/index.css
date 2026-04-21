@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --core-bg: #000000;
+    --core-text: #e8e8e8;
+    --core-muted: #888888;
+
+    --lava-red: #ff4d4d;
+    --lava-orange: #f97316;
+    --amber-core: 255 107 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    min-height: 100%;
+    background-color: #000000;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.58)),
+      url('/Gemini_Generated_Image_n8044sn8044sn804.png');
+    background-size: auto, cover;
+    background-position: center, center;
+    background-attachment: fixed, fixed;
+    background-repeat: no-repeat, no-repeat;
+    /* Scale typography down ~25% (Tailwind rem-based sizing follows this) */
+    font-size: 75%;
+  }
+
+  body {
+    min-height: 100dvh;
+    background: transparent;
+    color: var(--core-text);
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(255, 77, 77, 0.3);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .dot-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: radial-gradient(circle at center, rgba(255, 255, 255, 1) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.075;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  .ambient-glow {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(60px);
+    opacity: 0.7;
+    transform: translateZ(0);
+  }
+
+  .ambient-glow--tl {
+    top: -220px;
+    left: -240px;
+    width: 560px;
+    height: 560px;
+    background: radial-gradient(circle at center, rgba(255, 77, 77, 0.24), transparent 62%);
+    animation: glow 7s ease-in-out infinite;
+  }
+
+  .ambient-glow--br {
+    bottom: -260px;
+    right: -260px;
+    width: 640px;
+    height: 640px;
+    background: radial-gradient(circle at center, rgba(249, 115, 22, 0.22), transparent 62%);
+    animation: glow 8.5s ease-in-out infinite;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgb(249 115 22 / 0.28);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px);
+    border-color: rgb(249 115 22 / 0.65);
+    box-shadow:
+      0 0 28px rgb(249 115 22 / 0.2),
+      0 20px 48px rgba(0, 0, 0, 0.5);
+  }
+
+  .lava-line {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 77, 77, 0.95), rgba(249, 115, 22, 0.95), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .group:hover .lava-line {
+    opacity: 1;
+  }
+
+  a, button {
+    transition: all 0.3s ease;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 1px solid rgba(var(--amber-core) / 0.5);
+    outline-offset: 2px;
+  }
+}
+

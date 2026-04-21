@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Gardırop İstatistikleri — Garment Core{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <a href="{% url 'wardrobe:index' %}" class="text-sm text-gray-500 hover:text-brand-gold mb-4 inline-block">← Gardıroba dön</a>
+    <h1 class="text-2xl font-display font-medium text-gray-900 mb-8">Gardırop İstatistikleri</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <p class="text-3xl font-display font-medium text-brand-gold">{{ stats.total }}</p>
+            <p class="text-sm text-gray-500 mt-1">Toplam kıyafet</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <p class="text-3xl font-display font-medium text-gray-700">{{ stats.favorites }}</p>
+            <p class="text-sm text-gray-500 mt-1">Favori</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <p class="text-3xl font-display font-medium text-gray-700">{{ stats.by_category|length }}</p>
+            <p class="text-sm text-gray-500 mt-1">Kategori</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <p class="text-3xl font-display font-medium text-gray-700">{{ stats.most_worn|length }}</p>
+            <p class="text-sm text-gray-500 mt-1">En çok giyilen (top 5)</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Kategori dağılımı -->
+        <div class="rounded-2xl bg-white border border-gray-100 shadow-sm p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Kategoriye göre</h2>
+            {% if stats.by_category %}
+            <ul class="space-y-3">
+                {% for item in stats.by_category %}
+                <li class="flex items-center justify-between">
+                    <span class="text-gray-700">{{ item.category__name|default:"Kategorisiz" }}</span>
+                    <span class="font-medium text-brand-gold">{{ item.cnt }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-gray-500 text-sm">Henüz veri yok</p>
+            {% endif %}
+        </div>
+
+        <!-- En çok giyilen -->
+        <div class="rounded-2xl bg-white border border-gray-100 shadow-sm p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">En çok giyilenler</h2>
+            {% if stats.most_worn %}
+            <ul class="space-y-3">
+                {% for g in stats.most_worn %}
+                <li class="flex items-center gap-4">
+                    <a href="{% url 'wardrobe:detail' g.pk %}" class="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                        {% if g.image %}
+                        <img src="{{ g.image_url }}" alt="" class="w-full h-full object-cover" loading="lazy"
+                             onerror="this.onerror=null; this.src='{% static 'images/placeholder-garment.svg' %}';">
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-lg text-gray-400">👗</div>
+                        {% endif %}
+                    </a>
+                    <div class="flex-1 min-w-0">
+                        <a href="{% url 'wardrobe:detail' g.pk %}" class="font-medium text-gray-900 hover:text-brand-gold truncate block">{{ g.name }}</a>
+                        <span class="text-sm text-gray-500">{{ g.times_worn }} kez giyildi</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-gray-500 text-sm">Henüz giyim kaydı yok</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

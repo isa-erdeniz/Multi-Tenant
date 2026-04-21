@@ -1,0 +1,49 @@
+:8088 {
+  encode gzip
+
+  @dressifye host dressifye.localhost
+  handle @dressifye {
+    root * /srv/dressifye
+    try_files {path} {path}/ /index.html
+    file_server
+  }
+
+  @styleforhuman host styleforhuman.localhost
+  handle @styleforhuman {
+    root * /srv/styleforhuman
+    try_files {path} {path}/ /index.html
+    file_server
+  }
+
+  @stylecoree host stylecoree.localhost
+  handle @stylecoree {
+    root * /srv/stylecoree
+    try_files {path} {path}/ /index.html
+    file_server
+  }
+
+  @hairinfinitye host hairinfinitye.localhost
+  handle @hairinfinitye {
+    root * /srv/hairinfinitye
+    try_files {path} {path}/ /index.html
+    file_server
+  }
+
+  # API gateway (ortak servisler)
+  handle_path /api/garment/* {
+    reverse_proxy garment-core-django:8000
+  }
+  handle_path /api/mehlr/* {
+    reverse_proxy mehlr:8001
+  }
+  handle_path /api/garment-core/* {
+    reverse_proxy garment-core:8080
+  }
+
+  # default: dressifye
+  handle {
+    root * /srv/dressifye
+    try_files {path} {path}/ /index.html
+    file_server
+  }
+}

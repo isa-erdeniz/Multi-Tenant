@@ -1,0 +1,22 @@
+{% extends "mehlr/base.html" %}
+
+{% block title %}Raporlar{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold text-mehlr-primary mb-6">Analiz Raporları</h1>
+
+{% if reports %}
+  <ul class="space-y-3">
+    {% for report in reports %}
+      <li class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:border-mehlr-accent transition">
+        <a href="{% url 'mehlr:report_detail' report.pk %}" class="block">
+          <span class="font-medium text-mehlr-text">{{ report.title }}</span>
+          <span class="text-gray-500 text-sm block mt-1">{{ report.project.name }} · {{ report.get_report_type_display }} · {{ report.created_at|date:"d.m.Y H:i" }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="text-gray-500">Henüz rapor yok. Sohbetten "rapor üret" diyerek veya API ile rapor oluşturabilirsiniz.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Kıyafet Sil — Garment Core{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-6 py-10">
+
+  <div class="flex items-center gap-4 mb-8">
+    <a href="{% url 'wardrobe:index' %}"
+       class="text-sm hover:underline" style="color: #555;">
+      ← Gardıroba Dön
+    </a>
+  </div>
+
+  <div class="rounded-2xl p-8" style="background: #141414; border: 1px solid #2a2a2a;">
+    <h1 class="text-xl font-medium mb-4" style="color: #f5f0e8;">
+      Bu kıyafeti silmek istediğinize emin misiniz?
+    </h1>
+    <p class="text-sm mb-6" style="color: #888;">
+      "{{ garment.name }}" gardırobunuzdan kaldırılacak.
+    </p>
+
+    <form method="post" class="flex gap-3">
+      {% csrf_token %}
+      <a href="{% url 'wardrobe:detail' garment.pk %}"
+         class="flex-1 py-3 rounded-xl text-sm text-center transition-all"
+         style="background: #1e1e1e; color: #666; border: 1px solid #2a2a2a;">
+        İptal
+      </a>
+      <button type="submit"
+              class="flex-1 py-3 rounded-xl font-medium text-sm transition-all"
+              style="background: #ff6b6b; color: #fff;">
+        Sil
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "mehlr/base.html" %}
+{% load mehlr_tags %}
+
+{% block title %}{{ page_title|default:report.title }}{% endblock %}
+
+{% block content %}
+<article class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 max-w-4xl mx-auto">
+  <header class="border-b border-gray-100 pb-4 mb-4">
+    <h1 class="text-2xl font-bold text-mehlr-primary">{{ report.title }}</h1>
+    <p class="text-gray-500 text-sm mt-1">
+      {{ report.project.name }}
+      · {{ report.get_report_type_display }}
+      {% if report.data_snapshot and report.data_snapshot.confidence_score %}
+        · <span class="{{ report.data_snapshot.confidence_score|confidence_color }}">Güven: {{ report.data_snapshot.confidence_score }}</span>
+      {% endif %}
+      · {{ report.created_at|date:"d.m.Y H:i" }}
+    </p>
+    {% if report.data_snapshot %}
+      {% if report.data_snapshot.tokens_used or report.data_snapshot.generation_time %}
+      <p class="text-xs text-gray-400 mt-1">
+        {% if report.data_snapshot.tokens_used %}🔢 {{ report.data_snapshot.tokens_used }} token{% endif %}
+        {% if report.data_snapshot.generation_time %} · ⏱ {{ report.data_snapshot.generation_time|floatformat:1 }}s{% endif %}
+      </p>
+      {% endif %}
+    {% endif %}
+  </header>
+  <div class="prose prose-mehlr max-w-none">
+    {{ report.content|markdown_to_html|safe }}
+  </div>
+</article>
+<a href="{% url 'mehlr:reports' %}" class="inline-block mt-6 text-mehlr-accent hover:underline">← Rapor listesine dön</a>
+{% endblock %}

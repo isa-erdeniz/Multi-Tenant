@@ -1,0 +1,22 @@
+/* Multi-tenant premium background — Gemini reference */
+html {
+  min-height: 100%;
+  background-color: #0a0a0a;
+}
+body {
+  min-height: 100%;
+  background-color: transparent;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/Gemini_Generated_Image_2tml542tml542tml.webp");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  opacity: 0.35;
+  pointer-events: none;
+}

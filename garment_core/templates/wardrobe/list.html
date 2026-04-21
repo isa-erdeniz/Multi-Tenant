@@ -1,0 +1,131 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Gardırobum - Garment Core{% endblock %}
+
+{% block content %}
+<!-- Üst: başlık + arama / Yeni Ekle (mobilde de yan yana) -->
+<div class="mb-6">
+    <div class="mb-4">
+        <h1 class="text-2xl font-bold text-white">Gardırobum</h1>
+        <p class="text-gray-400 text-sm">{{ total_items|default:0 }} adet</p>
+    </div>
+
+    <div class="flex flex-row flex-wrap gap-3 items-stretch sm:items-center">
+        <form method="get" action="" class="relative flex-1 min-w-0 sm:max-w-md">
+            {% if current_category %}
+            <input type="hidden" name="kategori" value="{{ current_category }}">
+            {% endif %}
+            <input type="text"
+                   name="q"
+                   value="{{ search_query }}"
+                   placeholder="Ara..."
+                   autocomplete="off"
+                   class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-gold">
+            <button type="submit" class="absolute left-3 top-1/2 -translate-y-1/2 z-[1] p-0 border-0 bg-transparent cursor-pointer" aria-label="Ara">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </button>
+        </form>
+        <a href="{% url 'wardrobe:add' %}"
+           class="relative z-10 inline-flex shrink-0 items-center justify-center gap-2 self-center bg-brand-gold hover:bg-amber-400 text-gray-900 px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap">
+            <span aria-hidden="true">+</span> Yeni Ekle
+        </a>
+    </div>
+</div>
+
+{% if show_pin_grid_link %}
+<div class="flex flex-wrap items-center gap-4 mb-4 text-sm">
+    <a href="{% url 'wardrobe:pin_grid' %}" class="text-brand-gold hover:text-amber-400">Pin / filtre görünümü</a>
+    <span class="text-gray-600" aria-hidden="true">•</span>
+    <a href="{% url 'styling:new' %}" class="text-brand-gold hover:text-amber-400">Kombin öner</a>
+</div>
+{% endif %}
+
+<!-- Filtreler -->
+<div class="flex gap-2 overflow-x-auto pb-4 mb-6 -mx-1 px-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    {% for chip in filter_chips %}
+    <a href="{{ chip.href }}"
+       class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap shrink-0 transition-colors {% if chip.active %}bg-brand-gold text-gray-900{% else %}bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 border border-gray-700{% endif %}">
+        {{ chip.name }}
+    </a>
+    {% endfor %}
+</div>
+
+{% if garments %}
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    {% for item in garments %}
+    <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-gray-600 transition-all">
+        <div class="aspect-square bg-gray-700 relative overflow-hidden">
+            <a href="{% url 'wardrobe:detail' item.pk %}" class="block w-full h-full relative z-0">
+                {% if item.image %}
+                <img src="{{ item.image_url }}" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy"
+                     onerror="this.onerror=null; this.src='{% static 'images/placeholder-garment.svg' %}';">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center text-4xl bg-gray-700">
+                    {{ item.category.icon|default:"👗" }}
+                </div>
+                {% endif %}
+            </a>
+            <div class="absolute inset-0 z-10 bg-gray-900/85 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-3 pointer-events-none group-hover:pointer-events-auto">
+                <a href="{% url 'wardrobe:edit' item.pk %}" class="pointer-events-auto w-full max-w-[9rem] text-center px-3 py-2 bg-brand-gold text-gray-900 rounded-lg text-sm font-medium hover:bg-amber-400 transition-colors">
+                    Düzenle
+                </a>
+                <a href="{% url 'wardrobe:delete' item.pk %}" class="pointer-events-auto w-full max-w-[9rem] text-center px-3 py-2 bg-red-600/25 text-red-300 hover:bg-red-600/40 rounded-lg text-sm font-medium transition-colors">
+                    Sil
+                </a>
+            </div>
+            <button type="button" class="absolute top-2 right-2 z-20 w-8 h-8 bg-gray-900/50 rounded-lg flex items-center justify-center text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity border border-gray-700/80 pointer-events-none" tabindex="-1" aria-hidden="true">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/></svg>
+            </button>
+        </div>
+        <div class="p-3">
+            <div class="flex items-center justify-between gap-2">
+                <span class="text-xs text-gray-500 truncate">{% if item.category %}{{ item.category.name }}{% else %}—{% endif %}</span>
+                {% if item.color_hex %}
+                <span class="w-2.5 h-2.5 rounded-full shrink-0 border border-gray-600" style="background: {{ item.color_hex }}"></span>
+                {% else %}
+                <span class="w-2.5 h-2.5 rounded-full shrink-0 bg-gray-600"></span>
+                {% endif %}
+            </div>
+            <p class="text-sm text-white font-medium truncate mt-1">{{ item.name }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if total_pages > 1 %}
+<nav class="flex flex-wrap justify-center items-center gap-2 mt-10" aria-label="Sayfalama">
+    {% if has_previous %}
+    <a href="{{ pagination_prefix }}sayfa={{ previous_page_number }}" class="px-3 py-2 text-sm bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 border border-gray-700 transition-colors">
+        ← Önceki
+    </a>
+    {% endif %}
+    {% for num in page_numbers %}
+    <a href="{{ pagination_prefix }}sayfa={{ num }}"
+       class="min-w-[2.5rem] px-3 py-2 text-sm rounded-lg text-center border transition-colors {% if num == current_page %}bg-brand-gold text-gray-900 border-brand-gold font-semibold{% else %}bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700{% endif %}">
+        {{ num }}
+    </a>
+    {% endfor %}
+    {% if has_next %}
+    <a href="{{ pagination_prefix }}sayfa={{ next_page_number }}" class="px-3 py-2 text-sm bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 border border-gray-700 transition-colors">
+        Sonraki →
+    </a>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<div class="text-center py-20 px-4 rounded-2xl border border-gray-700 bg-gray-800/40">
+    <div class="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6 text-5xl border border-gray-700" aria-hidden="true">👗</div>
+    <h3 class="text-xl font-bold text-white mb-2">Gardırobunuz boş</h3>
+    <p class="text-gray-400 mb-6 max-w-md mx-auto text-sm">
+        İlk kıyafetinizi ekleyin, AI size özel kombinler oluşturmaya başlasın.
+    </p>
+    <a href="{% url 'wardrobe:add' %}" class="inline-block bg-brand-gold hover:bg-amber-400 text-gray-900 px-6 py-3 rounded-lg font-medium transition-colors">
+        İlk Kıyafetini Ekle
+    </a>
+</div>
+{% endif %}
+{% endblock %}

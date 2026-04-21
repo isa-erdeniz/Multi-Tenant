@@ -1,0 +1,24 @@
+# Cloudflare / yerel araçlar için hariç tutma listesi.
+# Worker statik asset yükü: Wrangler resmi olarak kökteki .assetsignore dosyasını okur.
+
+.assetsignore
+.cfignore
+wrangler.toml
+.gitignore
+
+.git/
+node_modules/
+.env
+.env.*
+*.log
+.DS_Store
+.vscode/
+.idea/
+coverage/
+dist/
+build/
+.wrangler/
+.venv/
+venv/
+.cursor/
+d1/

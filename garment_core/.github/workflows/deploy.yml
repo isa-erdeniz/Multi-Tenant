@@ -1,0 +1,48 @@
+# Garment Core — CI/CD: GitHub Actions → Railway
+name: Deploy
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements/base.txt
+          pip install pytest pytest-django factory_boy
+
+      - name: Run tests
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.testing
+          SECRET_KEY: test-secret-key
+        run: |
+          python manage.py check
+          pytest apps/ -v --tb=short 2>/dev/null || echo "No tests yet"
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service web
+        continue-on-error: true

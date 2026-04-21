@@ -1,0 +1,30 @@
+{% extends "legal/base_legal.html" %}
+{% block title %}Mesafeli Satış Sözleşmesi — Garment Core{% endblock %}
+{% block legal_heading %}Mesafeli Satış Sözleşmesi{% endblock %}
+{% block legal_body %}
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">1. Taraflar</h2>
+    <p><strong>Satıcı:</strong> Garment Core (ticari ünvan ve MERSİS bilgileri tescil tamamlandığında bu sayfa güncellenecektir; güncel iletişim: <a href="mailto:destek@garmentcore.com" class="text-brand-gold hover:underline">destek@garmentcore.com</a>).</p>
+    <p><strong>Alıcı:</strong> Platforma üye olan ve ödeme yapan gerçek veya tüzel kişi (“Kullanıcı”).</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">2. Sözleşmenin konusu</h2>
+    <p>Bu sözleşme, Garment Core’un sunmuş olduğu <strong>dijital abonelik tabanlı yazılım hizmeti</strong> (AI destekli stil danışmanlığı, sanal deneme, gardırop ve ilgili özellikler) ile Kullanıcı arasındaki hak ve yükümlülükleri düzenler. Hizmet internet üzerinden erişilebilir; fiziksel ürün teslimi söz konusu değildir.</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">3. Fiyat ve ödeme</h2>
+    <p>Ücretler <a href="{% url 'subscriptions:plan_list' %}" class="text-brand-gold hover:underline">planlar</a> sayfasında ilan edilir. Ödeme, anlaşmalı ödeme kuruluşu (ör. iyzico) üzerinden tahsil edilir. KDV ve yasal kesintiler, yürürlükteki mevzuata göre uygulanır.</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">4. Teslimat</h2>
+    <p>Hizmet, ödeme ve hesap doğrulamasının tamamlanmasından sonra <strong>anında dijital erişim</strong> ile ifa edilir. Kullanıcı, internet bağlantısı ve uyumlu cihaz ile hizmete erişmekle yükümlüdür.</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">5. Cayma hakkı</h2>
+    <p>6502 sayılı Kanun kapsamında mesafeli sözleşmelerde <strong>14 gün</strong> içinde cayma hakkı bulunabilir. Dijital içerik ve abonelik hizmetlerinde, <strong>hizmet ifasına başlandıysa</strong> ve Kullanıcı açıkça onay verdiyse cayma hakkı sınırlanabilir. Güncel iptal ve iade koşulları için <a href="{% url 'legal:iptal_iade' %}" class="text-brand-gold hover:underline">İptal ve İade</a> sayfasına bakınız.</p>
+</section>
+<section class="space-y-4">
+    <h2 class="text-lg font-semibold text-gray-900">6. İletişim</h2>
+    <p>E-posta: <a href="mailto:destek@garmentcore.com" class="text-brand-gold hover:underline">destek@garmentcore.com</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,41 @@
+---
+description: Railway tek instance — dört domain (hairinfinitye, stylecoree, styleforhuman, dressifye), tenant, fixture, Celery sync.
+globs:
+  - apps/tenant/**/*
+  - templates/tenants/**/*
+  - config/settings.py
+  - railway.toml
+---
+
+# Multi-tenant entegrasyon (4 domain)
+
+## Amaç
+
+`hairinfinitye.com`, `stylecoree.com`, `styleforhuman.com` veri toplar; `dressifye.com` **master** (Garment-Core) birleşik profil ve AI.
+
+## Middleware sırası
+
+1. `ErdenizSecurityMiddleware`
+2. `WhiteNoiseMiddleware` (varsa)
+3. `TenantMiddleware` (`HTTP_HOST` → tenant, thread-local)
+4. Diğer Django / `erdeniz_security` middleware’leri
+
+## Veri modeli
+
+- `Tenant`: `data_type`, `sync_to_tenant` (FK self; collector’lar → dressifye).
+- `CrossTenantData`: kaynak→hedef senkron kaydı.
+- Celery: `apps.tenant.tasks.sync_data_to_master` — `profile_data.cross_tenant_sources` güncellenir.
+
+## Şablonlar
+
+`templates/tenants/dressifye|hairinfinity|stylecoree|styleforhuman/` + kök fallback.
+
+## Dağıtım
+
+- `fixtures/tenants.json` (4 tenant; dressifye `pk=1`, diğerleri `sync_to_tenant: 1`).
+- `migrate` + `loaddata fixtures/tenants.json`.
+- `railway.toml` dört domain + `startCommand`.
+
+## Yeni tenant
+
+Admin veya fixture; gerekirse `templates/tenants/<slug>/`.

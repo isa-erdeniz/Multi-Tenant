@@ -1,0 +1,15 @@
+[deploy]
+restartPolicyType = "on_failure"
+startCommand = "gunicorn config.wsgi:application --workers 2 --threads 4 --bind 0.0.0.0:$PORT --log-level info"
+
+[[deploy.domains]]
+domain = "dressifye.com"
+
+[[deploy.domains]]
+domain = "hairinfinitye.com"
+
+[[deploy.domains]]
+domain = "stylecoree.com"
+
+[[deploy.domains]]
+domain = "styleforhuman.com"

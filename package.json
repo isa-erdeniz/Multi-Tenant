@@ -1,0 +1,33 @@
+{
+  "name": "multi-tenant",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "erdeniztech",
+    "garment_core",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build:site && npm run build:garment-css",
+    "lint": "npm run lint:site",
+    "dev:site": "npm run dev -w erdeniztech-site",
+    "build:site": "npm run build -w erdeniztech-site",
+    "lint:site": "npm run lint -w erdeniztech-site",
+    "dev:garment-core": "npm run dev -w garment-core",
+    "start:garment-core": "npm run start -w garment-core",
+    "build:garment-css": "npm run build:css -w garment_core",
+    "watch:garment-css": "npm run watch:css -w garment_core",
+    "up": "docker-compose up --build",
+    "down": "docker-compose down",
+    "ecosystem:scan": "node scripts/refresh-ecosystem-registry.mjs",
+    "venv:setup": "bash scripts/setup-python-venvs.sh",
+    "venv:force": "bash scripts/setup-python-venvs.sh --force",
+    "venv:shell:garment": "bash -c 'source ./garment_core/.venv/bin/activate && exec bash -l'",
+    "venv:shell:mehlr": "bash -c 'source ./mehlr_1.0/.venv/bin/activate && exec bash -l'",
+    "venv:shell:dressifye": "bash -c 'source ./dressifye/.venv/bin/activate && exec bash -l'",
+    "venv:shell:security": "bash -c 'source ./erdeniz_security/.venv/bin/activate && exec bash -l'",
+    "bootstrap": "npm install && npm run venv:setup && npm run ecosystem:scan"
+  }
+}
