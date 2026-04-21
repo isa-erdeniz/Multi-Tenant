@@ -25,14 +25,23 @@ class AvatarStyle(TimeStampedModel):
 
 class AvatarSession(TimeStampedModel):
     """AI avatar oluşturma oturumu."""
+    STATUS_CHOICES = [
+        ("pending", "Bekliyor"),
+        ("processing", "İşleniyor"),
+        ("completed", "Tamamlandı"),
+        ("failed", "Hata"),
+    ]
+
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="avatar_sessions"
     )
-    input_selfie = models.ImageField(upload_to="avatar/input/%Y/%m/")
+    input_selfie = models.ImageField(upload_to="avatar/input/%Y/%m/", null=True, blank=True)
     style = models.ForeignKey(
         AvatarStyle, on_delete=models.SET_NULL, null=True, blank=True
     )
     result_images = models.JSONField(default=list)  # [url1, url2, ...]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    output_data = models.JSONField(default=dict)
 
     class Meta:
         verbose_name = "Avatar Oturumu"

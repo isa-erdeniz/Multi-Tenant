@@ -24,6 +24,32 @@ class LookPackage(TimeStampedModel):
         ordering = ["name"]
 
 
+class LookApplySession(TimeStampedModel):
+    """Kullanıcının bir LookPackage'ı uygulaması."""
+    STATUS_CHOICES = [
+        ("pending", "Bekliyor"),
+        ("processing", "İşleniyor"),
+        ("completed", "Tamamlandı"),
+        ("failed", "Hata"),
+    ]
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="look_sessions"
+    )
+    look = models.ForeignKey(
+        LookPackage, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name="sessions"
+    )
+    photo = models.ImageField(upload_to="looks/sessions/%Y/%m/", null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    output_data = models.JSONField(default=dict)
+
+    class Meta:
+        verbose_name = "Look Uygulama Oturumu"
+        verbose_name_plural = "Look Uygulama Oturumları"
+        ordering = ["-created_at"]
+
+
 class LookRating(TimeStampedModel):
     """Görünüm puanlama."""
     look = models.ForeignKey(

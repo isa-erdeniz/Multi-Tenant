@@ -4,25 +4,22 @@ import time
 logger = logging.getLogger(__name__)
 
 
-def _process_makeup_session_impl(session_id: int) -> None:
+def _process_avatar_session_impl(session_id: int) -> None:
     from django.conf import settings
     from apps.core.clients.mehlr_client import MEHLRClient
     from apps.core.tenant_context import use_tenant
-    from apps.beauty.models import MakeupSession
+    from apps.avatar.models import AvatarSession
     from apps.analytics.services import record_usage_event
-
     from apps.subscriptions.models import FeatureUsage
     from apps.subscriptions.services import can_use_feature, increment_usage
 
     try:
-        session = MakeupSession.objects.select_related(
-            "user", "applied_look"
-        ).get(id=session_id)
-    except MakeupSession.DoesNotExist:
-        logger.error("MakeupSession bulunamadı: %s", session_id)
+        session = AvatarSession.objects.select_related("user", "style").get(id=session_id)
+    except AvatarSession.DoesNotExist:
+        logger.error("AvatarSession bulunamadı: %s", session_id)
         return
 
-    if not can_use_feature(session.user, FeatureUsage.FEATURE_MAKEUP):
+    if not can_use_feature(session.user, FeatureUsage.FEATURE_AVATAR):
         session.status = "failed"
         session.output_data = {"error": "quota_exceeded"}
         session.save()
@@ -35,23 +32,28 @@ def _process_makeup_session_impl(session_id: int) -> None:
 
         start = time.time()
 
-        look_name = session.applied_look.name if session.applied_look else "Belirtilmemiş"
-        look_category = session.applied_look.category if session.applied_look else "Belirtilmemiş"
+        style_name = session.style.name if session.style else "Gerçekçi"
+        style_category = session.style.category if session.style else "Genel"
+        prompt_template = (session.style.prompt_template or "") if session.style else ""
+
+        if prompt_template:
+            prompt = prompt_template
+        else:
+            prompt = (
+                f"Kullanıcı selfie'sinden dijital avatar oluşturmak istiyor:\n"
+                f"Stil: {style_name} ({style_category})\n\n"
+                f"Bu avatar stili için uygun renk paleti, yüz özellikleri ve stil önerileri hakkında "
+                f"kısa bir değerlendirme yap."
+            )
 
         client = MEHLRClient()
         result = client.analyze(
             project=settings.MEHLR_PROJECT,
-            prompt=(
-                f"Kullanıcı bu makyaj görünümünü sanal olarak denemek istiyor:\n"
-                f"Look: {look_name}\n"
-                f"Kategori: {look_category}\n\n"
-                f"Bu makyaj kullanıcıya yakışır mı? "
-                f"Renk uyumu ve öneriler hakkında kısa bir değerlendirme yap."
-            ),
+            prompt=prompt,
             context={
-                "task": "virtual_makeup_feedback",
+                "task": "virtual_avatar_feedback",
                 "session_id": session_id,
-                "look_id": session.applied_look.id if session.applied_look else None,
+                "style_id": session.style.id if session.style else None,
             },
         )
 
@@ -67,34 +69,34 @@ def _process_makeup_session_impl(session_id: int) -> None:
         else:
             session.status = "completed"
             session.output_data = {
-                "ai_feedback": "Bu makyaj görünümü size çok yakışacak!",
+                "ai_feedback": "Avatarınız oluşturuluyor, çok yakında hazır olacak!",
                 "mode": "placeholder",
                 "processing_time": elapsed,
             }
 
         session.save()
 
-        increment_usage(session.user, FeatureUsage.FEATURE_MAKEUP)
+        increment_usage(session.user, FeatureUsage.FEATURE_AVATAR)
         record_usage_event(
             session.user,
-            "makeup",
+            "avatar",
             metadata={"session_id": session_id},
             session_id=str(session_id),
         )
 
-        logger.info("MakeupSession %s tamamlandı", session_id)
+        logger.info("AvatarSession %s tamamlandı", session_id)
 
 
 try:
     from celery import shared_task
 
     @shared_task(bind=True, max_retries=3)
-    def process_makeup_session(self, session_id: int):
-        """MEHLR'e makyaj look + kullanıcı bilgisi gönder, AI geri bildirimi al."""
-        _process_makeup_session_impl(session_id)
+    def process_avatar_session(self, session_id: int):
+        """MEHLR'e avatar stili + selfie bilgisi gönder, AI geri bildirimi al."""
+        _process_avatar_session_impl(session_id)
 
 except ImportError:
 
-    def process_makeup_session(session_id: int):
+    def process_avatar_session(session_id: int):
         """Celery yoksa senkron çalıştır."""
-        _process_makeup_session_impl(session_id)
+        _process_avatar_session_impl(session_id)

@@ -33,6 +33,10 @@ def _limit_for_feature(plan: Optional[Plan], feature_type: str) -> int:
         FeatureUsage.FEATURE_EDITOR: 5,
         FeatureUsage.FEATURE_STYLE_SESSION: 5,
         FeatureUsage.FEATURE_LOOK_CREATE: 5,
+        FeatureUsage.FEATURE_MAKEUP: 3,
+        FeatureUsage.FEATURE_HAIR: 3,
+        FeatureUsage.FEATURE_AVATAR: 2,
+        FeatureUsage.FEATURE_LOOK_APPLY: 5,
     }
     if not plan:
         return defaults.get(feature_type, 0)
@@ -42,6 +46,10 @@ def _limit_for_feature(plan: Optional[Plan], feature_type: str) -> int:
         FeatureUsage.FEATURE_EDITOR: plan.editor_limit,
         FeatureUsage.FEATURE_STYLE_SESSION: plan.style_session_limit,
         FeatureUsage.FEATURE_LOOK_CREATE: plan.look_limit,
+        FeatureUsage.FEATURE_MAKEUP: plan.makeup_limit,
+        FeatureUsage.FEATURE_HAIR: plan.hair_limit,
+        FeatureUsage.FEATURE_AVATAR: plan.avatar_limit,
+        FeatureUsage.FEATURE_LOOK_APPLY: plan.look_apply_limit,
     }
     return int(mapping.get(feature_type, 0))
 

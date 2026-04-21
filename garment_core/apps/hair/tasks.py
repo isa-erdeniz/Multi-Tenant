@@ -11,12 +11,21 @@ def _process_hair_session_impl(session_id: int) -> None:
     from apps.hair.models import HairSession
     from apps.analytics.services import record_usage_event
 
+    from apps.subscriptions.models import FeatureUsage
+    from apps.subscriptions.services import can_use_feature, increment_usage
+
     try:
         session = HairSession.objects.select_related(
             "user", "applied_style", "applied_color"
         ).get(id=session_id)
     except HairSession.DoesNotExist:
         logger.error("HairSession bulunamadı: %s", session_id)
+        return
+
+    if not can_use_feature(session.user, FeatureUsage.FEATURE_HAIR):
+        session.status = "failed"
+        session.output_data = {"error": "quota_exceeded"}
+        session.save()
         return
 
     tenant = getattr(session.user, "tenant", None)
@@ -68,6 +77,7 @@ def _process_hair_session_impl(session_id: int) -> None:
 
         session.save()
 
+        increment_usage(session.user, FeatureUsage.FEATURE_HAIR)
         record_usage_event(
             session.user,
             "hair",

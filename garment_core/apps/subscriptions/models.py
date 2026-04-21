@@ -48,6 +48,19 @@ class Plan(TimeStampedModel):
         help_text="0 = sınırsız",
     )
 
+    makeup_limit = models.PositiveIntegerField(
+        "Aylık makyaj deneme limiti", default=3, help_text="0 = sınırsız"
+    )
+    hair_limit = models.PositiveIntegerField(
+        "Aylık saç değiştirme limiti", default=3, help_text="0 = sınırsız"
+    )
+    avatar_limit = models.PositiveIntegerField(
+        "Aylık avatar oluşturma limiti", default=2, help_text="0 = sınırsız"
+    )
+    look_apply_limit = models.PositiveIntegerField(
+        "Aylık look uygulama limiti", default=5, help_text="0 = sınırsız"
+    )
+
     has_ai_stylist = models.BooleanField("AI stilist", default=False)
     has_advanced_editor = models.BooleanField("Gelişmiş editör", default=False)
     has_social_sharing = models.BooleanField("Sosyal paylaşım", default=False)
@@ -193,12 +206,20 @@ class FeatureUsage(TimeStampedModel):
     FEATURE_EDITOR = "editor"
     FEATURE_STYLE_SESSION = "style_session"
     FEATURE_LOOK_CREATE = "look_create"
+    FEATURE_MAKEUP = "makeup"
+    FEATURE_HAIR = "hair"
+    FEATURE_AVATAR = "avatar"
+    FEATURE_LOOK_APPLY = "look_apply"
 
     FEATURE_CHOICES = [
         (FEATURE_TRYON, "Sanal Deneme"),
         (FEATURE_EDITOR, "Görsel Editör"),
         (FEATURE_STYLE_SESSION, "Stil Danışmanlığı"),
         (FEATURE_LOOK_CREATE, "Görünüm Oluşturma"),
+        (FEATURE_MAKEUP, "Makyaj Deneme"),
+        (FEATURE_HAIR, "Saç Değiştirme"),
+        (FEATURE_AVATAR, "Avatar Oluşturma"),
+        (FEATURE_LOOK_APPLY, "Look Uygulama"),
     ]
 
     tenant = models.ForeignKey(
