@@ -31,6 +31,7 @@ urlpatterns = [
     path("topluluk/", include("apps.social.urls", namespace="social")),
     path("katalog/", include("apps.catalog.urls", namespace="catalog")),
     path("api/v1/", include("apps.api.urls", namespace="api")),
+    path("api/v1/intake/", include("apps.intake.urls", namespace="intake")),
     path("webhooks/ai/", include("apps.ai_integrations.urls")),
     path("odemeler/", include("apps.payments.urls", namespace="payments")),
     path("abonelik/", include("apps.subscriptions.urls", namespace="subscriptions")),

@@ -383,5 +383,46 @@
     </div>
   </footer>
 
+<script>
+  (function () {
+    const GARMENT_CORE_INTAKE_URL = "https://garment-core.railway.app/api/v1/intake/";
+    const INTAKE_BEARER_TOKEN = "BURAYA_INTAKE_BEARER_TOKEN_GELECEK";
+    const TENANT_SLUG = "styleforhuman";
+
+    function sendIntakeEvent(eventType, payload) {
+      fetch(GARMENT_CORE_INTAKE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + INTAKE_BEARER_TOKEN,
+          "X-Tenant-ID": TENANT_SLUG,
+        },
+        body: JSON.stringify({
+          event_type: eventType,
+          tenant_slug: TENANT_SLUG,
+          payload: payload,
+        }),
+      }).catch(function () {});
+    }
+
+    sendIntakeEvent("page_view", {
+      page: window.location.pathname,
+      referrer: document.referrer,
+      user_agent: navigator.userAgent,
+      timestamp: new Date().toISOString(),
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".cta-btn, [data-intake]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          sendIntakeEvent("cta_click", {
+            element: el.dataset.intake || el.innerText.trim().slice(0, 60),
+            page: window.location.pathname,
+          });
+        });
+      });
+    });
+  })();
+</script>
 </body>
 </html>

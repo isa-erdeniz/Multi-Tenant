@@ -12,10 +12,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# erdeniz_security paketini container'a kopyala (pip install öncesi)
+COPY ../erdeniz_security/ /app/erdeniz_security/
+
+# ecosystem registry'yi container'a kopyala
+COPY ../ecosystem/ /app/ecosystem/
+
 # Python bağımlılıkları (layer cache için önce requirements)
 COPY requirements.txt ./
 COPY requirements ./requirements/
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-deps /app/erdeniz_security/
+
+ENV ERDENIZ_ECOSYSTEM_REGISTRY=/app/ecosystem/registry.json
 
 # Node.js (Tailwind build için)
 RUN apt-get update && apt-get install -y --no-install-recommends \

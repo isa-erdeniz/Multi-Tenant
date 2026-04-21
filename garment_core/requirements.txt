@@ -1,3 +1,4 @@
+erdeniz_security @ file:///${PROJECT_ROOT}/../erdeniz_security
 amqp==5.3.1
 asgiref==3.11.1
 billiard==4.2.4
