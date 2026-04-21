@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StyleForHuman – Modern Stil & Yaşam</title>
+  <meta name="description" content="StyleForHuman: Minimal, sürdürülebilir ve modern stil ürünleri. Yeni koleksiyonu keşfet.">
+
+  <style>
+    :root{
+      --bg:#0a0a0b;
+      --bg-soft:#111216;
+      --card:#15161a;
+      --text:#f3f4f6;
+      --muted:#a7aab3;
+      --accent:#e8ff4a;     /* lime */
+      --accent-2:#ff7a18;   /* turuncu vurgu */
+      --radius:18px;
+      --shadow:0 12px 30px rgba(0,0,0,.45);
+      --ring:rgba(232,255,74,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      min-height:100dvh;
+      background-color:var(--bg);
+      background-image:
+        linear-gradient(rgba(10,10,11,0.75), rgba(10,10,11,0.82)),
+        url("Gemini_Generated_Image_n8044sn8044sn804.png");
+      background-size:auto, cover;
+      background-position:center, center;
+      background-attachment:fixed, fixed;
+      background-repeat:no-repeat, no-repeat;
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block;border-radius:14px}
+    .container{max-width:1120px;margin:0 auto;padding:0 18px}
+
+    /* NAV */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:saturate(140%) blur(10px);
+      background:rgba(10,10,11,.7);
+      border-bottom:1px solid #22232b;
+    }
+    .nav{height:68px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px}
+    .logo{
+      width:38px;height:38px;border-radius:12px;
+      background:conic-gradient(from 220deg, var(--accent), #b7ff7a, #3ee58a, var(--accent));
+      display:grid;place-items:center;color:#000;font-weight:900;
+      box-shadow:0 0 0 4px rgba(232,255,74,.07);
+    }
+    .nav-links{display:flex;gap:16px;color:var(--muted);font-size:14px}
+    .nav-links a:hover{color:var(--text)}
+    .btn{
+      padding:10px 14px;border-radius:12px;font-weight:700;font-size:14px;
+      display:inline-flex;gap:8px;align-items:center;justify-content:center;
+      border:1px solid #2a2b33;background:#17181d;color:var(--text);
+      cursor:pointer;transition:.2s;
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.35)}
+    .btn.primary{
+      background:linear-gradient(180deg,#f2ff7a,#d9ff1a);
+      border-color:#e8ff4a;color:#0a0a0a;
+    }
+    .btn.ghost{background:transparent}
+
+    /* HERO */
+    main{padding:72px 0 32px;}
+    .hero{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center;
+    }
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;font-size:12px;
+      color:#dfff9e;background:rgba(232,255,74,.08);
+      border:1px solid rgba(232,255,74,.25);padding:6px 10px;border-radius:999px;
+    }
+    h1{font-size:46px;line-height:1.1;margin:12px 0 10px;letter-spacing:-.6px}
+    .lead{font-size:18px;color:#d8d9df;max-width:55ch}
+    .hero-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+    .hero-card{
+      background:radial-gradient(800px 400px at 0% 0%, #1e2028 0%, var(--card) 45%);
+      border:1px solid #272834;border-radius:var(--radius);
+      padding:18px;box-shadow:var(--shadow);
+    }
+    .hero-img{
+      min-height:260px;border:1px dashed #3a3c4c;background:#0f1014;
+      display:grid;place-items:center;color:var(--muted);
+    }
+
+    section{padding:44px 0;}
+    .section-title{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:14px}
+    .section-title h2{font-size:28px;margin:0}
+    .section-sub{color:var(--muted);font-size:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .card{
+      background:var(--card);border:1px solid #272834;border-radius:var(--radius);
+      padding:18px;box-shadow:var(--shadow);
+    }
+    .muted{color:var(--muted)}
+
+    /* Products */
+    .product{
+      display:grid;gap:10px;
+    }
+    .price{font-weight:800}
+    .badge{
+      font-size:11px;padding:4px 8px;border-radius:999px;font-weight:800;
+      background:rgba(255,122,24,.12);border:1px solid rgba(255,122,24,.35);color:#ffd4b0;
+      width:max-content;
+    }
+
+    /* Newsletter / form */
+    input, textarea{
+      width:100%;padding:10px 12px;border-radius:12px;border:1px solid #2b2c35;
+      background:#0f1014;color:var(--text);outline:none;transition:.15s;
+      box-shadow:0 0 0 0 var(--ring);
+    }
+    input:focus, textarea:focus{box-shadow:0 0 0 4px var(--ring);border-color:#e8ff4a}
+    form{display:grid;gap:10px}
+
+    /* Footer */
+    footer{
+      padding:28px 0 34px;border-top:1px solid #1f2027;color:var(--muted);font-size:14px;
+    }
+    .footer-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:14px}
+
+    @media(max-width:920px){
+      .hero{grid-template-columns:1fr;}
+      .grid-3{grid-template-columns:1fr 1fr;}
+      .footer-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:560px){
+      h1{font-size:34px}
+      .grid-3,.grid-2,.footer-grid{grid-template-columns:1fr;}
+      .nav-links{display:none;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <div class="logo">SFH</div>
+        <div>
+          <div style="font-size:16px">StyleForHuman</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:-2px">Modern Stil & Yaşam</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#koleksiyon">Koleksiyon</a>
+        <a href="#hikaye">Hikayemiz</a>
+        <a href="#degerler">Değerler</a>
+        <a href="#blog">Blog</a>
+        <a href="#iletisim">İletişim</a>
+      </nav>
+
+      <div style="display:flex;gap:8px">
+        <a class="btn ghost" href="#newsletter">Kulüp</a>
+        <a class="btn primary" href="#koleksiyon">Keşfet</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main id="top">
+    <div class="container hero">
+      <div>
+        <span class="pill">✨ Minimal • Sürdürülebilir • İnsan Odaklı</span>
+        <h1>Stil, insan için.<br/>Yaşam, insanla.</h1>
+        <p class="lead">
+          StyleForHuman; sade çizgiler, kaliteli malzeme ve sürdürülebilir yaklaşım ile
+          günlük yaşamın stil dilini yeniden tasarlar.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#koleksiyon">Yeni Koleksiyon</a>
+          <a class="btn" href="#hikaye">Marka Hikayesi</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <!-- Buraya gerçek hero görseli gelince img koyacağız -->
+        <div class="hero-img">
+          <div>
+            <div style="font-weight:800;color:#fff">Hero Görsel Alanı</div>
+            <div class="muted">Yeni koleksiyon fotoğrafı</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- COLLECTION -->
+  <section id="koleksiyon">
+    <div class="container">
+      <div class="section-title">
+        <h2>Yeni Koleksiyon</h2>
+        <p class="section-sub">Sezonun öne çıkan parçaları</p>
+      </div>
+
+      <div class="grid-3">
+        <article class="card product">
+          <div class="badge">NEW</div>
+          <img src="https://picsum.photos/seed/sfh1/600/420" alt="Ürün 1">
+          <div style="font-weight:700">Urban Minimal Jacket</div>
+          <div class="muted">Siyah / Unisex</div>
+          <a class="btn" href="#iletisim">Stok Sor</a>
+        </article>
+
+        <article class="card product">
+          <div class="badge">LIMITED</div>
+          <img src="https://picsum.photos/seed/sfh2/600/420" alt="Ürün 2">
+          <div style="font-weight:700">Human Core Tee</div>
+          <div class="muted">Beyaz / Oversize</div>
+          <a class="btn" href="#iletisim">Stok Sor</a>
+        </article>
+
+        <article class="card product">
+          <div class="badge">TREND</div>
+          <img src="https://picsum.photos/seed/sfh3/600/420" alt="Ürün 3">
+          <div style="font-weight:700">Everyday Cargo Pants</div>
+          <div class="muted">Haki / Rahat kesim</div>
+          <a class="btn" href="#iletisim">Stok Sor</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section id="hikaye">
+    <div class="container grid-2">
+      <div class="card">
+        <h2 style="margin-top:0">Hikayemiz</h2>
+        <p class="muted">
+          StyleForHuman, “giyinmek bir ihtiyaçtan fazlasıdır” fikriyle doğdu.
+          Amacımız; insanın kendini rahat, özgür ve güçlü hissettiği parçalar üretmek.
+        </p>
+        <p class="muted">
+          Trendleri takip ederken, zamansız tasarımları önceliklendiriyoruz.
+          Her ürün; günlük hayatın ritmine uyum sağlayacak şekilde tasarlanır.
+        </p>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/seed/sfhstory/900/650" alt="Marka görseli">
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section id="degerler">
+    <div class="container">
+      <div class="section-title">
+        <h2>Değerlerimiz</h2>
+        <p class="section-sub">Markayı marka yapan şey</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>İnsan Odaklı</h3>
+          <p class="muted">Tasarımda önce insan konforu ve özgürlüğü.</p>
+        </div>
+        <div class="card">
+          <h3>Sürdürülebilir</h3>
+          <p class="muted">Uzun ömürlü malzeme, düşük atık, bilinçli üretim.</p>
+        </div>
+        <div class="card">
+          <h3>Zamansız Stil</h3>
+          <p class="muted">Sezona değil, yıllara uyacak minimal çizgiler.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG PREVIEW -->
+  <section id="blog">
+    <div class="container">
+      <div class="section-title">
+        <h2>Blog</h2>
+        <p class="section-sub">Stil notları & ilham</p>
+      </div>
+
+      <div class="grid-3">
+        <article class="card">
+          <h3>Minimal Gardırop Rehberi</h3>
+          <p class="muted">Az parçayla çok kombin nasıl yapılır? Kısa ve pratik öneriler...</p>
+          <div class="muted" style="font-size:12px;margin-top:6px">Yayın: Yakında</div>
+        </article>
+        <article class="card">
+          <h3>Sürdürülebilir Kumaşlar</h3>
+          <p class="muted">Günlük giyimde çevre dostu kumaş seçimi neden önemli?</p>
+          <div class="muted" style="font-size:12px;margin-top:6px">Yayın: Yakında</div>
+        </article>
+        <article class="card">
+          <h3>Şehir Stilinin Ritmi</h3>
+          <p class="muted">Gün içinde rahatlık + şıklık dengesini yakalamak...</p>
+          <div class="muted" style="font-size:12px;margin-top:6px">Yayın: Yakında</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="newsletter">
+    <div class="container grid-2">
+      <div class="card">
+        <h2 style="margin-top:0">StyleForHuman Kulübü</h2>
+        <p class="muted">Yeni koleksiyonlar, drop’lar ve özel indirimlerden ilk sen haberdar ol.</p>
+      </div>
+      <div class="card">
+        <form action="mailto:info@styleforhuman.com" method="post" enctype="text/plain">
+          <input name="email" type="email" placeholder="E-posta adresin" required>
+          <button class="btn primary" type="submit">Katıl</button>
+          <div class="muted" style="font-size:12px">Gönderim mail ile yapılır. Sonra panel ekleriz.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="iletisim">
+    <div class="container">
+      <div class="section-title">
+        <h2>İletişim</h2>
+        <p class="section-sub">Sipariş, iş birliği, toptan satış</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Bizimle konuş</h3>
+          <p class="muted">Toptan satış, stok sorusu veya iş birliği için yaz.</p>
+          <p>✉️ info@styleforhuman.com</p>
+          <p>📞 +90 5xx xxx xx xx</p>
+        </div>
+        <div class="card">
+          <form action="mailto:info@styleforhuman.com" method="post" enctype="text/plain">
+            <input name="ad" placeholder="Ad Soyad" required>
+            <input name="email" type="email" placeholder="E-posta">
+            <textarea name="mesaj" rows="4" placeholder="Mesajın"></textarea>
+            <button class="btn primary" type="submit">Gönder</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:8px">
+          <div class="logo">SFH</div>
+          <div>
+            <div style="font-size:16px;color:#fff">StyleForHuman</div>
+            <div style="font-size:12px">Modern Stil & Yaşam</div>
+          </div>
+        </div>
+        <p class="muted">ErdenizTech markasıdır. © 2025</p>
+      </div>
+      <div>
+        <div style="font-weight:800;color:#fff;margin-bottom:6px">Linkler</div>
+        <div style="display:grid;gap:6px">
+          <a href="#koleksiyon">Koleksiyon</a>
+          <a href="#hikaye">Hikayemiz</a>
+          <a href="#blog">Blog</a>
+          <a href="#iletisim">İletişim</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:800;color:#fff;margin-bottom:6px">Yasal</div>
+        <div style="display:grid;gap:6px">
+          <span>KVKK / Gizlilik</span>
+          <span>Kullanım Koşulları</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

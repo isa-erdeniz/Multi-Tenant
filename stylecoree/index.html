@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StyleCoree – Stil, Marka ve Dijital Tasarım Stüdyosu</title>
+  <meta name="description" content="StyleCoree, markalar için modern stil danışmanlığı, marka kimliği tasarımı ve dijital çözümler sunan yaratıcı bir stüdyodur.">
+
+  <style>
+    :root{
+      --bg:#07080a;
+      --bg-soft:#101217;
+      --card:#151822;
+      --text:#f9fafb;
+      --muted:#a3a7b3;
+      --accent:#ff2e9f;   /* pembe */
+      --accent-2:#5f6bff; /* mor-mavi */
+      --radius:20px;
+      --shadow:0 14px 35px rgba(0,0,0,.5);
+      --ring:rgba(255,46,159,.35);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+      min-height:100dvh;
+      background-color:#050609;
+      background-image:
+        linear-gradient(rgba(5,6,9,0.78), rgba(5,6,9,0.88)),
+        url("Gemini_Generated_Image_n8044sn8044sn804.png");
+      background-size:auto, cover;
+      background-position:center, center;
+      background-attachment:fixed, fixed;
+      background-repeat:no-repeat, no-repeat;
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    img{max-width:100%;display:block}
+    a{text-decoration:none;color:inherit}
+
+    .container{
+      width:100%;
+      max-width:1120px;
+      margin:0 auto;
+      padding:0 16px;
+    }
+
+    /* Top Bar */
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter:blur(18px);
+      background:linear-gradient(to bottom,rgba(5,6,9,.94),rgba(5,6,9,.82));
+      border-bottom:1px solid rgba(255,255,255,.04);
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 0;
+      gap:16px;
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size:14px;
+    }
+    .logo-mark{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      background:
+        radial-gradient(circle at 20% 0, #fff 0, #ffbde6 18%, transparent 40%),
+        conic-gradient(from 210deg,var(--accent),var(--accent-2),var(--accent));
+      box-shadow:0 0 24px rgba(255,46,159,.6);
+      position:relative;
+    }
+    .logo-mark::after{
+      content:"";
+      position:absolute;
+      inset:7px;
+      border-radius:999px;
+      border:2px solid rgba(255,255,255,.6);
+      opacity:.7;
+    }
+
+    nav{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-size:13px;
+      color:var(--muted);
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    nav a{
+      padding:6px 10px;
+      border-radius:999px;
+      transition:.18s ease;
+    }
+    nav a:hover{
+      color:var(--text);
+      background:rgba(255,255,255,.05);
+    }
+    .btn-small{
+      padding:7px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:12px;
+      font-weight:500;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+      background:rgba(255,255,255,.02);
+    }
+    .btn-small span{
+      font-size:16px;
+      transform:translateY(1px);
+    }
+
+    /* Hero */
+    .hero{
+      padding:32px 0 40px;
+    }
+    .hero-inner{
+      display:grid;
+      grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);
+      gap:32px;
+      align-items:center;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(10,10,12,.6);
+      color:var(--muted);
+      font-size:11px;
+      margin-bottom:14px;
+    }
+    .eyebrow-dot{
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 12px rgba(255,46,159,.9);
+    }
+
+    h1{
+      font-size: clamp(30px, 4vw, 40px);
+      line-height:1.15;
+      margin-bottom:16px;
+    }
+    h1 span.highlight{
+      background:linear-gradient(120deg,var(--accent),var(--accent-2));
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+
+    .hero-sub{
+      max-width:520px;
+      color:var(--muted);
+      font-size:15px;
+      margin-bottom:20px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .btn-primary{
+      padding:11px 22px;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      background:linear-gradient(120deg,var(--accent),var(--accent-2));
+      color:#050508;
+      box-shadow:0 12px 30px var(--ring);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .btn-ghost{
+      padding:10px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(10,10,14,.7);
+      color:var(--text);
+      font-size:13px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+    }
+
+    .hero-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      font-size:11px;
+      color:var(--muted);
+      margin-top:8px;
+    }
+    .hero-meta div{
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .dot-soft{
+      width:6px;
+      height:6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.2);
+    }
+
+    .hero-card{
+      background:radial-gradient(circle at top,var(--card),#050609 58%);
+      border-radius:28px;
+      padding:18px 18px 16px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card-tag{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+    .hero-card-title{
+      font-size:16px;
+      font-weight:600;
+      margin-bottom:8px;
+    }
+    .hero-card-grid{
+      display:grid;
+      grid-template-columns:1.1fr 1fr;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .badge-pill{
+      display:inline-flex;
+      align-items:center;
+      padding:3px 9px;
+      border-radius:999px;
+      font-size:10px;
+      background:rgba(0,0,0,.5);
+      border:1px solid rgba(255,255,255,.1);
+      gap:6px;
+      margin-right:6px;
+    }
+    .badge-dot{
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:var(--accent-2);
+      box-shadow:0 0 14px rgba(95,107,255,.8);
+    }
+
+    .hero-card-list{
+      list-style:none;
+      font-size:11px;
+      color:var(--muted);
+      display:grid;
+      gap:4px;
+      margin:10px 0 0;
+    }
+
+    .hero-pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:8px;
+      font-size:10px;
+    }
+
+    .hero-orbit{
+      position:absolute;
+      right:-40px;
+      bottom:-40px;
+      width:180px;
+      height:180px;
+      border-radius:999px;
+      border:1px dashed rgba(255,255,255,.12);
+      opacity:.7;
+    }
+    .hero-orbit::before{
+      content:"";
+      position:absolute;
+      inset:35px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .hero-orbit-dot{
+      position:absolute;
+      top:26px;
+      right:42px;
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 24px rgba(255,46,159,.9);
+    }
+
+    /* Sections */
+    section{
+      padding:30px 0;
+      border-top:1px solid rgba(255,255,255,.04);
+    }
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .section-title{
+      font-size:18px;
+      font-weight:600;
+    }
+    .section-kicker{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* Hizmetler */
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+    .card{
+      background:var(--bg-soft);
+      border-radius:var(--radius);
+      padding:16px 15px 14px;
+      border:1px solid rgba(255,255,255,.06);
+      box-shadow:0 10px 26px rgba(0,0,0,.45);
+      min-height:150px;
+    }
+    .card-title{
+      font-size:14px;
+      margin-bottom:6px;
+    }
+    .card-text{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+    .card-tag{
+      font-size:10px;
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.16em;
+    }
+    .card-list{
+      list-style:none;
+      font-size:11px;
+      color:var(--muted);
+      display:grid;
+      gap:4px;
+      margin-top:6px;
+    }
+
+    /* Portfolyo */
+    .portfolio-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    .pf-item{
+      border-radius:16px;
+      padding:10px 10px 12px;
+      background:linear-gradient(145deg,rgba(21,24,34,1),rgba(10,11,16,1));
+      border:1px solid rgba(255,255,255,.06);
+      font-size:11px;
+    }
+    .pf-chip-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:8px;
+      color:var(--muted);
+    }
+    .pf-chip{
+      font-size:10px;
+      padding:3px 7px;
+      border-radius:999px;
+      background:rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .pf-title{
+      font-size:12px;
+      margin-bottom:4px;
+    }
+
+    /* Süreç */
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+      font-size:12px;
+    }
+    .step-num{
+      font-size:11px;
+      color:var(--accent);
+      margin-bottom:4px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+    }
+
+    /* Hakkımızda */
+    .about-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+      gap:18px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .about-highlight{
+      font-size:13px;
+      color:var(--text);
+      margin-bottom:8px;
+    }
+    .about-pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .about-pill{
+      font-size:11px;
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.02);
+    }
+
+    /* İletişim */
+    .contact-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+      gap:18px;
+    }
+    form{
+      background:var(--bg-soft);
+      border-radius:var(--radius);
+      padding:16px 14px 14px;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 26px rgba(0,0,0,.5);
+      font-size:13px;
+    }
+    .field{
+      margin-bottom:10px;
+    }
+    label{
+      display:block;
+      font-size:11px;
+      margin-bottom:4px;
+      color:var(--muted);
+    }
+    input, textarea, select{
+      width:100%;
+      padding:9px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#050609;
+      color:var(--text);
+      font-size:12px;
+      outline:none;
+    }
+    input:focus, textarea:focus, select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 1px var(--ring);
+    }
+    textarea{
+      min-height:90px;
+      resize:vertical;
+    }
+    .contact-note{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+    .contact-info-box{
+      font-size:13px;
+      color:var(--muted);
+      padding:14px 13px;
+      border-radius:var(--radius);
+      background:linear-gradient(145deg,rgba(21,24,34,.95),rgba(8,9,13,.98));
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .contact-line{
+      margin-bottom:8px;
+    }
+    .contact-label{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .contact-value{
+      font-size:13px;
+      color:var(--text);
+    }
+
+    /* Footer */
+    footer{
+      border-top:1px solid rgba(255,255,255,.05);
+      padding:14px 0 18px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .footer-inner{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .footer-right{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .footer-right a{
+      padding:3px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.06);
+    }
+    
+    /* =======================
+   TYPOGRAPHY UPDATES
+   (Metinleri büyütme)
+   ======================= */
+
+/* genel metinler */
+body, p{
+  font-size:16px;
+  line-height:1.65;
+}
+
+/* hero alt açıklama */
+.hero-sub{
+  font-size:17px;          /* 15 → 17 */
+}
+
+/* bölüm alt başlıkları */
+.section-kicker{
+  font-size:14px;          /* 12 → 14 */
+}
+
+/* kart içi başlık & açıklama */
+.card-title{
+  font-size:18px;          /* 14 → 18 */
+}
+.card-text{
+  font-size:15px;          /* 12 → 15 */
+}
+.card-list{
+  font-size:14px;          /* 11 → 14 */
+}
+
+/* portfolyo yazıları */
+.pf-item{
+  font-size:14px;          /* 11 → 14 */
+}
+.pf-title{
+  font-size:15px;          /* 12 → 15 */
+}
+
+/* süreç bölümü metinleri */
+.steps{
+  font-size:14px;          /* 12 → 14 */
+}
+.step-num{
+  font-size:13px;          /* 11 → 13 */
+}
+
+/* hakkında yazıları */
+.about-grid{
+  font-size:15px;          /* 13 → 15 */
+}
+.about-highlight{
+  font-size:15px;          /* 13 → 15 */
+}
+.about-pill{
+  font-size:12px;          /* 11 → 12 */
+}
+
+/* iletişim formu */
+form{
+  font-size:15px;          /* 13 → 15 */
+}
+label{
+  font-size:12px;          /* 11 → 12 */
+}
+input, textarea, select{
+  font-size:14px;          /* 12 → 14 */
+}
+.contact-note{
+  font-size:14px;          /* 12 → 14 */
+}
+.contact-info-box{
+  font-size:14px;          /* 13 → 14 */
+}
+
+/* footer */
+footer{
+  font-size:12px;          /* 11 → 12 */
+}
+
+
+    /* Responsive */
+    @media (max-width:840px){
+      .hero-inner,
+      .about-grid,
+      .contact-grid{
+        grid-template-columns:1fr;
+      }
+      .hero{
+        padding-top:22px;
+      }
+    }
+    @media (max-width:720px){
+      .grid-3,
+      .portfolio-grid,
+      .steps{
+        grid-template-columns:1fr;
+      }
+      .topbar{
+        align-items:flex-start;
+      }
+      nav{
+        justify-content:flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container topbar">
+    <div class="logo">
+      <div class="logo-mark"></div>
+      <div>STYLECOREE</div>
+    </div>
+    <nav>
+      <a href="#anasayfa">Anasayfa</a>
+      <a href="#hizmetler">Hizmetler</a>
+      <a href="#portfolyo">Portfolyo</a>
+      <a href="#hakkimizda">Hakkımızda</a>
+      <a href="#iletisim">İletişim</a>
+      <button class="btn-small" onclick="document.getElementById('iletisim').scrollIntoView({behavior:'smooth'})">
+        Teklif Al <span>→</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="anasayfa">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <div class="eyebrow">
+          <div class="eyebrow-dot"></div>
+          Stil & marka odaklı dijital tasarım stüdyosu
+        </div>
+        <h1>
+          Markanı merkeze alan <span class="highlight">stil, kimlik ve dijital deneyim</span> tasarlıyoruz.
+        </h1>
+        <p class="hero-sub">
+          StyleCoree, moda ve yaşam tarzı markaları için modern marka kimliği, web tasarımı ve sosyal medya
+          deneyimleri üretir. Net, okunabilir ve mobil öncelikli arayüzlerle markanı bir üst seviyeye taşır.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="document.getElementById('iletisim').scrollIntoView({behavior:'smooth'})">
+            15 Dakikalık Ücretsiz Tanışma Görüşmesi Planla
+            <span>⚡</span>
+          </button>
+          <button class="btn-ghost" onclick="document.getElementById('portfolyo').scrollIntoView({behavior:'smooth'})">
+            Son projelerimize göz at
+          </button>
+        </div>
+
+        <div class="hero-meta">
+          <div><span class="dot-soft"></span> Moda & güzellik odaklı tasarım</div>
+          <div><span class="dot-soft"></span> Mobil uyumlu, hızlı ve sade arayüzler</div>
+          <div><span class="dot-soft"></span> ErdenizTech ekosisteminin bir markası</div>
+        </div>
+      </div>
+
+      <aside class="hero-card" aria-hidden="true">
+        <div class="hero-card-tag">StyleCoree Çalışma Panosu</div>
+        <div class="hero-card-title">Yeni marka için stil ve dijital kimlik</div>
+
+        <div class="hero-card-grid">
+          <div>
+            <span class="badge-pill">
+              <span class="badge-dot"></span> Stil & Marka Kurgusu
+            </span>
+
+            <ul class="hero-card-list">
+              <li>• Logo ve görsel kimlik sistemi</li>
+              <li>• Renk paleti, tipografi ve UI kit</li>
+              <li>• Web & mobil arayüz önerileri</li>
+              <li>• Sosyal medya görsel dil seti</li>
+            </ul>
+
+            <div class="hero-pill-row">
+              <div class="about-pill">Lookbook tasarımı</div>
+              <div class="about-pill">Instagram grid planı</div>
+              <div class="about-pill">E-ticaret vitrini düzeni</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card-text" style="font-size:11px;">
+              Tasarım sürecini; stil stratejisi, arayüz tasarımı ve içerik planı olarak üç katmanda kurguluyoruz.
+              Böylece hem fiziksel hem dijital temas noktaları tutarlı ilerler.
+            </div>
+            <div class="hero-pill-row">
+              <div class="about-pill">UX odaklı tasarım</div>
+              <div class="about-pill">Hızlı prototip</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-orbit">
+          <div class="hero-orbit-dot"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- HİZMETLER -->
+  <section id="hizmetler">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Hizmetler</div>
+          <div class="section-kicker">Markanın çekirdeğini netleştiren tasarım ve içerik hizmetleri</div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-tag">Marka Kimliği</div>
+          <h3 class="card-title">Logo, renk paleti ve stil rehberi</h3>
+          <p class="card-text">
+            Moda, güzellik, butik, kuaför ve yaşam tarzı markaları için baştan sona marka kimliği oluşturuyoruz.
+          </p>
+          <ul class="card-list">
+            <li>• Logo ve varyasyonları</li>
+            <li>• Renk ve tipografi sistemi</li>
+            <li>• Sosyal medya şablonları</li>
+            <li>• Basılı materyal tasarımları</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-tag">Web & Dijital</div>
+          <h3 class="card-title">Web sitesi, landing page ve e-ticaret arayüzü</h3>
+          <p class="card-text">
+            Hızlı açılan, sade ve mobil uyumlu arayüzlerle markanın dijital vitrini için tasarım yapıyoruz.
+          </p>
+          <ul class="card-list">
+            <li>• Kurumsal web sitesi UI tasarımı</li>
+            <li>• Kampanya landing page tasarımı</li>
+            <li>• E-ticaret kategorisi & ürün sayfası düzeni</li>
+            <li>• Wireframe ve prototip dosyaları</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-tag">Sosyal Medya</div>
+          <h3 class="card-title">İçerik dili ve görsel akış</h3>
+          <p class="card-text">
+            Instagram, TikTok ve diğer platformlar için tutarlı bir görünüm ve içerik hattı oluşturuyoruz.
+          </p>
+          <ul class="card-list">
+            <li>• İçerik tema ve başlık önerileri</li>
+            <li>• Gönderi & Reels kapak şablonları</li>
+            <li>• Hikâye şablon setleri</li>
+            <li>• Aylık grid planlama taslağı</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLYO -->
+  <section id="portfolyo">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Seçili Çalışmalar</div>
+          <div class="section-kicker">Gerçek markalar için tasarlanan kurgusal örnekler</div>
+        </div>
+      </div>
+
+      <div class="portfolio-grid">
+        <article class="pf-item">
+          <div class="pf-chip-row">
+            <div class="pf-chip">Moda Butik – Web & Stil</div>
+            <span>2025</span>
+          </div>
+          <div class="pf-title">Luna Atelier</div>
+          <div class="card-text" style="margin-bottom:4px;">
+            Minimalist giyim markası için logo, renk sistemi ve responsive vitrin arayüzü tasarımı.
+          </div>
+          <div class="hero-pill-row">
+            <div class="about-pill">Landing Page</div>
+            <div class="about-pill">Lookbook PDF</div>
+          </div>
+        </article>
+
+        <article class="pf-item">
+          <div class="pf-chip-row">
+            <div class="pf-chip">Kuaför & Güzellik – Marka Kimliği</div>
+            <span>2025</span>
+          </div>
+          <div class="pf-title">Glow Studio</div>
+          <div class="card-text" style="margin-bottom:4px;">
+            Kuaför salonu için stil rehberi, sosyal medya grid tasarımı ve kampanya görselleri.
+          </div>
+          <div class="hero-pill-row">
+            <div class="about-pill">Logo & Rehber</div>
+            <div class="about-pill">Instagram Seti</div>
+          </div>
+        </article>
+
+        <article class="pf-item">
+          <div class="pf-chip-row">
+            <div class="pf-chip">Yaşam Tarzı – İçerik & Tasarım</div>
+            <span>2024</span>
+          </div>
+          <div class="pf-title">Calm Living Co.</div>
+          <div class="card-text" style="margin-bottom:4px;">
+            Well-being markası için blog arayüzü, ikon seti ve newsletter şablonları.
+          </div>
+          <div class="hero-pill-row">
+            <div class="about-pill">Blog UI</div>
+            <div class="about-pill">Mail Şablonu</div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SÜREÇ -->
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Nasıl Çalışıyoruz?</div>
+          <div class="section-kicker">Net süreç, şeffaf teslim ve sade dosya yapısı</div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div>
+          <div class="step-num">1. Keşif & Stil Yönü</div>
+          <div class="card-text">
+            Markanı, hedef kitleni ve beklentilerini konuşuyoruz. Referanslar üzerinden hangi
+            stil dünyasının sana uygun olduğuna birlikte karar veriyoruz.
+          </div>
+        </div>
+        <div>
+          <div class="step-num">2. Tasarım & Geri Bildirim</div>
+          <div class="card-text">
+            Logo, renk sistemi, web arayüzü ve sosyal medya taslaklarını hazırlıyoruz.
+            Ara aşamalarda görsel örnekler üzerinden geri bildirim topluyoruz.
+          </div>
+        </div>
+        <div>
+          <div class="step-num">3. Teslim & Uygulama</div>
+          <div class="card-text">
+            Onaylanan tüm tasarımları; düzenlenebilir dosyalar, PNG/SVG çıktılar ve kısa bir
+            stil rehberiyle birlikte teslim ediyoruz. İstersen devamında uygulama sürecine de eşlik ederiz.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HAKKIMIZDA -->
+  <section id="hakkimizda">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="section-title">StyleCoree Hakkında</div>
+          <div class="section-kicker">Stil, teknoloji ve okunabilir arayüz odağında tasarım</div>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <div>
+          <p class="about-highlight">
+            StyleCoree, ErdenizTech ekosisteminin stil ve markalama odaklı tasarım stüdyosudur.
+          </p>
+          <p>
+            Amacımız; markana sadece güzel görünen değil, aynı zamanda net, okunabilir ve kullanması
+            kolay dijital deneyimler kazandırmak. Bu yüzden tasarladığımız her sayfada;
+            tipografi, boşluk kullanımı ve mobil uyumluluğa özellikle dikkat ediyoruz.
+          </p>
+          <p>
+            Fikir aşamasındaki butiklerden, büyümek isteyen kuaför ve güzellik salonlarına kadar
+            farklı ölçeklerde markalarla çalışıyoruz.
+          </p>
+        </div>
+        <div>
+          <p>
+            Teknik tarafta; geliştirilebilir dosya yapıları, WordPress veya özel yazılımlar için
+            uyumlu tasarımlar ve sade bileşen sistemleri üretiyoruz. Böylece tasarımlar,
+            yazılım ekibinin elinde kolayca hayata geçebiliyor.
+          </p>
+          <div class="about-pill-row">
+            <div class="about-pill">Mobil öncelikli tasarım</div>
+            <div class="about-pill">Temiz tipografi</div>
+            <div class="about-pill">Net içerik hiyerarşisi</div>
+            <div class="about-pill">Uzun vadeli marka kurgusu</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- İLETİŞİM -->
+  <section id="iletisim">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Birlikte Çalışalım</div>
+          <div class="section-kicker">Kısa bir form doldur, seni geri arayalım</div>
+        </div>
+      </div>
+
+      <div class="contact-grid">
+        <div>
+          <form>
+            <p class="contact-note">
+              Aşağıdaki bilgileri doldurduğunda, markanı daha iyi anlamamız için ilk taslak
+              notlarımızı hazırlayıp sana geri dönüş yapmamız kolaylaşır.
+            </p>
+
+            <div class="field">
+              <label for="name">Ad Soyad / Marka Adı</label>
+              <input id="name" type="text" placeholder="Örn: Ayşe Yılmaz / Glow Studio">
+            </div>
+
+            <div class="field">
+              <label for="email">E-posta</label>
+              <input id="email" type="email" placeholder="ornek@stylecoree.com">
+            </div>
+
+            <div class="field">
+              <label for="budget">Tahmini bütçe aralığı</label>
+              <select id="budget">
+                <option>Seçiniz</option>
+                <option>Başlangıç – Sadece logo / kimlik</option>
+                <option>Orta – Web & sosyal medya tasarımı</option>
+                <option>Geniş – Tam marka paketi</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="message">Kısaca ihtiyacını anlat</label>
+              <textarea id="message" placeholder="Yeni marka kuruyorum, logo ve sosyal medya görsellerine ihtiyacım var..."></textarea>
+            </div>
+
+            <button type="button" class="btn-primary" style="margin-top:4px;">
+              Formu Gönder (örnek)
+            </button>
+            <p style="font-size:10px;color:var(--muted);margin-top:6px;">
+              Bu form şu an örnek amaçlıdır. Gerçek gönderim için e-posta adresi üzerinden bizimle iletişime geçebilirsin.
+            </p>
+          </form>
+        </div>
+
+        <aside class="contact-info-box">
+          <div class="contact-line">
+            <div class="contact-label">E-posta</div>
+            <div class="contact-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f363139301f2c2b26333a3c302d3a3a713c3032">[email&#160;protected]</a></div>
+          </div>
+          <div class="contact-line">
+            <div class="contact-label">İşbirliği & proje notları</div>
+            <div class="contact-value">
+              Marka lansmanı, rebranding, web arayüz tasarımı veya sosyal medya stil rehberi için
+              detaylı bir teklif istersen, marka adını ve hedefini kısaca aktararak mail gönderebilirsin.
+            </div>
+          </div>
+          <div class="contact-line">
+            <div class="contact-label">Bağlantılı markalar</div>
+            <div class="contact-value">
+              ErdenizTech • WorkTrackere • StyleForHuman • HairInfinity (planlanan)
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>© <span id="year"></span> StyleCoree · Tüm hakları saklıdır.</div>
+    <div class="footer-right">
+      <span>Bir ErdenizTech markasıdır.</span>
+      <a href="#anasayfa">Başa dön ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" defer></script><script>
+  // Yıl bilgisini otomatik yaz
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"5e5875d542ee4e9281276d055646c60a","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

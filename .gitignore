@@ -10,7 +10,3 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Bu klasörler kendi bağımsız GitHub repolarına sahip
-hairinfinitye/
-stylecoree/
-styleforhuman/

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HairInfinitye | Kuaför & Güzellik Stüdyosu</title>
+  <meta name="description" content="HairInfinitye: Saç tasarım, renklendirme, bakım ve gelin paketleri. Online randevu ile kolayca planla.">
+  <meta name="keywords" content="kuaför, saç tasarım, ombre, balayage, keratin, gelin saçı, güzellik salonu, HairInfinitye">
+  <meta name="author" content="HairInfinitye">
+  <meta property="og:title" content="HairInfinitye | Kuaför & Güzellik Stüdyosu">
+  <meta property="og:description" content="Profesyonel saç tasarım ve bakım hizmetleri. Hemen randevu al.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="tr_TR">
+
+  <style>
+    :root{
+      --bg:#070708;
+      --bg-soft:#0e0f12;
+      --card:#14151a;
+      --text:#f7f7fb;
+      --muted:#a7a9b3;
+      --accent:#d8b46a;   /* altın */
+      --accent-2:#ff6aa2; /* soft pembe */
+      --radius:20px;
+      --shadow:0 16px 45px rgba(0,0,0,.55);
+      --ring:rgba(216,180,106,.35);
+      --maxw:1180px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      min-height:100dvh;
+      background-color:var(--bg);
+      background-image:
+        linear-gradient(rgba(7,7,8,0.72), rgba(7,7,8,0.78)),
+        url("Gemini_Generated_Image_n8044sn8044sn804.png");
+      background-size:auto, cover;
+      background-position:center, center;
+      background-attachment:fixed, fixed;
+      background-repeat:no-repeat, no-repeat;
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .container{max-width:var(--maxw);margin:0 auto;padding:0 18px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:12px 16px;border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),#f0d9a2);
+      color:#171717;font-weight:700;letter-spacing:.2px;
+      box-shadow:0 10px 25px rgba(216,180,106,.35);
+      transition:.25s transform,.25s filter;
+    }
+    .btn:hover{transform:translateY(-2px);filter:saturate(1.1)}
+    .btn.ghost{
+      background:transparent;color:var(--text);
+      border:1px solid #2a2c35;box-shadow:none;font-weight:600;
+    }
+    .chip{
+      display:inline-block;padding:6px 10px;border-radius:999px;
+      background:#121319;border:1px solid #242633;color:var(--muted);
+      font-size:12px;letter-spacing:.4px;text-transform:uppercase;
+    }
+
+    /* HEADER */
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter: blur(10px);
+      background:rgba(7,7,8,.6);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      height:70px;
+    }
+    .brand{
+      display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.4px;
+    }
+    .brand .logo{
+      width:42px;height:42px;border-radius:12px;
+      display:grid;place-items:center;
+      background:radial-gradient(circle at top,#2b2c33,#111217);
+      border:1px solid #2a2b33;
+      box-shadow:inset 0 0 0 1px rgba(216,180,106,.15);
+      color:var(--accent);font-size:20px;
+    }
+    nav ul{display:flex;gap:14px;list-style:none}
+    nav a{
+      font-size:14px;color:#d8d9df;padding:8px 10px;border-radius:999px;
+      transition:.2s background,.2s color;
+    }
+    nav a:hover{background:#14151b;color:#fff}
+    .nav-cta{display:flex;gap:8px;align-items:center}
+    .menu-btn{display:none}
+
+    /* HERO */
+    .hero{
+      padding:70px 0 30px;
+      position:relative;overflow:hidden;
+    }
+    .hero-grid{
+      display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center;
+    }
+    .hero h1{
+      font-size: clamp(28px, 4vw, 48px);
+      line-height:1.15;letter-spacing:.3px;margin:10px 0 12px;
+    }
+    .hero p{color:var(--muted);font-size:16px;max-width:620px}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .hero-cards{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px;
+    }
+    .mini{
+      background:var(--card);border:1px solid #20222c;border-radius:16px;
+      padding:14px;box-shadow:var(--shadow);
+    }
+    .mini .t{font-weight:700}
+    .mini .s{color:var(--muted);font-size:13px;margin-top:4px}
+
+    .hero-visual{
+      background:
+        radial-gradient(400px 300px at 10% 0%, rgba(216,180,106,.25), transparent 60%),
+        radial-gradient(450px 320px at 100% 10%, rgba(255,106,162,.22), transparent 55%),
+        #0d0e12;
+      border:1px solid #242633;border-radius:22px;min-height:360px;
+      position:relative;box-shadow:var(--shadow);overflow:hidden;
+    }
+    .hero-visual .badge{
+      position:absolute;top:16px;left:16px;background:#0f1015;border:1px solid #242633;
+      padding:8px 10px;border-radius:12px;font-size:12px;color:var(--muted);
+    }
+    .hero-visual .glow{
+      position:absolute;inset:-30%;background:
+        conic-gradient(from 90deg, transparent, rgba(216,180,106,.25), transparent 35%, rgba(255,106,162,.18), transparent 70%);
+      filter:blur(40px);animation:spin 12s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .hero-visual .img{
+      position:absolute;inset:0;background:
+        linear-gradient(0deg, rgba(7,7,8,.8), transparent 40%),
+        url("https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1400&auto=format&fit=crop") center/cover no-repeat;
+      opacity:.9;
+    }
+    .hero-visual .stats{
+      position:absolute;bottom:14px;left:14px;right:14px;display:grid;
+      grid-template-columns:repeat(3,1fr);gap:8px;
+    }
+    .stat{
+      background:rgba(10,10,12,.9);border:1px solid #292b36;border-radius:14px;
+      padding:10px;text-align:center;
+    }
+    .stat .n{font-weight:800;font-size:18px;color:#fff}
+    .stat .l{font-size:12px;color:var(--muted)}
+
+    /* SECTIONS */
+    section{padding:52px 0}
+    .sec-head{
+      display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:18px;
+    }
+    .sec-head h2{font-size: clamp(20px, 2.6vw, 30px)}
+    .sec-head p{color:var(--muted);max-width:640px}
+
+    /* SERVICES */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .card{
+      background:var(--card);border:1px solid #20222c;border-radius:18px;
+      padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+    }
+    .card .icon{
+      width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+      background:#0f1015;border:1px solid #242633;color:var(--accent);font-size:18px;
+    }
+    .card h3{margin-top:10px;font-size:17px}
+    .card p{color:var(--muted);font-size:14px;margin-top:6px}
+    .card .price{margin-top:10px;font-weight:800;color:#fff}
+    .card .shine{
+      position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;
+      background:radial-gradient(circle, rgba(216,180,106,.25), transparent 60%);
+      filter:blur(2px);
+    }
+
+    /* GALLERY */
+    .gallery{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+    }
+    .gallery .g{
+      border-radius:14px;overflow:hidden;border:1px solid #232532;min-height:180px;
+      background:#0c0d11;
+      position:relative;
+    }
+    .gallery .g img{width:100%;height:100%;object-fit:cover;transition:.35s transform}
+    .gallery .g:hover img{transform:scale(1.05)}
+    .gallery .cap{
+      position:absolute;left:8px;bottom:8px;background:rgba(7,7,8,.8);
+      border:1px solid #2a2c35;padding:6px 8px;border-radius:10px;font-size:12px;color:#e9e9ef;
+    }
+
+    /* TEAM */
+    .team{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .member{
+      display:flex;gap:12px;align-items:center;
+    }
+    .avatar{
+      width:74px;height:74px;border-radius:16px;overflow:hidden;border:1px solid #2a2c35;
+      background:#0c0d11;
+    }
+    .member .role{color:var(--muted);font-size:13px}
+    .member .social{display:flex;gap:8px;margin-top:6px}
+    .member .social a{font-size:12px;color:#cfcfd6;padding:4px 6px;border:1px solid #2a2c35;border-radius:999px}
+
+    /* PRICING */
+    .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .plan{
+      padding:18px;
+    }
+    .plan.pop{
+      border-color:rgba(216,180,106,.6);
+      box-shadow:0 0 0 2px var(--ring), var(--shadow);
+    }
+    .plan .pname{font-weight:800;font-size:18px}
+    .plan .pdesc{color:var(--muted);font-size:14px;margin-top:4px}
+    .plan .pprice{font-size:30px;font-weight:900;margin:10px 0}
+    .plan ul{list-style:none;display:grid;gap:8px;color:#d9dae0;font-size:14px}
+    .plan li::before{content:"✓";color:var(--accent);margin-right:8px}
+
+    /* TESTIMONIALS */
+    .testi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .quote{font-size:14px;color:#e7e7ee}
+    .who{margin-top:10px;color:var(--muted);font-size:13px}
+
+    /* CONTACT */
+    .contact{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:12px;
+    }
+    .contact .list{
+      display:grid;gap:10px;margin-top:8px;font-size:14px;color:#e7e7ee;
+    }
+    .contact .list div{display:flex;gap:8px;align-items:flex-start}
+    .input{
+      width:100%;padding:12px 12px;border-radius:12px;border:1px solid #2a2c35;
+      background:#0d0e12;color:#fff;outline:none;
+      transition:.2s border,.2s box-shadow;
+    }
+    .input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+    textarea.input{min-height:120px;resize:vertical}
+    .form-grid{display:grid;gap:8px}
+
+    /* FOOTER */
+    footer{padding:28px 0;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:14px}
+
+    /* WhatsApp Floating */
+    .wa{
+      position:fixed;right:18px;bottom:18px;z-index:60;
+      display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:999px;
+      background:#0f1015;border:1px solid #2a2c35;box-shadow:var(--shadow);
+    }
+    .wa .dot{
+      width:10px;height:10px;border-radius:50%;background:#25D366;box-shadow:0 0 12px #25D366;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid, .contact{grid-template-columns:1fr}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+      .grid-3, .team, .pricing, .testi{grid-template-columns:repeat(2,1fr)}
+      nav ul{display:none}
+      .menu-btn{display:inline-flex}
+      .mobile{
+        display:none;position:absolute;top:70px;left:0;right:0;background:rgba(7,7,8,.98);
+        border-bottom:1px solid rgba(255,255,255,.06);padding:10px;
+      }
+      .mobile a{display:block;padding:10px;border-radius:10px;color:#e7e7ee}
+      .mobile a:hover{background:#14151b}
+      .mobile.show{display:block}
+    }
+    @media (max-width: 560px){
+      .hero-cards{grid-template-columns:1fr}
+      .gallery{grid-template-columns:1fr}
+      .grid-3, .team, .pricing, .testi{grid-template-columns:1fr}
+      .hero{padding-top:50px}
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+    <a class="brand" href="#">
+      <div class="logo">∞</div>
+      <div>
+        <div style="font-size:16px;">HairInfinitye</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:-2px;">Kuaför & Güzellik</div>
+      </div>
+    </a>
+
+    <nav>
+      <ul>
+        <li><a href="#services">Hizmetler</a></li>
+        <li><a href="#gallery">Galeri</a></li>
+        <li><a href="#team">Ekibimiz</a></li>
+        <li><a href="#pricing">Fiyatlar</a></li>
+        <li><a href="#contact">İletişim</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-cta">
+      <a class="btn ghost" href="#pricing">Paketler</a>
+      <a class="btn" href="#contact">Randevu Al</a>
+      <a class="btn ghost menu-btn" id="menuBtn" href="javascript:void(0)">Menü</a>
+    </div>
+  </div>
+
+  <div class="container mobile" id="mobileMenu">
+    <a href="#services">Hizmetler</a>
+    <a href="#gallery">Galeri</a>
+    <a href="#team">Ekibimiz</a>
+    <a href="#pricing">Fiyatlar</a>
+    <a href="#contact">İletişim</a>
+  </div>
+</header>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="chip">Yeni Nesil Saç Tasarım</span>
+      <h1>Saçınıza “sonsuz” bir dokunuş.<br/>HairInfinitye’de stiliniz yeniden doğsun.</h1>
+      <p>
+        Profesyonel ekibimizle kesim, renklendirme, bakım ve özel gün saç tasarımlarında
+        size en uygun stili planlıyoruz. Online randevu ile dakikalar içinde yerinizi ayırtın.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn" href="#contact">Hemen Randevu Al</a>
+        <a class="btn ghost" href="#services">Hizmetleri Gör</a>
+      </div>
+
+      <div class="hero-cards">
+        <div class="mini">
+          <div class="t">✨ Kişiye Özel Stil</div>
+          <div class="s">Yüz tipinize ve yaşam tarzınıza göre öneri.</div>
+        </div>
+        <div class="mini">
+          <div class="t">🎨 Premium Renklendirme</div>
+          <div class="s">Ombre, balayage, dip boya ve tonlama.</div>
+        </div>
+        <div class="mini">
+          <div class="t">🧴 Sağlıklı Bakım</div>
+          <div class="s">Keratin, botoks, onarıcı kürler.</div>
+        </div>
+        <div class="mini">
+          <div class="t">👰 Özel Gün Paketleri</div>
+          <div class="s">Gelin saçı, prova ve makyaj opsiyonları.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="glow"></div>
+      <div class="img"></div>
+      <div class="badge">📍 Türkiye • Randevulu Hizmet</div>
+
+      <div class="stats">
+        <div class="stat"><div class="n">8+ yıl</div><div class="l">Deneyim</div></div>
+        <div class="stat"><div class="n">2.500+</div><div class="l">Mutlu Müşteri</div></div>
+        <div class="stat"><div class="n">4.9/5</div><div class="l">Ortalama Puan</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="chip">Hizmetler</span>
+        <h2>Saç & güzellikte tüm ihtiyaçlar tek yerde</h2>
+      </div>
+      <p>En çok tercih edilen hizmetlerimiz. Detay ve fiyat için randevu sırasında bilgi alabilirsiniz.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="shine"></div>
+        <div class="icon">✂️</div>
+        <h3>Kesim & Şekillendirme</h3>
+        <p>Modern kesimler, fön, maşa, örgü ve günlük stil uygulamaları.</p>
+        <div class="price">Başlangıç: 450₺</div>
+      </div>
+
+      <div class="card">
+        <div class="shine"></div>
+        <div class="icon">🎨</div>
+        <h3>Renklendirme</h3>
+        <p>Ombre, balayage, dip boya, tonlama ve renk düzeltme.</p>
+        <div class="price">Başlangıç: 900₺</div>
+      </div>
+
+      <div class="card">
+        <div class="shine"></div>
+        <div class="icon">🧴</div>
+        <h3>Bakım & Onarım</h3>
+        <p>Keratin, saç botoksu, protein & nem terapileri.</p>
+        <div class="price">Başlangıç: 700₺</div>
+      </div>
+
+      <div class="card">
+        <div class="shine"></div>
+        <div class="icon">👰</div>
+        <h3>Gelin Saçı</h3>
+        <p>Provalı gelin saç tasarımı, aksesuar yerleştirme.</p>
+        <div class="price">Paket: 3.500₺</div>
+      </div>
+
+      <div class="card">
+        <div class="shine"></div>
+        <div class="icon">💇‍♀️</div>
+        <h3>Saç Tasarım</h3>
+        <p>Yüz tipine göre özel stil analizi & uygulama.</p>
+        <div class="price">Başlangıç: 600₺</div>
+      </div>
+
+      <div class="card">
+        <div class="shine"></div>
+        <div class="icon">✨</div>
+        <h3>Ek Hizmetler</h3>
+        <p>Kaş-bıyık, ağda, makyaj ve bakım seçenekleri.</p>
+        <div class="price">Sorunuz</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="chip">Galeri</span>
+        <h2>Önce / Sonra</h2>
+      </div>
+      <p>Gerçek uygulamalarımızdan seçmeler. Görselleri istersen senin fotoğraflarınla değiştiririm.</p>
+    </div>
+
+    <div class="gallery">
+      <div class="g">
+        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=900&auto=format&fit=crop" alt="Balayage">
+        <div class="cap">Balayage</div>
+      </div>
+      <div class="g">
+        <img src="https://images.unsplash.com/photo-1559599078-0578a5edb369?q=80&w=900&auto=format&fit=crop" alt="Kesim">
+        <div class="cap">Kesim</div>
+      </div>
+      <div class="g">
+        <img src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?q=80&w=900&auto=format&fit=crop" alt="Keratin Bakım">
+        <div class="cap">Keratin Bakım</div>
+      </div>
+      <div class="g">
+        <img src="https://images.unsplash.com/photo-1519415943484-9fa1873496d4?q=80&w=900&auto=format&fit=crop" alt="Gelin Saçı">
+        <div class="cap">Gelin Saçı</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- TEAM -->
+<section id="team">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="chip">Ekibimiz</span>
+        <h2>Stilinizi bilen uzmanlar</h2>
+      </div>
+      <p>buraya ekibinin bilgilerini eklenecek.</p>
+    </div>
+
+    <div class="team">
+      <div class="card member">
+        <div class="avatar"><img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=800&auto=format&fit=crop" alt="Uzman"></div>
+        <div>
+          <div style="font-weight:800">Usta Kuaför</div>
+          <div class="role">Saç Tasarım Uzmanı</div>
+          <div class="social">
+            <a href="#">Instagram</a><a href="#">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card member">
+        <div class="avatar"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop" alt="Uzman"></div>
+        <div>
+          <div style="font-weight:800">Renk Uzmanı</div>
+          <div class="role">Balayage & Ombre</div>
+          <div class="social">
+            <a href="#">Instagram</a><a href="#">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card member">
+        <div class="avatar"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop" alt="Uzman"></div>
+        <div>
+          <div style="font-weight:800">Bakım Terapisti</div>
+          <div class="role">Keratin & Onarım</div>
+          <div class="social">
+            <a href="#">Instagram</a><a href="#">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="chip">Fiyatlar</span>
+        <h2>Popüler paketler</h2>
+      </div>
+      <p>Fiyatlar saç uzunluğu ve ekstra işlemlere göre değişebilir.</p>
+    </div>
+
+    <div class="pricing">
+      <div class="card plan">
+        <div class="pname">Günlük Stil</div>
+        <div class="pdesc">Kesim + fön / şekillendirme</div>
+        <div class="pprice">₺</div>
+        <ul>
+          <li>Yüz tipine uygun kesim</li>
+          <li>Fön / maşa</li>
+          <li>Mini bakım</li>
+        </ul>
+        <div style="margin-top:12px"><a class="btn ghost" href="#contact">Seç</a></div>
+      </div>
+
+      <div class="card plan pop">
+        <div class="pname">Renk Dönüşümü</div>
+        <div class="pdesc">Ombre / Balayage + bakım</div>
+        <div class="pprice">₺</div>
+        <ul>
+          <li>Renk analizi</li>
+          <li>Premium boya</li>
+          <li>Tonlama</li>
+          <li>Onarıcı bakım</li>
+        </ul>
+        <div style="margin-top:12px"><a class="btn" href="#contact">Seç</a></div>
+      </div>
+
+      <div class="card plan">
+        <div class="pname">Gelin Paketi</div>
+        <div class="pdesc">Provalı özel gün saç tasarımı</div>
+        <div class="pprice">₺</div>
+        <ul>
+          <li>1 prova</li>
+          <li>Gelin saçı</li>
+          <li>Aksesuar yerleştirme</li>
+          <li>İsteğe bağlı makyaj</li>
+        </ul>
+        <div style="margin-top:12px"><a class="btn ghost" href="#contact">Seç</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="chip">Yorumlar</span>
+        <h2>Müşterilerimiz ne dedi?</h2>
+      </div>
+      <p>Google/Instagram yorumlarından ekleme yapabiliriz.</p>
+    </div>
+
+    <div class="testi">
+      <div class="card">
+        <div class="quote">“Balayage tam istediğim gibi oldu. Saçım hiç yıpranmadı!”</div>
+        <div class="who">— Elif A.</div>
+      </div>
+      <div class="card">
+        <div class="quote">“Keratin bakım sonrası saçım ipek gibi. İlgi harika.”</div>
+        <div class="who">— Zeynep K.</div>
+      </div>
+      <div class="card">
+        <div class="quote">“Gelin saçım bütün gece bozulmadı. Muhteşem ekip!”</div>
+        <div class="who">— Merve T.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container contact">
+    <div class="card">
+      <span class="chip">İletişim</span>
+      <h2 style="margin-top:8px">Randevu & Bilgi</h2>
+      <p style="color:var(--muted)">
+        Formu doldurun, aynı gün dönüş yapalım. Dilerseniz WhatsApp’tan da yazabilirsiniz.
+      </p>
+
+      <div class="list">
+        <div>📍 <strong>Adres:</strong> <span>Buraya salon adresi</span></div>
+        <div>📞 <strong>Telefon:</strong> <span>+90 5xx xxx xx xx</span></div>
+        <div>🕒 <strong>Çalışma Saatleri:</strong> <span>10:00 – 20:00 (Pazartesi hariç)</span></div>
+        <div>💬 <strong>WhatsApp:</strong> <span>Hızlı randevu & fiyat</span></div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn" href="https://wa.me/90XXXXXXXXXX" target="_blank" rel="noopener">WhatsApp’tan Yaz</a>
+        <a class="btn ghost" href="tel:+90XXXXXXXXXX">Ara</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="chip">Hızlı Form</span>
+      <form class="form-grid" onsubmit="submitForm(event)">
+        <input class="input" name="name" placeholder="Ad Soyad" required>
+        <input class="input" name="phone" placeholder="Telefon" required>
+        <select class="input" name="service" required>
+          <option value="">Hizmet seç</option>
+          <option>Kesim & Şekillendirme</option>
+          <option>Renklendirme (Ombre/Balayage)</option>
+          <option>Keratin/Bakım</option>
+          <option>Gelin Paketi</option>
+          <option>Diğer</option>
+        </select>
+        <input class="input" type="date" name="date" required>
+        <textarea class="input" name="note" placeholder="Not (isteğe bağlı)"></textarea>
+        <button class="btn" type="submit">Randevu Talebi Gönder</button>
+        <div id="formMsg" style="font-size:13px;color:var(--muted)"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <div>© <span id="year"></span> HairInfinitye. Tüm hakları saklıdır.</div>
+    <div style="display:flex;gap:8px">
+      <a href="#">KVKK</a>
+      <span>•</span>
+      <a href="#">Gizlilik</a>
+      <span>•</span>
+      <a href="#">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<a class="wa" href="https://wa.me/90XXXXXXXXXX" target="_blank" rel="noopener">
+  <span class="dot"></span>
+  WhatsApp Randevu
+</a>
+
+<script>
+  // yıl
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // mobil menü
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+  menuBtn?.addEventListener("click", ()=> mobileMenu.classList.toggle("show"));
+  mobileMenu.querySelectorAll("a").forEach(a=>{
+    a.addEventListener("click", ()=> mobileMenu.classList.remove("show"));
+  });
+
+  // form (demo)
+  function submitForm(e){
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const data = Object.fromEntries(fd.entries());
+    console.log("Randevu talebi:", data);
+
+    const msg = document.getElementById("formMsg");
+    msg.textContent = "Talebiniz alındı ✅ En kısa sürede size dönüş yapacağız.";
+    e.target.reset();
+  }
+</script>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"aba381ef9a974ab6b87187319ae6f1d9","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
