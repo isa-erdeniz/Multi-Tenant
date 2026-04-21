@@ -32,7 +32,7 @@ except ImportError:
 # Audit
 from .audit import log_event, get_alerts, get_stats, audit_trail, export_audit_logs
 
-# API Security (optional imports)
+# API Security (optional imports — lazy: simplejwt requires app registry)
 try:
     from .api_security import (
         ERDENIZ_JWT_SETTINGS,
@@ -41,7 +41,7 @@ try:
         RequestSigner,
         secure_exception_handler,
     )
-except ImportError:
+except (ImportError, Exception):
     ERDENIZ_JWT_SETTINGS = None
     ERDENIZ_RATE_LIMITS = None
     ErdenizAPIKeyManager = None
@@ -57,7 +57,7 @@ except ImportError:
     SSLHelper = None
     IPGuard = None
 
-# Fields (Django)
+# Fields (Django — requires FIELD_ENCRYPTION_KEY in settings)
 try:
     from .fields import (
         SecureCharField,
@@ -67,9 +67,9 @@ try:
         SecureTCKimlikField,
         SecureFilePathField,
     )
-except ImportError:
-    SecureCharField = SecureTextField = SecureEmailField = None
-    SecurePhoneField = SecureTCKimlikField = SecureFilePathField = None
+except (ImportError, Exception):
+    SecureCharField = SecureTextField = SecureEmailField = None  # type: ignore[assignment, misc]
+    SecurePhoneField = SecureTCKimlikField = SecureFilePathField = None  # type: ignore[assignment, misc]
 
 # Env protector (IntegrityChecker, SecureSettings)
 try:
@@ -78,17 +78,22 @@ except ImportError:
     IntegrityChecker = None  # type: ignore[misc, assignment]
     SecureSettings = None  # type: ignore[misc, assignment]
 
-# Decorators
-from .decorators import (
-    audit_log,
-    require_api_key,
-    require_jwt,
-    require_signed_request,
-    rate_limit,
-    verify_webhook,
-    secure_view,
-    permission_required_custom,
-)
+# Decorators (optional — may depend on Django app registry)
+try:
+    from .decorators import (
+        audit_log,
+        require_api_key,
+        require_jwt,
+        require_signed_request,
+        rate_limit,
+        verify_webhook,
+        secure_view,
+        permission_required_custom,
+    )
+except (ImportError, Exception):
+    audit_log = require_api_key = require_jwt = None  # type: ignore[assignment]
+    require_signed_request = rate_limit = verify_webhook = None  # type: ignore[assignment]
+    secure_view = permission_required_custom = None  # type: ignore[assignment]
 
 __all__ = [
     "__version__",

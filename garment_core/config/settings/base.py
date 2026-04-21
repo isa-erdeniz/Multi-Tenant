@@ -89,12 +89,11 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
 ]
 
-# erdeniz_security - opsiyonel (PyPI'de yoksa atla)
-try:
-    import erdeniz_security  # noqa: F401
+# erdeniz_security - opsiyonel (kurulu değilse atla; bare import AppRegistryNotReady'ye yol açar)
+import importlib.util as _ilu
+if _ilu.find_spec("erdeniz_security") is not None:
     INSTALLED_APPS.insert(0, "erdeniz_security")
-except ImportError:
-    pass
+del _ilu
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
