@@ -1,0 +1,48 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+
+  <!-- Türkçe Mod Butonu -->
+  <li>
+    <a href="{% url 'admin:erdeniz_security_securityauditlog_turkce_mod_ac' %}"
+       style="background:#1a73e8;color:white;padding:6px 14px;border-radius:6px;
+              text-decoration:none;font-weight:bold;font-size:13px;
+              display:inline-flex;align-items:center;gap:6px;">
+      🇹🇷 Türkçe Modu Aç
+    </a>
+  </li>
+
+  <!-- Güvenlik Raporu Butonu -->
+  <li>
+    <a href="{% url 'admin:erdeniz_security_securityauditlog_guvenlik_raporu' %}"
+       style="background:#28a745;color:white;padding:6px 14px;border-radius:6px;
+              text-decoration:none;font-weight:bold;font-size:13px;
+              display:inline-flex;align-items:center;gap:6px;">
+      📊 Güvenlik Raporu
+    </a>
+  </li>
+
+  <!-- Eski Logları Temizle Butonu -->
+  <li>
+    <a href="{% url 'admin:erdeniz_security_securityauditlog_loglari_temizle' %}"
+       style="background:#dc3545;color:white;padding:6px 14px;border-radius:6px;
+              text-decoration:none;font-weight:bold;font-size:13px;
+              display:inline-flex;align-items:center;gap:6px;"
+       onclick="return confirm('30 günden eski loglar silinecek. Emin misiniz?')">
+      🗑️ Eski Logları Temizle
+    </a>
+  </li>
+
+  <!-- Dili Sıfırla Butonu -->
+  <li>
+    <a href="{% url 'admin:erdeniz_security_securityauditlog_turkce_mod_kapat' %}"
+       style="background:#6c757d;color:white;padding:6px 14px;border-radius:6px;
+              text-decoration:none;font-weight:bold;font-size:13px;
+              display:inline-flex;align-items:center;gap:6px;">
+      🔄 Dili Sıfırla
+    </a>
+  </li>
+
+  {{ block.super }}
+{% endblock %}

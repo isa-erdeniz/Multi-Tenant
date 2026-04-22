@@ -1,0 +1,73 @@
+# ErdenizTech Security — Türkçe çeviri
+# Copyright (C) 2025 ErdenizTech
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+
+msgid "Encryption successful"
+msgstr "Şifreleme başarılı"
+
+msgid "Decryption successful"
+msgstr "Şifre çözme başarılı"
+
+msgid "Decryption failed"
+msgstr "Şifre çözülemedi"
+
+msgid "Invalid API key"
+msgstr "Geçersiz API anahtarı"
+
+msgid "API key required"
+msgstr "API anahtarı gerekli"
+
+msgid "Authentication required"
+msgstr "Kimlik doğrulama gerekli"
+
+msgid "Insufficient permissions"
+msgstr "Yetersiz yetki"
+
+msgid "Too Many Requests"
+msgstr "Çok fazla istek"
+
+msgid "Invalid request signature"
+msgstr "Geçersiz istek imzası"
+
+msgid "Webhook verification failed"
+msgstr "Webhook doğrulaması başarısız"
+
+msgid "Bad Request"
+msgstr "Geçersiz İstek"
+
+msgid "Security audit report"
+msgstr "Güvenlik denetim raporu"
+
+msgid "Key rotation required"
+msgstr "Anahtar rotasyonu gerekli"
+
+msgid "Environment variable missing"
+msgstr "Ortam değişkeni eksik"
+
+msgid "TC Identity Number must be 11 digits"
+msgstr "TC Kimlik Numarası 11 haneli olmalıdır"
+
+msgid "Enter a valid Turkey phone number"
+msgstr "Geçerli bir Türkiye telefon numarası girin"
+
+msgid "Invalid file path (path traversal)"
+msgstr "Geçersiz dosya yolu (dizin geçişi tespit edildi)"
+
+msgid "Security Alert"
+msgstr "Güvenlik Uyarısı"
+
+msgid "Audit Log"
+msgstr "Denetim Kaydı"
+
+msgid "Security Audit Logs"
+msgstr "Güvenlik Denetim Kayıtları"
+
+msgid "API Keys"
+msgstr "API Anahtarları"
+
+msgid "ErdenizTech Security"
+msgstr "ErdenizTech Güvenlik"
