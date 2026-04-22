@@ -13,10 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # erdeniz_security paketini container'a kopyala (pip install öncesi)
-COPY ../erdeniz_security/ /app/erdeniz_security/
+COPY erdeniz_security/ /app/erdeniz_security/
 
 # ecosystem registry'yi container'a kopyala
-COPY ../ecosystem/ /app/ecosystem/
+COPY ecosystem/ /app/ecosystem/
 
 # Python bağımlılıkları (layer cache için önce requirements)
 COPY requirements.txt ./
