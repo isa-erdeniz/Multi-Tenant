@@ -46,4 +46,4 @@ ENV DJANGO_SETTINGS_MODULE=config.settings.production
 
 # Çalışma zamanı: migrate railway.toml preDeployCommand / Procfile release ile;
 # burada yalnızca gunicorn (çoklu replikada migrate yarışı olmaz).
-CMD exec gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8080} --workers 2
+CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8080} --workers 2"]
