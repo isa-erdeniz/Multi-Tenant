@@ -2,11 +2,6 @@
  * Dressifye fiyatlandırma: HTMX + garment_core API + iyzico form gömme.
  */
 (function () {
-  function apiBase() {
-    var m = document.querySelector('meta[name="garment-core-api"]');
-    return (m && m.getAttribute("content")) || "";
-  }
-
   function parseFeatures(raw) {
     if (!raw) return [];
     if (Array.isArray(raw)) return raw;
@@ -151,25 +146,19 @@
   };
 
   document.addEventListener("DOMContentLoaded", function () {
-    var base = apiBase().replace(/\/+$/, "");
-    if (!base) {
-      console.warn("meta garment-core-api tanımlı değil");
-      return;
-    }
+    // meta[name="garment-core-api"] okuma kaldırıldı — Worker endpoint'leri kullanılıyor.
+    // apiBase() artık çağrılmıyor; tüm istekler aynı origin'deki Worker rotalarına gider.
 
     var loginForm = document.getElementById("login-form");
     if (loginForm) {
-      loginForm.setAttribute("hx-post", base + "/api/v1/auth/token/");
+      loginForm.setAttribute("hx-post", "/api/v1/auth/token");
       loginForm.setAttribute("hx-target", "#login-status");
       loginForm.setAttribute("hx-swap", "none");
     }
 
     var checkoutForm = document.getElementById("checkout-init-form");
     if (checkoutForm) {
-      checkoutForm.setAttribute(
-        "hx-post",
-        base + "/api/v1/payments/dressifye/subscription/init/"
-      );
+      checkoutForm.setAttribute("hx-post", "/odeme/abonelik-baslat");
       checkoutForm.setAttribute("hx-swap", "none");
     }
 

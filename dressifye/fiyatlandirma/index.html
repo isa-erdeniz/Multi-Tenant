@@ -4,8 +4,8 @@
     <link rel="stylesheet" href="/css/site-background.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Üretimde Railway / API alan adınızı yazın (sonunda / olmasın) -->
-    <meta name="garment-core-api" content="http://127.0.0.1:8000">
+    <!-- API URL Worker env'den okunur; bu tag artık kullanılmıyor -->
+    <meta name="garment-core-api" content="">
     <title>Abonelik — Dressifye × Garment Core</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
@@ -139,7 +139,7 @@
             <h3 class="text-lg font-semibold mb-4 text-center">3. Ödeme formu</h3>
             <p class="text-center text-sm text-gray-400 mb-6">Önce yukarıdan plan seçin, giriş yapın; ardından form oluşturulur.</p>
             <form id="checkout-init-form" hx-ext="json-enc" class="hidden">
-                <input type="hidden" name="tier" :value="selectedTier">
+                <input type="hidden" name="plan_slug" :value="selectedTier">
                 <input type="hidden" name="custom_title" :value="customTitle">
                 <!-- API: interval veya period (ikisi de garment_core’da kabul edilir) -->
                 <input type="hidden" name="interval" :value="period">

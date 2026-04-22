@@ -14,7 +14,12 @@ database_id = "193a55ca-7006-41be-89b3-3b2e1c165f4a"
 directory = "./"
 binding = "ASSETS"
 
-# Cloudflare Dashboard → Workers → dressifye → Variables (veya wrangler secret)
-# Örnek: https://garment-core-production.up.railway.app  (sonunda / yok)
+# Cloudflare Dashboard → Workers & Pages → dressifye → Settings → Variables
+# Aşağıdaki değerleri Cloudflare panelinde environment variable olarak set edin.
 [vars]
-GARMENT_CORE_API_URL = "http://127.0.0.1:8000"
+# Django garment_core (Railway) — abonelik init, callback ve auth proxy için
+GARMENT_CORE_API_URL = ""   # Railway'de: https://<garment-core-django>.railway.app
+
+# packages/garment_core TypeScript API (Railway) — garment listesi için
+GARMENT_CORE_TS_URL = ""    # Railway'de: https://<garment-core-ts>.railway.app
+GARMENT_CORE_TS_API_KEY = ""  # npm run db:create-api-key çıktısı
