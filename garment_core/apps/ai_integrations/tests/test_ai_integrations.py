@@ -4,6 +4,7 @@ Harici AI entegrasyonu: kota, failover, webhook imzası ve eşzamanlı kota.
 
 from __future__ import annotations
 
+import datetime
 import hashlib
 import hmac
 import json
@@ -18,8 +19,26 @@ from rest_framework.test import APIClient
 from apps.ai_integrations.exceptions import ProviderUnavailableError, QuotaExceededError
 from apps.ai_integrations.models import AIProcessingTask, AIProvider
 from apps.ai_integrations.services import QuotaManager, WearViewProvider, run_provider_process_with_fallback
+from apps.subscriptions.models import Plan
 
 User = get_user_model()
+
+
+def _ensure_plan(user):
+    """post_save sinyali plan=None ile subscription oluşturabilir; bu helper test planını garantiler."""
+    sub = user.subscription
+    if sub.plan is None:
+        plan, _ = Plan.objects.get_or_create(
+            slug="ai-test-plan",
+            defaults={
+                "name": "AI Test Plan",
+                "external_ai_enabled": False,
+                "ai_credits_monthly": 0,
+            },
+        )
+        sub.plan = plan
+        sub.save(update_fields=["plan"])
+    return sub.plan
 
 
 def _tryon_payload() -> dict:
@@ -41,18 +60,32 @@ class AIProcessQuotaTests(TestCase):
             email="quota0@example.com",
             password="x",
         )
+        # Signal tenant_id'yi DB'de günceller ama in-memory instance'ı değil;
+        # TenantContextMiddleware user.tenant'ı okur — refresh şart.
+        user.refresh_from_db()
         sub = user.subscription
-        plan = sub.plan
+        plan = _ensure_plan(user)
         plan.external_ai_enabled = True
         plan.ai_credits_monthly = 5
         plan.save()
+        # ai_credits_reset_date None olunca _ensure_ai_period kullanımı sıfırlar;
+        # gelecek tarih vererek sıfırlamayı engelliyoruz.
+        from django.utils import timezone as tz
         sub.ai_credits_used = 5
-        sub.save()
+        sub.ai_credits_reset_date = tz.now() + datetime.timedelta(days=30)
+        sub.save(update_fields=["ai_credits_used", "ai_credits_reset_date"])
 
         client = APIClient()
         client.force_authenticate(user=user)
+        # TenantContextMiddleware Django request.user'ından okur (DRF wrapping öncesi);
+        # header ile tenant'ı doğrudan geçmek daha güvenilir.
         with patch("apps.ai_integrations.views.process_ai_task.delay") as delay_mock:
-            r = client.post("/api/v1/ai/process/", _tryon_payload(), format="json")
+            r = client.post(
+                "/api/v1/ai/process/",
+                _tryon_payload(),
+                format="json",
+                HTTP_X_GARMENT_CORE_TENANT_SLUG=user.tenant.slug,
+            )
         self.assertEqual(r.status_code, 402)
         delay_mock.assert_not_called()
 
@@ -139,13 +172,22 @@ class WebhookSignatureTests(TestCase):
 
 class ConcurrentQuotaTests(TransactionTestCase):
     def test_concurrent_deduct_does_not_exceed_limit(self):
+        from django.db import connection as _conn
+
+        if _conn.vendor == "sqlite":
+            self.skipTest(
+                "SQLite eşzamanlı satır kilitlemeyi desteklemiyor; PostgreSQL gerekir."
+            )
+
         user = User.objects.create_user(
             username="race@example.com",
             email="race@example.com",
             password="x",
         )
+        # Signal DB'yi günceller, in-memory değil; FK okuma için refresh şart.
+        user.refresh_from_db()
         sub = user.subscription
-        plan = sub.plan
+        plan = _ensure_plan(user)
         plan.external_ai_enabled = True
         plan.ai_credits_monthly = 5
         plan.save()
