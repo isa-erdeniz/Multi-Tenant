@@ -34,6 +34,10 @@ class PlanAdmin(admin.ModelAdmin):
                     "look_limit",
                     "editor_limit",
                     "style_session_limit",
+                    "makeup_limit",
+                    "hair_limit",
+                    "avatar_limit",
+                    "look_apply_limit",
                 )
             },
         ),

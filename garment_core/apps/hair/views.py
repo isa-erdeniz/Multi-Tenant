@@ -46,7 +46,7 @@ def hair_start_view(request):
     if color_id:
         color = HairColor.objects.filter(pk=color_id).first()
 
-    if not can_use_feature(request.user, FeatureUsage.FEATURE_TRYON):
+    if not can_use_feature(request.user, FeatureUsage.FEATURE_HAIR):
         return JsonResponse(
             {
                 "error": "Limit doldu",
@@ -71,7 +71,7 @@ def hair_start_view(request):
             status=500,
         )
 
-    increment_usage(request.user, FeatureUsage.FEATURE_TRYON)
+    increment_usage(request.user, FeatureUsage.FEATURE_HAIR)
     run_hair_session(session.id)
 
     return JsonResponse(

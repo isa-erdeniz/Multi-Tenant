@@ -144,7 +144,7 @@ class GarmentCoreTSClient:
 
         try:
             response = requests.get(
-                f"{self.base_url}/api/v1/garments",
+                f"{self.base_url}/v1/garments",
                 params=params,
                 headers={"Authorization": f"Bearer {self.api_key}"},
                 timeout=10,

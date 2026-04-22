@@ -40,7 +40,7 @@ def beauty_start_view(request):
     if look_id:
         look = MakeupLook.objects.filter(pk=look_id).first()
 
-    if not can_use_feature(request.user, FeatureUsage.FEATURE_TRYON):
+    if not can_use_feature(request.user, FeatureUsage.FEATURE_MAKEUP):
         return JsonResponse(
             {
                 "error": "Limit doldu",
@@ -64,7 +64,7 @@ def beauty_start_view(request):
             status=500,
         )
 
-    increment_usage(request.user, FeatureUsage.FEATURE_TRYON)
+    increment_usage(request.user, FeatureUsage.FEATURE_MAKEUP)
     run_makeup_session(session.id)
 
     return JsonResponse(
