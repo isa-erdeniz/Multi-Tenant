@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "tenants": [
+    {
+      "slug": "dressifye",
+      "folder": "dressifye",
+      "origins": [
+        "https://dressifye.com",
+        "https://www.dressifye.com"
+      ]
+    },
+    {
+      "slug": "erdeniztech",
+      "folder": "erdeniztech",
+      "origins": [
+        "https://erdeniztech.com",
+        "https://www.erdeniztech.com",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+      ]
+    },
+    {
+      "slug": "hairinfinitye",
+      "folder": "hairinfinitye",
+      "origins": [
+        "https://hairinfinitye.com",
+        "https://www.hairinfinitye.com"
+      ]
+    },
+    {
+      "slug": "stylecoree",
+      "folder": "stylecoree",
+      "origins": [
+        "https://stylecoree.com",
+        "https://www.stylecoree.com"
+      ]
+    },
+    {
+      "slug": "styleforhuman",
+      "folder": "styleforhuman",
+      "origins": [
+        "https://styleforhuman.com",
+        "https://www.styleforhuman.com"
+      ]
+    }
+  ]
+}
