@@ -7,6 +7,6 @@ dockerfilePath = "Dockerfile"
 
 [deploy]
 # Her deploy öncesi bir kez (çoklu replikada konteyner başına tekrar etmez)
-preDeployCommand = "python manage.py migrate --noinput"
+preDeployCommand = "python manage.py migrate --noinput && python manage.py shell -c \"from django.contrib.auth import get_user_model; U=get_user_model(); U.objects.filter(username='admin').exists() or U.objects.create_superuser('admin', 'admin@erdeniztech.com', 'Garm2026!Erdeniz')\""
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
