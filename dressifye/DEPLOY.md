@@ -6,8 +6,8 @@ Workers & Pages → dressifye → Settings → Variables:
 
 | Değişken | Değer |
 |---|---|
-| `GARMENT_CORE_API_URL` | `https://<garment-core-django>.railway.app` |
-| `GARMENT_CORE_TS_URL` | `https://<garment-core-ts>.railway.app` |
+| `GARMENT_CORE_API_URL` | `https://<dressifye-saas-django>.railway.app` |
+| `GARMENT_CORE_TS_URL` | `https://<dressifye-saas-ts>.railway.app` |
 | `GARMENT_CORE_TS_API_KEY` | `npm run db:create-api-key` çıktısı |
 
 > `wrangler.toml` içindeki `[vars]` değerleri boş bırakılmıştır — gerçek URL'leri
@@ -43,14 +43,14 @@ cd dressifye && wrangler deploy
 
 - `dressifye/d1/` SQL dosyaları — **dokunma**
 - `dressifye/index.html` (ana landing page) içeriği — **dokunma**
-- `garment_core/` Django tarafı — **dokunma**
-- `packages/garment_core/` TS tarafı — **dokunma**
+- `dressifye_saas/` Django tarafı — **dokunma**
+- `packages/dressifye_saas/` TS tarafı — **dokunma**
 
 ## Özet Kontrol Listesi
 
 - [x] git commit snapshot alındı
 - [x] `wrangler.toml` → `GARMENT_CORE_TS_URL` + `GARMENT_CORE_TS_API_KEY` eklendi, `GARMENT_CORE_API_URL` boşaltıldı
-- [x] `fiyatlandirma/index.html` → `<meta name="garment-core-api" content="">` yapıldı
+- [x] `fiyatlandirma/index.html` → `<meta name="dressifye-saas-api" content="">` yapıldı
 - [x] `fiyatlandirma/index.html` → form alanı `name="tier"` → `name="plan_slug"` olarak güncellendi
 - [x] `index.js` → `/odeme/abonelik-baslat` POST + OPTIONS eklendi
 - [x] `index.js` → `/api/garments` GET eklendi

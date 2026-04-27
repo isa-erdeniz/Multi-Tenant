@@ -23,7 +23,7 @@ class Command(BaseCommand):
         created_count = updated_count = 0
 
         for slug, meta in PROJECT_PROMPTS.items():
-            # garment-core → garment_core slug normalize (DB slug field)
+            # dressifye-saas → dressifye_saas slug normalize (DB slug field)
             db_slug = slug.replace("-", "_")
             display = meta.get("display_name", slug.title())
             description = meta.get("description", "")

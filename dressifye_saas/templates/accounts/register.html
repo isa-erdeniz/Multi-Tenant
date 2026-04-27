@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Ücretsiz Başlayın — Dressifye{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center px-4"
+     style="background: #0a0a0a;">
+  
+  <div class="w-full max-w-md">
+    
+    <!-- Logo -->
+    <div class="text-center mb-10">
+      <a href="{% url 'core:landing' %}"
+         class="text-3xl font-serif italic"
+         style="color: #c9a84c;">garment core</a>
+      <p class="mt-2 text-sm" style="color: #888;">Stilinizi keşfedin</p>
+    </div>
+    
+    <!-- Kart -->
+    <div class="rounded-2xl p-8" 
+         style="background: #141414; border: 1px solid #2a2a2a;">
+      
+      <h1 class="text-xl font-medium mb-6" style="color: #f5f0e8;">
+        Ücretsiz Başlayın
+      </h1>
+      
+      <!-- Flash mesajlar -->
+      {% for message in messages %}
+      <div class="mb-4 px-4 py-3 rounded-lg text-sm"
+           style="background: #2a1a1a; color: #ff6b6b; border: 1px solid #3a2a2a;">
+        {{ message }}
+      </div>
+      {% endfor %}
+      
+      <!-- Form -->
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+        
+        <div>
+          <label class="block text-xs mb-2" style="color: #888;">
+            E-posta
+          </label>
+          <input type="email" name="email" required
+                 placeholder="ornek@email.com"
+                 value="{{ form.email.value|default:'' }}"
+                 class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                 style="background: #1e1e1e; border: 1px solid #2a2a2a; 
+                        color: #f5f0e8;"
+                 onfocus="this.style.borderColor='#c9a84c'"
+                 onblur="this.style.borderColor='#2a2a2a'">
+          {% if form.email.errors %}
+          <p class="mt-1 text-xs" style="color: #ff6b6b;">{{ form.email.errors.0 }}</p>
+          {% endif %}
+        </div>
+        
+        <div>
+          <label class="block text-xs mb-2" style="color: #888;">
+            Şifre
+          </label>
+          <input type="password" name="password1" required
+                 placeholder="Şifre oluşturun"
+                 class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                 style="background: #1e1e1e; border: 1px solid #2a2a2a; 
+                        color: #f5f0e8;"
+                 onfocus="this.style.borderColor='#c9a84c'"
+                 onblur="this.style.borderColor='#2a2a2a'">
+          {% if form.password1.errors %}
+          <p class="mt-1 text-xs" style="color: #ff6b6b;">{{ form.password1.errors.0 }}</p>
+          {% endif %}
+        </div>
+        
+        <div>
+          <label class="block text-xs mb-2" style="color: #888;">
+            Şifre tekrar
+          </label>
+          <input type="password" name="password2" required
+                 placeholder="Şifreyi tekrar girin"
+                 class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                 style="background: #1e1e1e; border: 1px solid #2a2a2a; 
+                        color: #f5f0e8;"
+                 onfocus="this.style.borderColor='#c9a84c'"
+                 onblur="this.style.borderColor='#2a2a2a'">
+          {% if form.password2.errors %}
+          <p class="mt-1 text-xs" style="color: #ff6b6b;">{{ form.password2.errors.0 }}</p>
+          {% endif %}
+        </div>
+        
+        <button type="submit"
+                class="w-full py-3 rounded-xl font-medium text-sm transition-all"
+                style="background: #c9a84c; color: #0a0a0a;"
+                onmouseover="this.style.background='#d4b560'"
+                onmouseout="this.style.background='#c9a84c'">
+          Ücretsiz Başla
+        </button>
+      </form>
+      
+      <p class="mt-4 text-center text-xs" style="color: #555;">
+        7 gün ücretsiz deneme · Kredi kartı gerekmez
+      </p>
+      
+      <p class="mt-6 text-center text-sm" style="color: #555;">
+        Hesabınız var mı?
+        <a href="{% url 'account_login' %}"
+           style="color: #c9a84c;" 
+           class="ml-1 hover:underline">
+          Giriş yapın
+        </a>
+      </p>
+      
+    </div>
+    
+    <!-- Ana sayfaya dön -->
+    <div class="text-center mt-6">
+      <a href="{% url 'core:landing' %}"
+         class="text-xs hover:underline"
+         style="color: #444;">
+        ← Ana sayfaya dön
+      </a>
+    </div>
+    
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: garment
+      POSTGRES_PASSWORD: garment
+      POSTGRES_DB: dressifye_saas
+    ports:
+      - "${GARMENT_CORE_PG_PORT:-5432}:5432"
+    volumes:
+      - dressifye_saas_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U garment -d dressifye_saas"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dressifye-saas:
+    build: .
+    image: dressifye-saas:${GARMENT_CORE_VERSION:-0.1.0}
+    ports:
+      - "${GARMENT_CORE_PORT:-8080}:8080"
+    env_file:
+      - .env
+    environment:
+      PORT: "8080"
+      GARMENT_CORE_VERSION: "${GARMENT_CORE_VERSION:-0.1.0}"
+      DATABASE_URL: postgresql://garment:garment@postgres:5432/dressifye_saas
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  dressifye_saas_pg:

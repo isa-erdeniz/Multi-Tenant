@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Kıyafet {{ action }} — Dressifye{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/wardrobe-form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-8">
+  <a href="{% url 'wardrobe:index' %}" class="text-gray-600 hover:text-brand-gold mb-4 inline-block">
+    ← Gardıroba Dön
+  </a>
+  <h1 class="text-3xl font-display font-medium text-gray-900 mb-2">Kıyafet {{ action }}</h1>
+
+  <div class="step-indicator">
+    <span class="step-dot active" data-step="1">1</span>
+    <span class="step-line"></span>
+    <span class="step-dot" data-step="2">2</span>
+    <span class="step-line"></span>
+    <span class="step-dot" data-step="3">3</span>
+    <span class="step-line"></span>
+    <span class="step-dot" data-step="4">4</span>
+  </div>
+
+  <div id="form-loading-overlay" class="form-loading-overlay hidden">
+    <div class="form-loading-content">
+      <div class="form-loading-spinner"></div>
+      <p class="form-loading-text">Arka plan temizleniyor ve stil analizi yapılıyor...</p>
+    </div>
+  </div>
+  <form method="post" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg p-6 md:p-8" data-initial-step="{{ initial_step|default:1 }}">
+    {% csrf_token %}
+
+    <!-- ADIM 1: Fotoğraf -->
+    <section id="step-1" class="form-step active">
+      <h2 class="text-xl font-semibold mb-4">Fotoğraf Ekle</h2>
+      <div class="upload-area" onclick="document.getElementById('id_image').click()">
+        <input type="file" name="image" id="id_image" accept="image/*" {% if not garment %}required{% endif %} class="hidden">
+        {% if garment and garment.image %}
+        <img src="{{ garment.image.url }}" alt="Mevcut fotoğraf" class="max-h-[250px] object-contain rounded-lg">
+        <p class="text-sm text-gray-500 mt-2">Değiştirmek için tıklayın</p>
+        {% else %}
+        <div class="upload-placeholder">
+          <svg class="w-16 h-16 text-gray-400 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <p class="text-gray-600">Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
+          <p class="text-sm text-gray-400 mt-2">PNG, JPG, WEBP (max 10MB)</p>
+        </div>
+        {% endif %}
+      </div>
+      {% if form.image.errors %}<p class="text-sm text-red-600 mt-2">{{ form.image.errors.0 }}</p>{% endif %}
+      <div class="step-actions">
+        <button type="button" class="btn-next" onclick="nextStep(2)">Devam Et →</button>
+      </div>
+    </section>
+
+    <!-- ADIM 2: Temel Bilgiler -->
+    <section id="step-2" class="form-step hidden">
+      <h2 class="text-xl font-semibold mb-4">Temel Bilgiler</h2>
+      <div class="form-group">
+        <label>Kıyafet Adı *</label>
+        <input type="text" name="name" required placeholder="Örn: Kırmızı Elbise" value="{{ form.name.value|default:'' }}"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+        {% if form.name.errors %}<p class="text-sm text-red-600 mt-1">{{ form.name.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kategori</label>
+          {{ form.category }}
+        </div>
+        <div class="form-group">
+          <label>Alt Kategori</label>
+          {{ form.subcategory }}
+        </div>
+      </div>
+      <div class="step-actions">
+        <button type="button" class="btn-prev" onclick="prevStep(1)">← Geri</button>
+        <button type="button" class="btn-next" onclick="nextStep(3)">Devam Et →</button>
+      </div>
+    </section>
+
+    <!-- ADIM 3: Detaylar -->
+    <section id="step-3" class="form-step hidden">
+      <h2 class="text-xl font-semibold mb-4">Detaylar</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Renk</label>
+          <div class="color-picker-row">
+            <input type="color" name="color_hex" value="{% if garment %}{{ garment.color_hex|default:'#C9A84C' }}{% else %}{{ form.color_hex.value|default:'#C9A84C' }}{% endif %}" title="Renk seçin">
+            <input type="text" name="color" placeholder="Renk adı (Örn: Bordo)" value="{% if garment %}{{ garment.color|default:'' }}{% else %}{{ form.color.value|default:'' }}{% endif %}"
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Desen</label>
+          {{ form.pattern }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Marka</label>
+          <input type="text" name="brand" placeholder="Zara, Mango..." value="{% if garment %}{{ garment.brand|default:'' }}{% else %}{{ form.brand.value|default:'' }}{% endif %}"
+                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+        </div>
+        <div class="form-group">
+          <label>Beden</label>
+          <input type="text" name="size" placeholder="M, 38, L..." value="{% if garment %}{{ garment.size|default:'' }}{% else %}{{ form.size.value|default:'' }}{% endif %}"
+                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Materyal</label>
+        <input type="text" name="material" placeholder="Pamuk, Polyester..." value="{% if garment %}{{ garment.material|default:'' }}{% else %}{{ form.material.value|default:'' }}{% endif %}"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+      </div>
+      <div class="form-group">
+        <label>Mevsim</label>
+        <div class="season-chips">
+          {% for value, label in form.fields.season.choices %}
+          <label class="chip">
+            <input type="radio" name="season" value="{{ value }}" {% if form.season.value == value or not form.season.value and value == '4mevsim' %}checked{% endif %}>
+            {{ label }}
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="step-actions">
+        <button type="button" class="btn-prev" onclick="prevStep(2)">← Geri</button>
+        <button type="button" class="btn-next" onclick="nextStep(4)">Devam Et →</button>
+      </div>
+    </section>
+
+    <!-- ADIM 4: Ekstra ve Kaydet -->
+    <section id="step-4" class="form-step hidden">
+      <h2 class="text-xl font-semibold mb-4">Son Bilgiler</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fiyat (₺)</label>
+          <input type="number" name="price" step="0.01" placeholder="0.00" value="{% if garment %}{{ garment.price|default:'' }}{% else %}{{ form.price.value|default:'' }}{% endif %}"
+                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+        </div>
+        <div class="form-group">
+          <label>Satın Alma Tarihi</label>
+          <input type="date" name="purchase_date" {% if form.purchase_date.value %}value="{{ form.purchase_date.value|date:'Y-m-d' }}"{% elif garment and garment.purchase_date %}value="{{ garment.purchase_date|date:'Y-m-d' }}"{% endif %}
+                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mağaza</label>
+        <input type="text" name="store_name" placeholder="Trendyol, Zara..." value="{% if garment %}{{ garment.store_name|default:'' }}{% else %}{{ form.store_name.value|default:'' }}{% endif %}"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+      </div>
+      <div class="form-group">
+        <label>Alışveriş Linki</label>
+        <input type="url" name="purchase_url" placeholder="https://..." value="{% if garment %}{{ garment.purchase_url|default:'' }}{% else %}{{ form.purchase_url.value|default:'' }}{% endif %}"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+      </div>
+      <div class="form-group">
+        <label>Etiketler</label>
+        <input type="text" name="tags_input" placeholder="iş, günlük, gece, spor (virgülle ayır)" value="{{ form.tags_input.value|default:form.tags_input.initial|default:'' }}"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">
+      </div>
+      <div class="form-group">
+        <label>Notlar</label>
+        <textarea name="notes" rows="3" placeholder="Özel notlar..." class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand-gold focus:outline-none">{% if garment %}{{ garment.notes|default:'' }}{% else %}{{ form.notes.value|default:'' }}{% endif %}</textarea>
+      </div>
+      <div class="step-actions">
+        <button type="button" class="btn-prev" onclick="prevStep(3)">← Geri</button>
+        <button type="submit" class="btn-save">💾 Kaydet</button>
+      </div>
+    </section>
+  </form>
+</div>
+
+<script src="{% static 'js/wardrobe-form.js' %}"></script>
+{% endblock %}

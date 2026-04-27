@@ -70,7 +70,7 @@ class ProjectPromptsTests(TestCase):
     ALL_PROJECTS = [
         "looopone",
         "worktrackere",
-        "garment-core",
+        "dressifye-saas",
         "hairinfinitye",
         "edulingoe",
         "stylecoree",
@@ -96,9 +96,9 @@ class ProjectPromptsTests(TestCase):
             with self.subTest(project=key):
                 self.assertGreater(len(PROJECT_PROMPTS[key].get("capabilities", [])), 0)
 
-    def test_garment_core_slug_variants(self):
-        ctx_tire = get_project_context("garment-core")
-        ctx_alt = get_project_context("garment_core")
+    def test_dressifye_saas_slug_variants(self):
+        ctx_tire = get_project_context("dressifye-saas")
+        ctx_alt = get_project_context("dressifye_saas")
         self.assertTrue(bool(ctx_tire) or bool(ctx_alt))
 
     def test_contexts_has_general(self):

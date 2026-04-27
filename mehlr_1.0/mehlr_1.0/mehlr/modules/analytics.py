@@ -9,7 +9,7 @@ class AnalyticsModule(BaseMEHLRModule):
     version = "1.0"
     description = "KPI hesaplama, trend analizi, anomali tespiti"
     supported_projects = [
-        "looopone", "worktrackere", "garment_core",
+        "looopone", "worktrackere", "dressifye_saas",
         "hairinfinitye", "edulingoe", "stylecoree", "drivetrackere",
     ]
 

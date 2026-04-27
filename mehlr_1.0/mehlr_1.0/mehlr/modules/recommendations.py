@@ -9,7 +9,7 @@ class RecommendationModule(BaseMEHLRModule):
     version = "1.0"
     description = "Veriye dayalı aksiyon önerileri, önceliklendirme"
     supported_projects = [
-        "looopone", "worktrackere", "garment_core",
+        "looopone", "worktrackere", "dressifye_saas",
         "hairinfinitye", "edulingoe", "stylecoree", "drivetrackere",
     ]
 

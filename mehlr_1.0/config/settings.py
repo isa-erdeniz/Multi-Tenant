@@ -186,15 +186,15 @@ INTER_SERVICE_API_KEY = config('INTER_SERVICE_API_KEY', config('INTER_SERVICE_SE
 DRESSIFYE_API_URL = config('DRESSIFYE_API_URL', default='https://api.dressifye.com/v1')
 DRESSIFYE_API_KEY = config('DRESSIFYE_API_KEY', default='your-secret-key')
 
-# garment-core köprüsü — Celery + Webhook (Adım 3)
+# dressifye-saas köprüsü — Celery + Webhook (Adım 3)
 GARMENT_CORE_WEBHOOK_URL = config('GARMENT_CORE_WEBHOOK_URL', default='')
 GARMENT_CORE_WEBHOOK_SECRET = config('GARMENT_CORE_WEBHOOK_SECRET', default='')
 
-# garment-core okuma API'si — Mehlr AI bağlamı için (Adım 4)
+# dressifye-saas okuma API'si — Mehlr AI bağlamı için (Adım 4)
 # Boş bırakılırsa sistem Dressifye API'ye veya mock'a düşer.
 GARMENT_CORE_API_URL = config('GARMENT_CORE_API_URL', default='')
 GARMENT_CORE_API_KEY = config('GARMENT_CORE_API_KEY', default='')
-# hangi tenant_slug'lar için garment-core'u dene (virgülle, ör. dressifye,stylecoree)
+# hangi tenant_slug'lar için dressifye-saas'u dene (virgülle, ör. dressifye,stylecoree)
 GARMENT_CORE_TENANT_SLUGS = config(
     'GARMENT_CORE_TENANT_SLUGS',
     default='dressifye,stylecoree,hairinfinitye,styleforhuman',

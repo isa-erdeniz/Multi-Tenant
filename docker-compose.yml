@@ -10,28 +10,28 @@ services:
       - ./stylecoree:/srv/stylecoree:ro
       - ./hairinfinitye:/srv/hairinfinitye:ro
     depends_on:
-      - garment-core
-      - garment-core-django
+      - dressifye-saas
+      - dressifye-saas-django
       - mehlr
     restart: unless-stopped
 
   # ortak domain / küçük API (node/express)
-  garment-core:
-    build: ./packages/garment_core
+  dressifye-saas:
+    build: ./packages/dressifye_saas
     environment:
       PORT: "8080"
     ports:
       - "8080:8080"
     restart: unless-stopped
 
-  # garment_core ana backend (Django)
-  garment-core-django:
-    build: ./garment_core
+  # dressifye_saas ana backend (Django)
+  dressifye-saas-django:
+    build: ./dressifye_saas
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./garment_core:/app
+      - ./dressifye_saas:/app
     env_file:
-      - ./garment_core/.env
+      - ./dressifye_saas/.env
     ports:
       - "8000:8000"
     depends_on:
@@ -41,9 +41,9 @@ services:
   garment-db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: garment_core
-      POSTGRES_PASSWORD: garment_core
-      POSTGRES_DB: garment_core
+      POSTGRES_USER: dressifye_saas
+      POSTGRES_PASSWORD: dressifye_saas
+      POSTGRES_DB: dressifye_saas
     ports:
       - "5432:5432"
     volumes:

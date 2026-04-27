@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dressifye — AI Destekli Kişisel Stil Danışmanlığı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/dist/output.css' %}">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .font-display { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Inter', sans-serif; }
+        .grain-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-delay-1 { animation-delay: 0.15s; }
+        .animate-delay-2 { animation-delay: 0.3s; }
+        .animate-delay-3 { animation-delay: 0.45s; }
+        .animate-delay-4 { animation-delay: 0.6s; }
+        .animate-delay-5 { animation-delay: 0.75s; }
+        .animate-delay-6 { animation-delay: 0.9s; }
+        .animate-delay-7 { animation-delay: 1.05s; }
+        .hero-mock-pulse {
+            animation: heroPulse 2.4s ease-in-out infinite;
+        }
+        @keyframes heroPulse {
+            0%, 100% { opacity: 1; border-color: rgba(201, 168, 76, 0.45); }
+            50% { opacity: 0.92; border-color: rgba(201, 168, 76, 0.75); }
+        }
+        .feature-card:hover {
+            border-color: #c9a84c;
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+        }
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(8px); }
+            60% { transform: translateY(4px); }
+        }
+        [x-cloak] { display: none !important; }
+        .animate-on-scroll {
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        @keyframes demoScanMove {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        .demo-scan-animate {
+            animation: demoScanMove 2s ease-in-out forwards;
+        }
+        @keyframes demoFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .demo-garment-reveal {
+            animation: demoFadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-[#f5f0e8] overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
+
+    {% include "components/navbar_landing.html" %}
+
+    <!-- HERO — koyu tema -->
+    <section class="relative overflow-hidden bg-gray-900 pt-24 pb-20 lg:pt-28 lg:pb-32">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <p class="text-sm font-medium text-brand-gold uppercase tracking-wide">
+                        Her sabah dolabın önünde ortalama 15 dakika mı kaybediyorsunuz?
+                    </p>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-white leading-tight">
+                        AI ile
+                        <span class="bg-gradient-to-r from-brand-gold to-amber-300 bg-clip-text text-transparent">2 dakikada</span>
+                        hazır olun
+                    </h1>
+                    <p class="text-lg text-gray-300 max-w-xl leading-relaxed">
+                        Gardırobunuzu fotoğraflayın, yapay zeka size özel kombinler oluştursun.
+                        Sanal deneyin, beğeninizi kaydedin, mağazaya gitmeden karar verin.
+                    </p>
+                    <div class="flex flex-wrap gap-6 py-4">
+                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                            <span class="text-blue-400" aria-hidden="true">👥</span>
+                            <span><span class="font-semibold text-white">10.000+</span> kullanıcı</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                            <span class="text-amber-400" aria-hidden="true">⭐</span>
+                            <span><span class="font-semibold text-white">4,8/5</span> değerlendirme</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-300">
+                            <span class="text-emerald-400" aria-hidden="true">⏱️</span>
+                            <span><span class="font-semibold text-white">12 dk</span> ortalama hazırlanma</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="{% url 'subscriptions:plan_list' %}" class="inline-flex items-center justify-center bg-brand-gold hover:bg-amber-400 text-gray-900 px-8 py-4 rounded-full font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+                            Ücretsiz Dene — 7 Gün
+                            <svg class="ml-2 w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </a>
+                        <button type="button" onclick="document.getElementById('demo').scrollIntoView({behavior: 'smooth', block: 'start'})" class="inline-flex items-center justify-center border-2 border-gray-600 hover:border-gray-400 text-white px-8 py-4 rounded-full font-medium text-lg transition-all">
+                            <svg class="mr-2 w-5 h-5 text-brand-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Nasıl Çalışır?
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-400 flex flex-wrap items-center gap-2">
+                        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shrink-0" aria-hidden="true"></span>
+                        Kredi kartı gerekmez • İptal her zaman
+                    </p>
+                </div>
+                <div class="relative">
+                    <div class="relative bg-gray-800 rounded-2xl shadow-2xl p-6 sm:p-8 border border-gray-700">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 p-4 bg-gray-700/50 rounded-xl border border-gray-600">
+                                <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center text-2xl shrink-0" aria-hidden="true">👗</div>
+                                <div class="min-w-0">
+                                    <p class="font-medium text-white truncate">Mavi Elbise</p>
+                                    <p class="text-sm text-brand-gold">✓ Kategorize edildi</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-4 bg-gray-700/50 rounded-xl border border-gray-600">
+                                <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center text-2xl shrink-0" aria-hidden="true">👠</div>
+                                <div class="min-w-0">
+                                    <p class="font-medium text-white truncate">Siyah Stiletto</p>
+                                    <p class="text-sm text-brand-gold">✓ Renk analizi tamamlandı</p>
+                                </div>
+                            </div>
+                            <div class="hero-mock-pulse p-4 bg-gradient-to-r from-brand-gold/10 to-amber-500/10 rounded-xl border border-dashed border-brand-gold/50 text-center">
+                                <p class="text-center text-brand-gold font-medium text-sm sm:text-base">
+                                    🤖 &ldquo;Bu kombin için önerilen 3 seçenek&hellip;&rdquo;
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 scroll-indicator">
+            <a href="#demo" class="flex flex-col items-center gap-2 text-gray-500 hover:text-brand-gold transition text-sm">
+                <span>Keşfet</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- İnteraktif demo: gardırop analizi simülasyonu — koyu tema -->
+    <section id="demo" class="py-20 bg-gray-900 scroll-mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+                    Dressifye'u deneyimleyin
+                </h2>
+                <p class="text-lg text-gray-400">
+                    Bir kıyafet fotoğrafı yükleyin, AI analiz etsin
+                </p>
+            </div>
+            <div class="bg-gray-800 rounded-3xl p-8 lg:p-12 border border-gray-700">
+                <!-- Adım 1 -->
+                <div id="demo-step-1" class="text-center">
+                    <button type="button" onclick="window.garmentCoreStartDemo()" class="w-24 h-24 bg-gray-700 rounded-2xl mx-auto mb-6 flex items-center justify-center cursor-pointer hover:bg-gray-600 transition-colors" aria-label="Demo: fotoğraf yükle">
+                        <svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+                    <button type="button" onclick="window.garmentCoreStartDemo()" class="bg-brand-gold hover:bg-amber-400 text-gray-900 px-6 py-3 rounded-full font-medium transition-colors">
+                        <span aria-hidden="true">📷</span> Fotoğraf Yükle (Demo)
+                    </button>
+                    <p class="text-sm text-gray-500 mt-3">Gerçek yükleme değil — simülasyon</p>
+                </div>
+                <!-- Adım 2 -->
+                <div id="demo-step-2" class="hidden">
+                    <div class="flex flex-col lg:flex-row gap-8 lg:gap-10 items-stretch">
+                        <div class="w-full lg:w-1/2">
+                            <div id="demo-garment-box" class="bg-gray-700 rounded-2xl p-4 aspect-square max-w-sm mx-auto lg:max-w-none flex items-center justify-center text-7xl sm:text-8xl relative overflow-hidden border border-gray-600 opacity-0">
+                                <span aria-hidden="true">👗</span>
+                                <div id="demo-scan-line" class="absolute left-0 right-0 h-1.5 rounded-full opacity-0 pointer-events-none shadow-lg" style="top: 0; background: linear-gradient(90deg, transparent, #c9a84c, #f5d78e, #c9a84c, transparent); box-shadow: 0 0 12px rgba(201,168,76,0.8);"></div>
+                            </div>
+                            <p class="text-center text-sm text-gray-500 mt-3 lg:hidden">AI görüntüyü tarıyor…</p>
+                        </div>
+                        <div class="w-full lg:w-1/2 space-y-4">
+                            <h3 class="text-xl font-semibold text-white">AI Analizi</h3>
+                            <p class="text-sm text-gray-500 hidden lg:block">Görüntü taranıyor…</p>
+                            <div id="demo-tags" class="space-y-3">
+                                <div class="demo-tag-item opacity-0 translate-x-4 transition-all duration-500 flex items-center gap-3 bg-gray-700/80 p-3 rounded-xl border border-gray-600">
+                                    <span class="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center text-lg shrink-0" aria-hidden="true">👗</span>
+                                    <div>
+                                        <p class="font-medium text-gray-200 text-sm">Kategori</p>
+                                        <p class="text-sm text-brand-gold font-medium">Elbise</p>
+                                    </div>
+                                </div>
+                                <div class="demo-tag-item opacity-0 translate-x-4 transition-all duration-500 flex items-center gap-3 bg-gray-700/80 p-3 rounded-xl border border-gray-600" style="transition-delay: 150ms;">
+                                    <span class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center text-lg shrink-0" aria-hidden="true">🎨</span>
+                                    <div>
+                                        <p class="font-medium text-gray-200 text-sm">Renk</p>
+                                        <p class="text-sm text-blue-300 font-medium">Mavi</p>
+                                    </div>
+                                </div>
+                                <div class="demo-tag-item opacity-0 translate-x-4 transition-all duration-500 flex items-center gap-3 bg-gray-700/80 p-3 rounded-xl border border-gray-600" style="transition-delay: 300ms;">
+                                    <span class="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center text-lg shrink-0" aria-hidden="true">✂️</span>
+                                    <div>
+                                        <p class="font-medium text-gray-200 text-sm">Kesim</p>
+                                        <p class="text-sm text-amber-200 font-medium">Klasik kesim</p>
+                                    </div>
+                                </div>
+                                <div class="demo-tag-item opacity-0 translate-x-4 transition-all duration-500 flex items-center gap-3 bg-gray-700/80 p-3 rounded-xl border border-gray-600" style="transition-delay: 450ms;">
+                                    <span class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center text-lg shrink-0" aria-hidden="true">☀️</span>
+                                    <div>
+                                        <p class="font-medium text-gray-200 text-sm">Sezon</p>
+                                        <p class="text-sm text-emerald-300 font-medium">Yaz sezonu</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Adım 3 -->
+                <div id="demo-step-3" class="hidden mt-10 pt-8 border-t border-gray-700">
+                    <h3 class="text-xl font-semibold text-white mb-6 text-center">
+                        Bu elbise için 3 öneri
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+                        <div class="bg-gray-700/80 rounded-xl p-4 border border-gray-600 hover:border-gray-500 transition-colors">
+                            <div class="text-4xl mb-3 text-center" aria-hidden="true">👠</div>
+                            <p class="font-medium text-white text-center">Nude Stiletto</p>
+                            <p class="text-sm text-gray-400 text-center mb-3">Bacakları uzatır</p>
+                            <button type="button" onclick="window.garmentCoreDemoAddFeedback(this)" class="demo-kombin-btn w-full py-2 bg-gray-600 hover:bg-brand-gold/20 text-gray-200 hover:text-white rounded-lg text-sm font-medium transition-colors border border-gray-500 hover:border-brand-gold/50 disabled:opacity-80">
+                                Kombine Ekle
+                            </button>
+                        </div>
+                        <div class="bg-gray-700/80 rounded-xl p-4 border border-gray-600 hover:border-gray-500 transition-colors">
+                            <div class="text-4xl mb-3 text-center" aria-hidden="true">👜</div>
+                            <p class="font-medium text-white text-center">Bej Clutch</p>
+                            <p class="text-sm text-gray-400 text-center mb-3">Şık dokunuş</p>
+                            <button type="button" onclick="window.garmentCoreDemoAddFeedback(this)" class="demo-kombin-btn w-full py-2 bg-gray-600 hover:bg-brand-gold/20 text-gray-200 hover:text-white rounded-lg text-sm font-medium transition-colors border border-gray-500 hover:border-brand-gold/50">
+                                Kombine Ekle
+                            </button>
+                        </div>
+                        <div class="bg-gray-700/80 rounded-xl p-4 border border-gray-600 hover:border-gray-500 transition-colors">
+                            <div class="text-4xl mb-3 text-center" aria-hidden="true">💎</div>
+                            <p class="font-medium text-white text-center">İnci Küpe</p>
+                            <p class="text-sm text-gray-400 text-center mb-3">Klasik zarafet</p>
+                            <button type="button" onclick="window.garmentCoreDemoAddFeedback(this)" class="demo-kombin-btn w-full py-2 bg-gray-600 hover:bg-brand-gold/20 text-gray-200 hover:text-white rounded-lg text-sm font-medium transition-colors border border-gray-500 hover:border-brand-gold/50">
+                                Kombine Ekle
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button type="button" onclick="window.garmentCoreResetDemo()" class="text-brand-gold hover:text-amber-300 font-medium text-sm underline underline-offset-2">
+                            Tekrar başlat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Özellik kartları — koyu tema -->
+    <section id="ozellikler" class="py-20 bg-gray-900 scroll-mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+                    Neler sunuyoruz
+                </h2>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                    Profesyonel moda asistanınız cebinizde — gardırop, kombin, sanal deneme ve daha fazlası.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <a href="{% url 'wardrobe:index' %}" class="feature-card bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300 block">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center text-2xl mb-4">
+                        👗
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Gardırop Analizi</h3>
+                    <p class="text-gray-400">Kıyafetlerinizi yükleyin, AI otomatik kategorize etsin.</p>
+                </a>
+                <a href="{% url 'styling:index' %}" class="feature-card bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300 block">
+                    <div class="w-12 h-12 bg-brand-gold/20 rounded-lg flex items-center justify-center text-2xl mb-4">
+                        ✨
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">AI Kombinleri</h3>
+                    <p class="text-gray-400">Size özel kombinler, renk uyumları ve stil önerileri.</p>
+                </a>
+                <a href="{% url 'tryon:index' %}" class="feature-card bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300 block">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center text-2xl mb-4">
+                        🪞
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sanal Deneme</h3>
+                    <p class="text-gray-400">Kıyafeti üzerinizde görün, satın almadan önce deneyin.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÜŞTERİ YORUMLARI — koyu tema -->
+    <section id="yorumlar" class="py-20 bg-gray-900 scroll-mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+            <div class="text-center mb-16 animate-on-scroll opacity-0 translate-y-4">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+                    10.000+ kullanıcı stilini yeniden keşfetti
+                </h2>
+                <p class="text-lg text-gray-400">
+                    İşte gerçek kullanıcı deneyimleri
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <article class="bg-gray-800 rounded-2xl p-6 border border-gray-700 animate-on-scroll opacity-0 translate-y-4" style="transition-delay: 80ms;">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 shrink-0 bg-gradient-to-br from-violet-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold" aria-hidden="true">ZK</div>
+                        <div>
+                            <p class="font-semibold text-white">Zeynep K.</p>
+                            <p class="text-sm text-gray-400">İstanbul</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 mb-3" aria-label="5 üzerinden 5 yıldız">
+                        {% for i in "12345" %}
+                        <svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        {% endfor %}
+                    </div>
+                    <p class="text-gray-300 italic">
+                        &ldquo;Sabahları 20 dakika yerine 5 dakikada hazırlanıyorum. AI kombinlerim sürekli beğeni alıyor.&rdquo;
+                    </p>
+                </article>
+                <article class="bg-gray-800 rounded-2xl p-6 border border-gray-700 animate-on-scroll opacity-0 translate-y-4" style="transition-delay: 160ms;">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 shrink-0 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold" aria-hidden="true">SM</div>
+                        <div>
+                            <p class="font-semibold text-white">Selin M.</p>
+                            <p class="text-sm text-gray-400">Ankara</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 mb-3" aria-label="5 üzerinden 5 yıldız">
+                        {% for i in "12345" %}
+                        <svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        {% endfor %}
+                    </div>
+                    <p class="text-gray-300 italic">
+                        &ldquo;Sanal deneme özelliği sayesinde alışverişte hata yapmıyorum. Para tasarrufu bile yaptım.&rdquo;
+                    </p>
+                </article>
+                <article class="bg-gray-800 rounded-2xl p-6 border border-gray-700 animate-on-scroll opacity-0 translate-y-4" style="transition-delay: 240ms;">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 shrink-0 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold" aria-hidden="true">AT</div>
+                        <div>
+                            <p class="font-semibold text-white">Ayşe T.</p>
+                            <p class="text-sm text-gray-400">İzmir</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 mb-3" aria-label="5 üzerinden 5 yıldız">
+                        {% for i in "12345" %}
+                        <svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        {% endfor %}
+                    </div>
+                    <p class="text-gray-300 italic">
+                        &ldquo;Profesyonel stil danışmanına gitmeye gerek kalmadı. Her hafta yeni kombin önerileri geliyor.&rdquo;
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOSYAL KANIT — koyu tema -->
+    <section id="kanit" class="py-20 bg-gray-900 scroll-mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-brand-gold mb-4">
+                    10.000+
+                </h2>
+                <p class="text-lg text-gray-400">
+                    Mutlu kullanıcı
+                </p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {% for i in "1234" %}
+                <div class="aspect-square bg-gray-800 rounded-xl flex items-center justify-center border border-gray-700">
+                    <span class="text-4xl" aria-hidden="true">📸</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- FİYATLAR — koyu tema -->
+    <section id="fiyatlar" class="py-20 lg:py-24 bg-gray-900 scroll-mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mb-4">
+                    İhtiyacınıza uygun planı seçin
+                </h2>
+                <p class="text-lg text-gray-400 mb-8">
+                    İstediğiniz zaman değiştirebilirsiniz
+                </p>
+                <div class="inline-flex bg-gray-800 rounded-full p-1 border border-gray-700" role="group" aria-label="Faturalama dönemi">
+                    <button type="button" onclick="window.garmentCoreSetBilling('monthly')" id="btn-billing-monthly" class="px-6 py-2 rounded-full text-sm font-medium transition-all bg-brand-gold text-gray-900">
+                        Aylık
+                    </button>
+                    <button type="button" onclick="window.garmentCoreSetBilling('yearly')" id="btn-billing-yearly" class="px-6 py-2 rounded-full text-sm font-medium transition-all text-gray-300 hover:text-white">
+                        Yıllık <span class="text-brand-gold font-semibold">-17%</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
+                {% if has_plans %}
+                {% for plan in plans %}
+                <div class="bg-gray-800 rounded-2xl shadow-lg p-8 transition-colors relative flex flex-col {% if plan.is_popular %}border-2 border-brand-gold lg:scale-[1.02] z-10 shadow-xl{% else %}border border-gray-700 hover:border-gray-600{% endif %}">
+                    {% if plan.is_popular %}
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                        <span class="bg-brand-gold text-gray-900 px-4 py-1 rounded-full text-sm font-bold shadow-md">EN POPÜLER</span>
+                    </div>
+                    {% endif %}
+                    <div class="mb-6 {% if plan.is_popular %}pt-2{% endif %}">
+                        <h3 class="text-xl font-bold text-white mb-2">{{ plan.name }}</h3>
+                        {% if plan.features %}
+                        <p class="text-gray-400 text-sm">{{ plan.features|first }}</p>
+                        {% else %}
+                        <p class="text-gray-400 text-sm">Dressifye aboneliği</p>
+                        {% endif %}
+                    </div>
+                    <div class="mb-6">
+                        {% if plan.is_free %}
+                        <span class="text-4xl font-bold text-white">{{ payment_currency_symbol }}0</span>
+                        <span class="text-gray-400">/ {{ plan.trial_days }} gün deneme</span>
+                        {% else %}
+                        <span class="text-4xl font-bold text-white price-monthly">{{ payment_currency_symbol }}{{ plan.price_monthly|floatformat:0 }}</span>
+                        <span class="text-4xl font-bold text-white price-yearly hidden">{{ payment_currency_symbol }}{{ plan.price_yearly|floatformat:0 }}</span>
+                        <span class="text-gray-400 billing-period">/ay</span>
+                        {% if plan.yearly_savings > 0 %}
+                        <p class="text-sm text-brand-gold mt-1 price-yearly-text hidden">Yıllık tasarruf: {{ payment_currency_symbol }}{{ plan.yearly_savings|floatformat:0 }}</p>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    <ul class="space-y-3 mb-8 text-sm flex-1">
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Sanal deneme:
+                            {% if plan.slug == 'ucretsiz' and plan.tryon_limit == 0 %}
+                            <span class="text-gray-400">Dahil değil</span>
+                            {% elif plan.tryon_limit == 0 %}
+                            Sınırsız
+                            {% else %}
+                            {{ plan.tryon_limit }}/ay
+                            {% endif %}
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Gardırop: {% if plan.wardrobe_limit == 0 %}Sınırsız{% else %}{{ plan.wardrobe_limit }} parça{% endif %}
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Editör: {% if plan.editor_limit == 0 %}Sınırsız{% else %}{{ plan.editor_limit }}/ay{% endif %}
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Stil danışmanlığı: {% if plan.style_session_limit == 0 %}Sınırsız{% else %}{{ plan.style_session_limit }}/ay{% endif %}
+                        </li>
+                        {% if plan.has_ai_stylist %}<li class="flex items-center gap-3 text-gray-300"><svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> AI Stilist</li>{% endif %}
+                        {% if plan.has_advanced_editor %}<li class="flex items-center gap-3 text-gray-300"><svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Gelişmiş editör</li>{% endif %}
+                        {% if plan.has_social_sharing %}<li class="flex items-center gap-3 text-gray-300"><svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Sosyal paylaşım</li>{% endif %}
+                        {% if plan.has_priority_support %}<li class="flex items-center gap-3 text-gray-300"><svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Öncelikli destek</li>{% endif %}
+                        {% if plan.has_hq_export %}<li class="flex items-center gap-3 text-gray-300"><svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Yüksek kalite dışa aktarım</li>{% endif %}
+                    </ul>
+                    {% if plan.is_free %}
+                    <a href="{% url 'account_signup' %}" class="block w-full py-3 px-6 text-center border-2 border-gray-600 text-gray-300 rounded-xl font-medium hover:border-gray-400 hover:text-white transition-colors mt-auto">
+                        Ücretsiz Başla
+                    </a>
+                    {% else %}
+                    <a href="{% url 'subscriptions:checkout' plan.slug %}?period=monthly" class="block w-full py-3 px-6 text-center {% if plan.is_popular %}bg-brand-gold hover:bg-amber-400 text-gray-900 font-bold shadow-lg{% else %}border-2 border-gray-600 text-gray-300 hover:border-gray-400 hover:text-white font-medium{% endif %} rounded-xl transition-colors mt-auto">
+                        Bu Planı Seç
+                    </a>
+                    {% if plan.is_popular %}
+                    <p class="text-center text-xs text-gray-500 mt-3 flex items-center justify-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full shrink-0" aria-hidden="true"></span>
+                        Ödeme için giriş gerekir
+                    </p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="col-span-full text-center text-gray-400 py-8">
+                    <p>Planlar şu an gösterilemiyor. <a href="{% url 'subscriptions:plan_list' %}" class="text-brand-gold hover:underline">Planlar sayfasına</a> gidin.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="mt-12 flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+                <span class="flex items-center gap-2">
+                    <svg class="w-4 h-4 shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    SSL Güvenli Ödeme
+                </span>
+                <span class="flex items-center gap-2">
+                    <svg class="w-4 h-4 shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    7 Gün Ücretsiz İptal
+                </span>
+                <span class="flex items-center gap-2">
+                    <svg class="w-4 h-4 shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    Denemede Kredi Kartı Yok
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SSS — koyu tema -->
+    <section id="sss" class="py-20 bg-gray-900 scroll-mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+            <h2 class="text-3xl sm:text-4xl font-display font-bold text-white text-center mb-12">
+                Sıkça Sorulan Sorular
+            </h2>
+            <div class="space-y-0 divide-y divide-gray-700">
+                <div class="faq-item">
+                    <button type="button" onclick="window.garmentCoreToggleFaq(this)" class="w-full py-5 flex items-center justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 group" aria-expanded="false">
+                        <span class="text-lg font-medium text-white group-hover:text-brand-gold transition-colors pr-2">7 gün ücretsiz deneme nasıl çalışır?</span>
+                        <svg class="w-5 h-5 text-gray-400 shrink-0 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer overflow-hidden transition-all duration-300 ease-out max-h-0 opacity-0">
+                        <p class="pb-5 text-gray-300 leading-relaxed text-sm sm:text-base pr-8">
+                            Kredi kartı gerekmez. 7 gün boyunca tüm özellikleri kullanın. Beğenmezseniz hiçbir ücret ödemezsiniz.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" onclick="window.garmentCoreToggleFaq(this)" class="w-full py-5 flex items-center justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 group" aria-expanded="false">
+                        <span class="text-lg font-medium text-white group-hover:text-brand-gold transition-colors pr-2">Gardırobumdaki kıyafetleri nasıl ekliyorum?</span>
+                        <svg class="w-5 h-5 text-gray-400 shrink-0 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer overflow-hidden transition-all duration-300 ease-out max-h-0 opacity-0">
+                        <p class="pb-5 text-gray-300 leading-relaxed text-sm sm:text-base pr-8">
+                            Telefonunuzdan fotoğraf çekin veya galeriden yükleyin. AI otomatik kategorize eder: elbise, pantolon, renk, desen, sezon.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" onclick="window.garmentCoreToggleFaq(this)" class="w-full py-5 flex items-center justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 group" aria-expanded="false">
+                        <span class="text-lg font-medium text-white group-hover:text-brand-gold transition-colors pr-2">Sanal deneme ne kadar gerçekçi?</span>
+                        <svg class="w-5 h-5 text-gray-400 shrink-0 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer overflow-hidden transition-all duration-300 ease-out max-h-0 opacity-0">
+                        <p class="pb-5 text-gray-300 leading-relaxed text-sm sm:text-base pr-8">
+                            Vücut tipinize göre ayarlanır. %85 kullanıcı &ldquo;gerçeğe çok yakın&rdquo; diyor. Ayna öncesi son kontrol niteliğinde.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" onclick="window.garmentCoreToggleFaq(this)" class="w-full py-5 flex items-center justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 group" aria-expanded="false">
+                        <span class="text-lg font-medium text-white group-hover:text-brand-gold transition-colors pr-2">Hangi mağazalarla çalışıyorsunuz?</span>
+                        <svg class="w-5 h-5 text-gray-400 shrink-0 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer overflow-hidden transition-all duration-300 ease-out max-h-0 opacity-0">
+                        <p class="pb-5 text-gray-300 leading-relaxed text-sm sm:text-base pr-8">
+                            Şu an bağımsız çalışıyoruz. 2024&rsquo;te Zara, H&amp;M, Trendyol entegrasyonu geliyor. Şimdilik kendi gardırobunuzu yönetin.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" onclick="window.garmentCoreToggleFaq(this)" class="w-full py-5 flex items-center justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 group" aria-expanded="false">
+                        <span class="text-lg font-medium text-white group-hover:text-brand-gold transition-colors pr-2">Verilerim güvende mi?</span>
+                        <svg class="w-5 h-5 text-gray-400 shrink-0 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer overflow-hidden transition-all duration-300 ease-out max-h-0 opacity-0">
+                        <p class="pb-5 text-gray-300 leading-relaxed text-sm sm:text-base pr-8">
+                            GDPR uyumlu, şifrelenmiş saklama. Fotoğraflarınız asla paylaşılmaz, satılmaz. Silme hakkınız her zaman var.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section id="footer-cta" class="bg-gray-900 py-14 sm:py-16 scroll-mt-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-semibold text-white mb-3 sm:mb-4">
+                Stilinizi bugün keşfedin
+            </h2>
+            <p class="text-gray-400 text-base sm:text-lg mb-8">
+                10.000+ kullanıcıya katılın
+            </p>
+            <a href="{% url 'subscriptions:plan_list' %}" class="inline-flex items-center justify-center w-full sm:w-auto min-w-[200px] bg-brand-gold text-[#0a0a0a] px-8 py-4 rounded-full font-bold text-base sm:text-lg hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl mb-4 border border-amber-600/30">
+                Ücretsiz Başla
+            </a>
+            <p class="text-gray-500 text-sm flex flex-wrap items-center justify-center gap-2">
+                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full shrink-0" aria-hidden="true"></span>
+                Kredi kartı gerekmez · 7 gün ücretsiz
+            </p>
+        </div>
+    </section>
+
+    <!-- Alt footer -->
+    <footer class="bg-gray-950 py-8 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+                <p class="text-gray-400 text-sm order-2 md:order-1">
+                    © 2026 Dressifye. Tüm hakları saklıdır.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm order-1 md:order-2">
+                    <a href="{% url 'legal:gizlilik' %}" class="text-gray-400 hover:text-white transition-colors">Gizlilik Politikası</a>
+                    <a href="{% url 'legal:mesafeli_satis' %}" class="text-gray-400 hover:text-white transition-colors">Mesafeli Satış</a>
+                    <a href="{% url 'legal:iptal_iade' %}" class="text-gray-400 hover:text-white transition-colors">İptal ve İade</a>
+                    <a href="{% url 'hakkimizda' %}" class="text-gray-400 hover:text-white transition-colors">Hakkımızda</a>
+                    <a href="mailto:destek@garmentcore.com" class="text-gray-400 hover:text-white transition-colors">İletişim</a>
+                </div>
+                <div class="flex gap-4 order-3">
+                    <a href="#" class="text-gray-400 hover:text-brand-gold transition-colors p-1" aria-label="Instagram">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-brand-gold transition-colors p-1" aria-label="X (Twitter)">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('opacity-0', 'translate-y-4');
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.animate-on-scroll').forEach(function (el) {
+                observer.observe(el);
+            });
+        });
+
+        window.garmentCoreDemoTimers = window.garmentCoreDemoTimers || [];
+        function garmentCoreClearDemoTimers() {
+            (window.garmentCoreDemoTimers || []).forEach(function (id) { clearTimeout(id); });
+            window.garmentCoreDemoTimers = [];
+        }
+        function garmentCoreDemoAfter(ms, fn) {
+            var id = setTimeout(fn, ms);
+            window.garmentCoreDemoTimers.push(id);
+            return id;
+        }
+        window.garmentCoreStartDemo = function () {
+            garmentCoreClearDemoTimers();
+            var s1 = document.getElementById('demo-step-1');
+            var s2 = document.getElementById('demo-step-2');
+            var s3 = document.getElementById('demo-step-3');
+            var box = document.getElementById('demo-garment-box');
+            var scan = document.getElementById('demo-scan-line');
+            if (!s1 || !s2 || !s3 || !box || !scan) return;
+            s1.classList.add('hidden');
+            s2.classList.remove('hidden');
+            s3.classList.add('hidden');
+            box.classList.remove('demo-garment-reveal');
+            box.classList.add('opacity-0');
+            void box.offsetWidth;
+            box.classList.add('demo-garment-reveal');
+            scan.classList.add('opacity-0', 'hidden');
+            scan.classList.remove('demo-scan-animate');
+            scan.style.top = '0';
+            document.querySelectorAll('.demo-tag-item').forEach(function (tag) {
+                tag.classList.add('opacity-0', 'translate-x-4');
+                tag.classList.remove('opacity-100', 'translate-x-0');
+            });
+            garmentCoreDemoAfter(400, function () {
+                scan.classList.remove('hidden', 'opacity-0');
+                scan.classList.add('demo-scan-animate');
+            });
+            garmentCoreDemoAfter(2400, function () {
+                scan.classList.add('opacity-0', 'hidden');
+                scan.classList.remove('demo-scan-animate');
+                scan.style.top = '0';
+            });
+            garmentCoreDemoAfter(2700, function () {
+                document.querySelectorAll('.demo-tag-item').forEach(function (tag) {
+                    tag.classList.remove('opacity-0', 'translate-x-4');
+                    tag.classList.add('opacity-100', 'translate-x-0');
+                });
+            });
+            garmentCoreDemoAfter(4300, function () {
+                s3.classList.remove('hidden');
+                s3.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        };
+        window.garmentCoreResetDemo = function () {
+            garmentCoreClearDemoTimers();
+            var s1 = document.getElementById('demo-step-1');
+            var s2 = document.getElementById('demo-step-2');
+            var s3 = document.getElementById('demo-step-3');
+            var scan = document.getElementById('demo-scan-line');
+            var box = document.getElementById('demo-garment-box');
+            if (s1) s1.classList.remove('hidden');
+            if (s2) s2.classList.add('hidden');
+            if (s3) s3.classList.add('hidden');
+            if (scan) {
+                scan.classList.add('opacity-0', 'hidden');
+                scan.classList.remove('demo-scan-animate');
+                scan.style.top = '0';
+            }
+            if (box) {
+                box.classList.remove('demo-garment-reveal');
+                box.classList.add('opacity-0');
+            }
+            document.querySelectorAll('.demo-tag-item').forEach(function (tag) {
+                tag.classList.add('opacity-0', 'translate-x-4');
+                tag.classList.remove('opacity-100', 'translate-x-0');
+            });
+            document.querySelectorAll('.demo-kombin-btn').forEach(function (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Kombine Ekle';
+                btn.classList.remove('bg-emerald-100', 'text-emerald-800');
+            });
+            var demo = document.getElementById('demo');
+            if (demo) demo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+        window.garmentCoreDemoAddFeedback = function (btn) {
+            if (!btn || btn.disabled) return;
+            btn.textContent = 'Eklendi ✓';
+            btn.classList.add('bg-emerald-100', 'text-emerald-800');
+            btn.disabled = true;
+        };
+
+        window.garmentCoreToggleFaq = function (btn) {
+            var item = btn.closest('.faq-item');
+            var answer = item && item.querySelector('.faq-answer');
+            var icon = btn.querySelector('.faq-icon');
+            if (!answer || !icon) return;
+            var wasOpen = answer.classList.contains('opacity-100') && answer.classList.contains('max-h-[28rem]');
+            document.querySelectorAll('#sss .faq-answer').forEach(function (el) {
+                el.classList.add('max-h-0', 'opacity-0');
+                el.classList.remove('max-h-[28rem]', 'opacity-100');
+            });
+            document.querySelectorAll('#sss .faq-icon').forEach(function (ic) { ic.classList.remove('rotate-180'); });
+            document.querySelectorAll('#sss .faq-item button[type="button"]').forEach(function (b) {
+                b.setAttribute('aria-expanded', 'false');
+            });
+            if (!wasOpen) {
+                answer.classList.remove('max-h-0', 'opacity-0');
+                answer.classList.add('max-h-[28rem]', 'opacity-100');
+                icon.classList.add('rotate-180');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        };
+
+        window.garmentCoreSetBilling = function (type) {
+            var monthlyBtn = document.getElementById('btn-billing-monthly');
+            var yearlyBtn = document.getElementById('btn-billing-yearly');
+            var monthlyPrices = document.querySelectorAll('#fiyatlar .price-monthly');
+            var yearlyPrices = document.querySelectorAll('#fiyatlar .price-yearly');
+            var yearlyTexts = document.querySelectorAll('#fiyatlar .price-yearly-text');
+            var billingPeriods = document.querySelectorAll('#fiyatlar .billing-period');
+            if (!monthlyBtn || !yearlyBtn) return;
+            if (type === 'yearly') {
+                monthlyBtn.classList.remove('bg-brand-gold', 'text-gray-900');
+                monthlyBtn.classList.add('text-gray-300', 'hover:text-white');
+                yearlyBtn.classList.add('bg-brand-gold', 'text-gray-900');
+                yearlyBtn.classList.remove('text-gray-300', 'hover:text-white');
+                monthlyPrices.forEach(function (el) { el.classList.add('hidden'); });
+                yearlyPrices.forEach(function (el) { el.classList.remove('hidden'); });
+                yearlyTexts.forEach(function (el) { el.classList.remove('hidden'); });
+                billingPeriods.forEach(function (el) { el.textContent = '/yıl'; });
+            } else {
+                yearlyBtn.classList.remove('bg-brand-gold', 'text-gray-900');
+                yearlyBtn.classList.add('text-gray-300', 'hover:text-white');
+                monthlyBtn.classList.add('bg-brand-gold', 'text-gray-900');
+                monthlyBtn.classList.remove('text-gray-300', 'hover:text-white');
+                monthlyPrices.forEach(function (el) { el.classList.remove('hidden'); });
+                yearlyPrices.forEach(function (el) { el.classList.add('hidden'); });
+                yearlyTexts.forEach(function (el) { el.classList.add('hidden'); });
+                billingPeriods.forEach(function (el) { el.textContent = '/ay'; });
+            }
+        };
+    </script>
+</body>
+</html>

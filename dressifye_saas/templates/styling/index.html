@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Stil Önerilerim — Dressifye{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-10">
+
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-serif italic" style="color: #f5f0e8;">
+      Stil Önerileri
+    </h1>
+    <a href="{% url 'styling:new' %}"
+       class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all"
+       style="background: #c9a84c; color: #0a0a0a;"
+       onmouseover="this.style.background='#d4b560'"
+       onmouseout="this.style.background='#c9a84c'">
+      + Yeni Öneri Al
+    </a>
+  </div>
+
+  {% if saved %}
+  <section class="mb-10">
+    <h2 class="text-sm mb-4" style="color: #888;">★ Kaydedilenler</h2>
+    <div class="space-y-3">
+      {% for session in saved %}
+      {% include 'styling/_session_card.html' %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if recent %}
+  <section>
+    <h2 class="text-sm mb-4" style="color: #888;">Son Öneriler</h2>
+    <div class="space-y-3">
+      {% for session in recent %}
+      {% include 'styling/_session_card.html' %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if not saved and not recent %}
+  <div class="text-center py-24">
+    <p class="text-5xl mb-4">✨</p>
+    <h2 class="text-xl font-medium mb-2" style="color: #f5f0e8;">
+      Henüz öneri yok
+    </h2>
+    <p class="text-sm mb-6" style="color: #555;">
+      İlk kombin önerinizi alın.
+    </p>
+    <a href="{% url 'styling:new' %}"
+       class="inline-block px-6 py-3 rounded-xl font-medium text-sm"
+       style="background: #c9a84c; color: #0a0a0a;">
+      Kombin Öner
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

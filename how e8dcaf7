@@ -1,0 +1,22 @@
+[33mb892e9d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m feat: auto-create superuser on deploy
+[33mbd63a8f[m ci: force Railway cache bust
+[33me8dcaf7[m fix: hardcode port 8080 in gunicorn CMD
+[33m77ee0a6[m fix: CMD shell form for PORT variable expansion
+[33m0b62099[m fix: remove local file:// erdeniz_security ref from requirements.txt
+[33mffb16e4[m chore: add erdeniz_security for Railway deploy
+[33m4340323[m fix: add .venv/ to .dockerignore to prevent venv from polluting container PATH
+[33m428beb8[m fix: Dockerfile COPY paths for standalone repo deploy
+[33mde668bc[m chore: add ecosystem registry for Railway deploy
+[33m1b74965[m fix: ai_integrations tests plan=None guard + comprehensive test suite
+[33md220a38[m test: comprehensive test suite for production readiness
+[33m2a50dbb[m feat: dressifye standalone production wiring + subscription init + garment api bridge
+[33m5c6d184[m chore: snapshot before dressifye standalone wiring
+[33mc37d6b3[m fix: erdeniz_security AppRegistryNotReady on startup
+[33m45238d3[m feat: django-to-ts garmentcore webhook bridge + erdeniz_security ingest endpoint
+[33m037a3f4[m feat: face_analyzer MEHLR integration + editor upload/crop/filter pipeline
+[33m2e293f0[m feat: avatar AI engine + looks apply session + beauty/hair/avatar subscription limits
+[33m9309767[m feat: fix duplicate intake route + implement beauty/hair/avatar AI engines + analytics views
+[33m4e333fc[m chore: snapshot before faz8-9-10-21 implementation
+[33mf533d00[m feat(mehlr): stylecoree ve styleforhuman tenant template'leri eklendi
+[33m78fca2f[m feat(structure): hairinfinitye, stylecoree, styleforhuman monorepo içine alındı
+[33m8b8ef6a[m chore(repo): Multi-Tenant/ klasörü artık repo kökü — temiz monorepo yapısı

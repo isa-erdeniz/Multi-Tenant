@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Fotoğraf Düzenleme — Dressifye{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8" x-data="editorApp()" x-init="init()">
+
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-brand-black">Fotoğraf Düzenleme</h1>
+    <p class="text-gray-500 mt-1 text-sm">Fotoğraf yükleyin, arka planı otomatik silin ve AI ile analiz ettirin.</p>
+  </div>
+
+  {# ---- UPLOAD AREA ---- #}
+  <div
+    x-show="!previewUrl"
+    @dragover.prevent="dragOver = true"
+    @dragleave="dragOver = false"
+    @drop.prevent="onDrop($event)"
+    :class="dragOver ? 'border-brand-gold bg-yellow-50' : 'border-gray-300 bg-brand-ivory'"
+    class="rounded-2xl border-2 border-dashed p-12 text-center cursor-pointer transition-colors"
+    @click="$refs.fileInput.click()"
+  >
+    <div class="flex flex-col items-center gap-3">
+      <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+      </svg>
+      <p class="text-gray-600 font-medium">Sürükleyip bırakın veya tıklayın</p>
+      <p class="text-gray-400 text-xs">JPEG, PNG, WebP · Maks. 10 MB</p>
+    </div>
+    <input
+      x-ref="fileInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      class="hidden"
+      @change="onFileSelected($event)"
+    >
+  </div>
+
+  {# ---- PREVIEW + ACTIONS ---- #}
+  <div x-show="previewUrl" class="space-y-6">
+
+    {# Preview cards #}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+      {# Original #}
+      <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
+        <div class="bg-gray-50 px-4 py-2 border-b border-gray-200">
+          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Orijinal</span>
+        </div>
+        <div class="relative aspect-square flex items-center justify-center bg-gray-100 p-2">
+          <img :src="previewUrl" alt="Orijinal fotoğraf" class="max-h-64 max-w-full object-contain rounded">
+        </div>
+      </div>
+
+      {# Result #}
+      <div class="rounded-xl overflow-hidden border border-gray-200 bg-white">
+        <div class="bg-gray-50 px-4 py-2 border-b border-gray-200 flex items-center justify-between">
+          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+            <span x-text="resultLabel">Sonuç</span>
+          </span>
+          <a
+            x-show="resultUrl"
+            :href="resultUrl"
+            download
+            class="text-xs text-brand-gold hover:underline font-medium"
+          >İndir</a>
+        </div>
+        <div class="relative aspect-square flex items-center justify-center bg-[repeating-conic-gradient(#e5e7eb_0%_25%,transparent_0%_50%)] bg-[length:20px_20px] p-2">
+          <template x-if="!resultUrl && !uploading">
+            <p class="text-gray-400 text-sm text-center px-4">Arka planı silmek için butona tıklayın</p>
+          </template>
+          <template x-if="uploading">
+            <div class="flex flex-col items-center gap-2">
+              <svg class="animate-spin w-8 h-8 text-brand-gold" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+              <p class="text-sm text-gray-500" x-text="statusMsg">İşleniyor...</p>
+            </div>
+          </template>
+          <template x-if="resultUrl && !uploading">
+            <img :src="resultUrl" alt="Sonuç" class="max-h-64 max-w-full object-contain rounded">
+          </template>
+        </div>
+      </div>
+    </div>
+
+    {# Action buttons #}
+    <div class="flex flex-wrap gap-3">
+      <button
+        @click="uploadAndProcess()"
+        :disabled="uploading || !!resultUrl"
+        class="px-5 py-2.5 rounded-lg bg-brand-black text-white text-sm font-medium
+               hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+      >
+        <span x-show="!uploading">✂️ Arka Planı Sil</span>
+        <span x-show="uploading">İşleniyor...</span>
+      </button>
+
+      <button
+        @click="analyzePhoto()"
+        :disabled="analysing || (!resultUrl && !uploadedPath)"
+        class="px-5 py-2.5 rounded-lg border border-brand-gold text-brand-gold text-sm font-medium
+               hover:bg-yellow-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+      >
+        <span x-show="!analysing">🔍 AI ile Analiz Et</span>
+        <span x-show="analysing">Analiz ediliyor...</span>
+      </button>
+
+      <button
+        @click="reset()"
+        class="px-5 py-2.5 rounded-lg border border-gray-200 text-gray-600 text-sm
+               font-medium hover:bg-gray-50 transition-colors"
+      >
+        Yeni Fotoğraf
+      </button>
+    </div>
+
+    {# Note input for analysis #}
+    <div x-show="resultUrl || uploadedPath">
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Analiz notu (isteğe bağlı)
+      </label>
+      <input
+        type="text"
+        x-model="userNote"
+        placeholder="Örn: Düğün için, casual stil, renk önerileri..."
+        class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm
+               focus:outline-none focus:ring-2 focus:ring-brand-gold/40 focus:border-brand-gold"
+      >
+    </div>
+
+    {# Error message #}
+    <div
+      x-show="errorMsg"
+      class="rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3"
+      x-text="errorMsg"
+    ></div>
+
+    {# Analysis result #}
+    <div
+      x-show="analysisResult"
+      class="rounded-xl border border-gray-200 bg-white overflow-hidden"
+    >
+      <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center gap-2">
+        <span class="text-base">✨</span>
+        <span class="text-sm font-semibold text-gray-700">AI Stil Analizi</span>
+      </div>
+      <div class="px-5 py-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line"
+           x-text="analysisResult">
+      </div>
+    </div>
+
+  </div>{# /previewUrl #}
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function editorApp() {
+  return {
+    dragOver: false,
+    previewUrl: null,
+    resultUrl: null,
+    resultLabel: 'Sonuç',
+    uploadedPath: null,
+    uploading: false,
+    analysing: false,
+    statusMsg: '',
+    errorMsg: '',
+    analysisResult: '',
+    userNote: '',
+    selectedFile: null,
+
+    init() {},
+
+    onDrop(e) {
+      this.dragOver = false;
+      const file = e.dataTransfer.files[0];
+      if (file) this.loadFile(file);
+    },
+
+    onFileSelected(e) {
+      const file = e.target.files[0];
+      if (file) this.loadFile(file);
+    },
+
+    loadFile(file) {
+      const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowed.includes(file.type)) {
+        this.errorMsg = 'Geçersiz dosya türü. JPEG, PNG veya WebP yükleyin.';
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        this.errorMsg = 'Dosya 10 MB sınırını aşıyor.';
+        return;
+      }
+      this.errorMsg = '';
+      this.selectedFile = file;
+      this.previewUrl = URL.createObjectURL(file);
+      this.resultUrl = null;
+      this.resultLabel = 'Sonuç';
+      this.uploadedPath = null;
+      this.analysisResult = '';
+    },
+
+    async uploadAndProcess() {
+      if (!this.selectedFile) return;
+      this.uploading = true;
+      this.errorMsg = '';
+      this.statusMsg = 'Fotoğraf yükleniyor...';
+
+      try {
+        const fd = new FormData();
+        fd.append('photo', this.selectedFile);
+        fd.append('csrfmiddlewaretoken', this.getCsrf());
+
+        const res = await fetch('{% url "editor:upload" %}', {
+          method: 'POST',
+          body: fd,
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.ok) {
+          this.errorMsg = data.error || 'Yükleme başarısız.';
+          return;
+        }
+
+        this.resultUrl = data.file_url;
+        this.uploadedPath = data.saved_path;
+        this.resultLabel = data.bg_removed ? 'Arka Plan Silindi ✓' : 'Yüklendi (arka plan korundu)';
+      } catch (err) {
+        this.errorMsg = 'Bağlantı hatası. Lütfen tekrar deneyin.';
+      } finally {
+        this.uploading = false;
+        this.statusMsg = '';
+      }
+    },
+
+    async analyzePhoto() {
+      if (!this.resultUrl && !this.uploadedPath) return;
+      this.analysing = true;
+      this.errorMsg = '';
+      this.analysisResult = '';
+
+      try {
+        const res = await fetch('{% url "editor:analyze" %}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': this.getCsrf(),
+          },
+          body: JSON.stringify({
+            file_url: this.resultUrl || '',
+            note: this.userNote,
+          }),
+        });
+        const data = await res.json();
+        this.analysisResult = data.analysis || 'Analiz sonucu alınamadı.';
+      } catch (err) {
+        this.errorMsg = 'Analiz sırasında hata oluştu.';
+      } finally {
+        this.analysing = false;
+      }
+    },
+
+    reset() {
+      this.previewUrl = null;
+      this.resultUrl = null;
+      this.resultLabel = 'Sonuç';
+      this.uploadedPath = null;
+      this.uploading = false;
+      this.analysing = false;
+      this.statusMsg = '';
+      this.errorMsg = '';
+      this.analysisResult = '';
+      this.userNote = '';
+      this.selectedFile = null;
+    },
+
+    getCsrf() {
+      return document.cookie
+        .split('; ')
+        .find(r => r.startsWith('csrftoken='))
+        ?.split('=')[1] || '';
+    },
+  };
+}
+</script>
+{% endblock %}

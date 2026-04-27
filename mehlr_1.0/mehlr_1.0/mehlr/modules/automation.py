@@ -9,7 +9,7 @@ class AutomationModule(BaseMEHLRModule):
     version = "1.0"
     description = "Tetikleme kuralları, bildirim altyapısı"
     supported_projects = [
-        "looopone", "worktrackere", "garment_core",
+        "looopone", "worktrackere", "dressifye_saas",
         "hairinfinitye", "edulingoe", "stylecoree", "drivetrackere",
     ]
 

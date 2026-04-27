@@ -1,0 +1,38 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Gönderi — Dressifye{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto">
+  <a href="{% url 'social:feed' %}" class="text-sm text-brand-gold hover:underline mb-4 inline-block">← Akış</a>
+  <article class="border border-gray-700 rounded-xl p-6 bg-gray-800/50 mb-6">
+    <p class="text-white font-medium mb-1">{{ post.user.email }}</p>
+    <p class="text-gray-300">{{ post.outfit.name }}</p>
+    {% if post.caption %}<p class="text-gray-400 mt-3">{{ post.caption }}</p>{% endif %}
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'social:post_like' post.pk %}" class="mt-4">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <button type="submit" class="text-sm text-brand-gold hover:underline">
+        {% if liked %}Beğeniyi kaldır{% else %}Beğen{% endif %} ({{ post.likes_count }})
+      </button>
+    </form>
+    {% endif %}
+  </article>
+
+  <h2 class="text-lg font-semibold text-white mb-3">Yorumlar</h2>
+  {% for c in comments %}
+  <div class="text-sm text-gray-400 mb-2 border-l-2 border-gray-600 pl-3">
+    <span class="text-gray-300">{{ c.user.email }}</span> — {{ c.content }}
+  </div>
+  {% empty %}
+  <p class="text-gray-500 text-sm">Yorum yok.</p>
+  {% endfor %}
+
+  {% if user.is_authenticated %}
+  <form method="post" action="{% url 'social:post_comment' post.pk %}" class="mt-4 space-y-2">
+    {% csrf_token %}
+    <textarea name="content" rows="2" class="w-full rounded-lg bg-gray-800 border border-gray-600 text-white p-2 text-sm" placeholder="Yorum yazın..."></textarea>
+    <button type="submit" class="px-4 py-2 bg-brand-gold text-gray-900 rounded-lg text-sm font-medium">Gönder</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

@@ -10,4 +10,4 @@ Stil, marka ve dijital tasarım stüdyosu — ErdenizTech ekosistemi fashion_sty
 ## Ekosistem
 
 Bu servis [Multi-Tenant](https://github.com/isa-erdeniz/Multi-Tenant) mimarisinin `stylecoree` kiracısıdır.
-Veri [garment-core](https://github.com/isa-erdeniz/Multi-Tenant/tree/main/Multi-Tenant/packages/garment_core) üzerinden işlenir.
+Veri [dressifye-saas](https://github.com/isa-erdeniz/Multi-Tenant/tree/main/Multi-Tenant/packages/dressifye_saas) üzerinden işlenir.

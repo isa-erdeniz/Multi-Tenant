@@ -15,7 +15,7 @@ QUERY_GENERAL = 'general'
 PROJECT_ALIASES = {
     'looopone': ['looopone', 'atık', 'çöp', 'konteyner', 'belediye'],
     'worktrackere': ['worktrackere', 'worktracker', 'randevu', 'salon', 'kuaför'],
-    'garment_core': ['garment', 'core', 'kıyafet', 'moda', 'e-ticaret'],
+    'dressifye_saas': ['garment', 'core', 'kıyafet', 'moda', 'e-ticaret'],
     'hairinfinitye': ['hairinfinitye', 'saç', 'bakım', 'hair'],
     'edulingoe': ['edulingoe', 'dil', 'öğrenme', 'edu'],
     'stylecoree': ['stylecoree', 'tasarım', 'stüdyo', 'style'],

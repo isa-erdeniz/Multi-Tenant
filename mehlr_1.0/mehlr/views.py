@@ -22,7 +22,7 @@ from mehlr.utils import sanitize_user_input, markdown_to_html
 
 
 def _project_meta(slug):
-    """PROJECT_PROMPTS'tan meta döner; garment_core / garment-core uyumlu."""
+    """PROJECT_PROMPTS'tan meta döner; dressifye_saas / dressifye-saas uyumlu."""
     if not slug:
         return {}
     return PROJECT_PROMPTS.get(slug) or PROJECT_PROMPTS.get(slug.replace("_", "-")) or {}

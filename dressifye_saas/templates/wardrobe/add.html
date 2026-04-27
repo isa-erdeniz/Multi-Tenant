@@ -1,0 +1,376 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Yeni Kıyafet - Dressifye{% endblock %}
+
+{% block content %}
+<div class="flex items-center gap-4 mb-6">
+    <a href="{% url 'wardrobe:index' %}" class="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-800" aria-label="Gardırobuma dön">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+    </a>
+    <h1 class="text-2xl font-bold text-white">Yeni Kıyafet Ekle</h1>
+</div>
+
+{% if form.non_field_errors %}
+<div class="mb-4 p-4 rounded-xl bg-red-900/25 border border-red-800/50 text-red-300 text-sm">
+    {% for err in form.non_field_errors %}<p>{{ err }}</p>{% endfor %}
+</div>
+{% endif %}
+
+{% if analysis_always_visible %}
+<div class="mb-4 p-4 rounded-xl bg-amber-900/20 border border-amber-700/40 text-amber-200/90 text-sm">
+    Lütfen alanları kontrol edin. Hata varsa fotoğrafı tekrar seçmeniz gerekebilir.
+</div>
+{% endif %}
+
+<form id="add-garment-form" method="post" enctype="multipart/form-data" class="pb-12"
+      data-analysis-always="{{ analysis_always_visible|yesno:'true,false' }}">
+    {% csrf_token %}
+
+    <!-- Aşama 1: Yükleme -->
+    <div id="upload-section" class="max-w-2xl mx-auto mb-8">
+        <div id="drop-zone"
+             role="button"
+             tabindex="0"
+             class="border-2 border-dashed border-gray-600 rounded-2xl p-10 sm:p-12 text-center hover:border-brand-gold hover:bg-gray-800/40 transition-all cursor-pointer">
+            <div class="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-700">
+                <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+            </div>
+            <p class="text-lg text-white font-medium mb-2">Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
+            <p class="text-sm text-gray-400 mb-4">JPG, PNG, WEBP · En fazla 10 MB</p>
+            <span class="inline-flex bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors border border-gray-700 pointer-events-none">
+                Fotoğraf Seç
+            </span>
+            {{ form.image }}
+        </div>
+        {% if form.image.errors %}
+        <p class="mt-3 text-red-400 text-sm text-center">{{ form.image.errors.0 }}</p>
+        {% endif %}
+        <p id="upload-error" class="hidden mt-4 text-red-400 text-center text-sm" role="alert"></p>
+    </div>
+
+    <!-- Aşama 2 -->
+    <div id="analysis-section" class="{% if not analysis_always_visible %}hidden{% endif %} max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-8">
+            <div>
+                <div class="aspect-square bg-gray-800 rounded-xl overflow-hidden border border-gray-700 flex items-center justify-center">
+                    <img id="preview-image" src="" alt="" class="w-full h-full object-cover hidden">
+                    <div id="preview-placeholder" class="text-gray-500 text-sm px-6 text-center">
+                        {% if analysis_always_visible %}
+                        Önizleme için yeni bir fotoğraf seçin.
+                        {% else %}
+                        Önizleme burada görünecek.
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="button" id="btn-reset-upload" class="mt-4 w-full py-3 border-2 border-dashed border-gray-600 hover:border-brand-gold rounded-xl text-gray-400 hover:text-white transition-colors flex items-center justify-center gap-2 text-sm font-medium">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Başka fotoğraf yükle
+                </button>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full shrink-0" id="ai-status-dot"></span>
+                    <span class="text-emerald-400 text-sm font-medium" id="ai-status-text">AI analizi</span>
+                </div>
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-white mb-2">Alanları kontrol edin</h2>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Kaydettikten sonra görsel arka plan ve etiketler arka planda güncellenebilir. Aşağıdaki alanları onaylayın veya düzenleyin.
+                    </p>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <label for="id_name" class="text-sm font-medium text-gray-300">Kıyafet adı *</label>
+                            {% include "wardrobe/partials/ai_field_actions.html" with target_id="id_name" %}
+                        </div>
+                        {{ form.name }}
+                        {% if form.name.errors %}<p class="text-red-400 text-xs mt-1">{{ form.name.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <label for="id_category" class="text-sm font-medium text-gray-300">Kategori</label>
+                            {% include "wardrobe/partials/ai_field_actions.html" with target_id="id_category" %}
+                        </div>
+                        {% include "wardrobe/partials/select_dark_wrap.html" with field=form.category %}
+                        {% if form.category.errors %}<p class="text-red-400 text-xs mt-1">{{ form.category.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <label for="id_subcategory" class="text-sm font-medium text-gray-300">Alt kategori</label>
+                            {% include "wardrobe/partials/ai_field_actions.html" with target_id="id_subcategory" %}
+                        </div>
+                        {% include "wardrobe/partials/select_dark_wrap.html" with field=form.subcategory %}
+                        {% if form.subcategory.errors %}<p class="text-red-400 text-xs mt-1">{{ form.subcategory.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="text-sm font-medium text-gray-300">Renk</span>
+                            {% include "wardrobe/partials/ai_field_actions.html" with target_id="id_color" %}
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            {{ form.color_hex }}
+                            <div class="flex-1 min-w-0">{{ form.color }}</div>
+                        </div>
+                        {% if form.color.errors %}<p class="text-red-400 text-xs mt-1">{{ form.color.errors.0 }}</p>{% endif %}
+                        {% if form.color_hex.errors %}<p class="text-red-400 text-xs mt-1">{{ form.color_hex.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <label for="id_pattern" class="text-sm font-medium text-gray-300">Desen</label>
+                            {% include "wardrobe/partials/ai_field_actions.html" with target_id="id_pattern" %}
+                        </div>
+                        {% include "wardrobe/partials/select_dark_wrap.html" with field=form.pattern %}
+                        {% if form.pattern.errors %}<p class="text-red-400 text-xs mt-1">{{ form.pattern.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <label for="id_season" class="text-sm font-medium text-gray-300">Mevsim</label>
+                            {% include "wardrobe/partials/ai_field_actions.html" with target_id="id_season" %}
+                        </div>
+                        {% include "wardrobe/partials/select_dark_wrap.html" with field=form.season %}
+                        {% if form.season.errors %}<p class="text-red-400 text-xs mt-1">{{ form.season.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <label for="id_material" class="text-sm font-medium text-gray-300">Kumaş (tahmini)</label>
+                            {% include "wardrobe/partials/ai_field_actions.html" with target_id="id_material" %}
+                        </div>
+                        {{ form.material }}
+                        {% if form.material.errors %}<p class="text-red-400 text-xs mt-1">{{ form.material.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="id_brand" class="block text-sm font-medium text-gray-300 mb-2">Marka</label>
+                            {{ form.brand }}
+                        </div>
+                        <div>
+                            <label for="id_size" class="block text-sm font-medium text-gray-300 mb-2">Beden</label>
+                            {{ form.size }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="id_tags_input" class="block text-sm font-medium text-gray-300 mb-2">Etiketler (virgülle)</label>
+                        {{ form.tags_input }}
+                    </div>
+
+                    <div>
+                        <label for="id_notes" class="block text-sm font-medium text-gray-300 mb-2">Notlar</label>
+                        {{ form.notes }}
+                        {% if form.notes.errors %}<p class="text-red-400 text-xs mt-1">{{ form.notes.errors.0 }}</p>{% endif %}
+                    </div>
+                </div>
+
+                <div class="hidden">
+                    {{ form.price }}{{ form.purchase_date }}{{ form.store_name }}{{ form.purchase_url }}
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 pt-8">
+                    <button type="submit" class="flex-1 bg-brand-gold hover:bg-amber-400 text-gray-900 py-3 rounded-lg font-bold transition-colors">
+                        ✓ Kaydet
+                    </button>
+                    <button type="button" id="btn-reanalyze" class="px-5 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors border border-gray-700" title="Yeniden yükle ve önizle">
+                        Yeniden Analiz Et
+                    </button>
+                    <a href="{% url 'wardrobe:index' %}" class="px-5 py-3 border border-gray-600 text-gray-300 hover:text-white rounded-lg font-medium transition-colors text-center">
+                        İptal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="loading-overlay" class="hidden fixed inset-0 bg-gray-900/85 backdrop-blur-sm z-[60] flex items-center justify-center p-6" aria-live="polite">
+    <div class="text-center max-w-sm">
+        <div class="w-14 h-14 border-4 border-brand-gold/30 border-t-brand-gold rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-white font-medium">Hazırlanıyor…</p>
+        <p class="text-sm text-gray-400 mt-2">Kayıttan sonra AI görselinizi işleyebilir.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    var form = document.getElementById('add-garment-form');
+    if (!form) return;
+
+    var analysisAlways = form.getAttribute('data-analysis-always') === 'true';
+    var dropZone = document.getElementById('drop-zone');
+    var fileInput = document.getElementById('id_image');
+    var uploadSection = document.getElementById('upload-section');
+    var analysisSection = document.getElementById('analysis-section');
+    var loadingOverlay = document.getElementById('loading-overlay');
+    var previewImage = document.getElementById('preview-image');
+    var previewPlaceholder = document.getElementById('preview-placeholder');
+    var uploadError = document.getElementById('upload-error');
+    var aiStatusText = document.getElementById('ai-status-text');
+
+    var VALID_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+    var MAX_BYTES = 10 * 1024 * 1024;
+
+    function showError(msg) {
+        if (!uploadError) return;
+        uploadError.textContent = msg;
+        uploadError.classList.remove('hidden');
+    }
+    function hideError() {
+        if (uploadError) uploadError.classList.add('hidden');
+    }
+
+    function assignFile(file) {
+        if (!fileInput || !file) return;
+        try {
+            var dt = new DataTransfer();
+            dt.items.add(file);
+            fileInput.files = dt.files;
+        } catch (e) {
+            showError('Dosya seçilemedi. Tarayıcınızı güncelleyin.');
+            return false;
+        }
+        return true;
+    }
+
+    function showPreview(file) {
+        if (!previewImage || !previewPlaceholder) return;
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewImage.classList.remove('hidden');
+            previewPlaceholder.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function goToAnalysisAfterLoad() {
+        if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+        if (aiStatusText) aiStatusText.textContent = 'Alanları kontrol edin';
+        window.setTimeout(function () {
+            if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            if (analysisSection) analysisSection.classList.remove('hidden');
+            if (uploadSection && !analysisAlways) uploadSection.classList.add('hidden');
+        }, analysisAlways ? 0 : 900);
+    }
+
+    function handleFile(file) {
+        hideError();
+        if (!file) return;
+        if (VALID_TYPES.indexOf(file.type) === -1) {
+            showError('Lütfen JPG, PNG veya WEBP seçin.');
+            return;
+        }
+        if (file.size > MAX_BYTES) {
+            showError('Dosya boyutu en fazla 10 MB olabilir.');
+            return;
+        }
+        if (!assignFile(file)) return;
+        showPreview(file);
+        goToAnalysisAfterLoad();
+    }
+
+    if (dropZone && fileInput) {
+        dropZone.addEventListener('click', function (e) {
+            if (e.target === fileInput) return;
+            e.preventDefault();
+            fileInput.click();
+        });
+        dropZone.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                fileInput.click();
+            }
+        });
+        fileInput.addEventListener('change', function () {
+            var f = fileInput.files && fileInput.files[0];
+            if (f) handleFile(f);
+        });
+        dropZone.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            dropZone.classList.add('border-brand-gold', 'bg-gray-800/50');
+        });
+        dropZone.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            dropZone.classList.remove('border-brand-gold', 'bg-gray-800/50');
+        });
+        dropZone.addEventListener('drop', function (e) {
+            e.preventDefault();
+            dropZone.classList.remove('border-brand-gold', 'bg-gray-800/50');
+            var f = e.dataTransfer.files && e.dataTransfer.files[0];
+            if (f) handleFile(f);
+        });
+    }
+
+    document.getElementById('btn-reset-upload') && document.getElementById('btn-reset-upload').addEventListener('click', function () {
+        if (fileInput) fileInput.value = '';
+        if (previewImage) {
+            previewImage.src = '';
+            previewImage.classList.add('hidden');
+        }
+        if (previewPlaceholder) previewPlaceholder.classList.remove('hidden');
+        if (!analysisAlways && analysisSection) analysisSection.classList.add('hidden');
+        if (!analysisAlways && uploadSection) uploadSection.classList.remove('hidden');
+        hideError();
+        if (fileInput) fileInput.focus();
+    });
+
+    document.getElementById('btn-reanalyze') && document.getElementById('btn-reanalyze').addEventListener('click', function () {
+        if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+        window.setTimeout(function () {
+            if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            document.getElementById('btn-reset-upload') && document.getElementById('btn-reset-upload').click();
+            if (fileInput) fileInput.click();
+        }, 500);
+    });
+
+    window.garmentCoreFocusField = function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.focus();
+        el.classList.add('ring-2', 'ring-brand-gold', 'ring-offset-2', 'ring-offset-gray-900');
+        window.setTimeout(function () {
+            el.classList.remove('ring-2', 'ring-brand-gold', 'ring-offset-2', 'ring-offset-gray-900');
+        }, 1200);
+    };
+
+    window.garmentCoreMarkAiOk = function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add('ring-2', 'ring-emerald-500', 'ring-offset-2', 'ring-offset-gray-900');
+        window.setTimeout(function () {
+            el.classList.remove('ring-2', 'ring-emerald-500', 'ring-offset-2', 'ring-offset-gray-900');
+        }, 700);
+    };
+
+    if (analysisAlways) {
+        if (analysisSection) analysisSection.classList.remove('hidden');
+        if (aiStatusText) aiStatusText.textContent = 'AI analiz edemedi veya form hatalı — manuel düzenleyin';
+        var dot = document.getElementById('ai-status-dot');
+        if (dot) {
+            dot.classList.remove('bg-emerald-500');
+            dot.classList.add('bg-amber-500');
+        }
+    }
+
+    form.addEventListener('submit', function () {
+        if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+    });
+})();
+</script>
+{% endblock %}

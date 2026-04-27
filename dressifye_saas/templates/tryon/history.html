@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Try-On Geçmişi — Dressifye{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-10">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-serif italic" style="color: #f5f0e8;">
+      Sanal Deneme Geçmişi
+    </h1>
+    <a href="{% url 'tryon:index' %}"
+       class="text-sm" style="color: #c9a84c;">← Yeni deneme</a>
+  </div>
+
+  {% if sessions %}
+  <div class="space-y-4">
+    {% for session in sessions %}
+    <div class="flex items-center gap-4 p-4 rounded-xl"
+         style="background: #141414; border: 1px solid #2a2a2a;">
+      <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0"
+           style="background: #1e1e1e;">
+        {% if session.user_photo %}
+        <img src="{{ session.user_photo.url }}" class="w-full h-full object-cover" alt="">
+        {% else %}
+        <div class="w-full h-full flex items-center justify-center text-xl">📷</div>
+        {% endif %}
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium" style="color: #f5f0e8;">{{ session.garment.name }}</p>
+        <p class="text-xs mt-0.5" style="color: #555;">
+          {{ session.created_at|timesince }} önce · {{ session.get_status_display }}
+        </p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="p-12 rounded-xl text-center"
+       style="background: #141414; border: 1px solid #2a2a2a;">
+    <p class="text-sm mb-4" style="color: #555;">Henüz deneme yok</p>
+    <a href="{% url 'tryon:index' %}"
+       class="text-sm" style="color: #c9a84c;">İlk denemenizi yapın →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

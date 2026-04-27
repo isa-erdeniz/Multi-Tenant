@@ -11,7 +11,7 @@ PROJECT_CONTEXTS = {
         'WorkTrackere — Randevu ve salon yönetimi. Müşteri, personel, hizmet, gelir verileri. '
         'Kuaför ve güzellik salonları hedef kitle.'
     ),
-    'garment_core': (
+    'dressifye_saas': (
         'Garment-Core — AI sanal kıyafet deneme. Görsel analiz, ürün kataloğu, dönüşüm verileri. '
         'E-ticaret / moda hedef kitle.'
     ),
@@ -142,10 +142,10 @@ PROJECT_PROMPTS = {
     # ─────────────────────────────────────────────
     # Garment-Core — Giysi Yönetim Altyapısı
     # ─────────────────────────────────────────────
-    "garment-core": {
-        "name": "garment-core",
+    "dressifye-saas": {
+        "name": "dressifye-saas",
         "domain": "garment_infrastructure",
-        "website": "https://garment-core.com",
+        "website": "https://dressifye-saas.com",
         "display_name": "Garment-Core",
         "description": (
             "Garment-Core, Dressifye ekosisteminin temel altyapı katmanıdır. "

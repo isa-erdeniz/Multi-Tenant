@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Çıkış Yap — Dressifye{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center px-4 bg-brand-black">
+  <div class="w-full max-w-md">
+    <div class="rounded-2xl p-8 bg-gray-900 border border-gray-800 text-center">
+      <h1 class="text-xl font-medium mb-6 text-brand-ivory">Çıkış yapmak istediğinize emin misiniz?</h1>
+      <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="px-6 py-3 rounded-xl font-medium bg-brand-gold text-brand-black hover:opacity-90">Çıkış Yap</button>
+      </form>
+
+      <p class="mt-6">
+        <a href="/" class="text-sm text-brand-gold hover:underline">← Ana sayfaya dön</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

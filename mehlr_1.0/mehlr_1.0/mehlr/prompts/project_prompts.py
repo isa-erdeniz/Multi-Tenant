@@ -11,7 +11,7 @@ PROJECT_CONTEXTS = {
         'WorkTrackere — Randevu ve salon yönetimi. Müşteri, personel, hizmet, gelir verileri. '
         'Kuaför ve güzellik salonları hedef kitle.'
     ),
-    'garment_core': (
+    'dressifye_saas': (
         'Garment-Core — AI sanal kıyafet deneme. Görsel analiz, ürün kataloğu, dönüşüm verileri. '
         'E-ticaret / moda hedef kitle.'
     ),

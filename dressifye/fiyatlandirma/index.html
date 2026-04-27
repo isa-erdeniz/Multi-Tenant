@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- API URL Worker env'den okunur; bu tag artık kullanılmıyor -->
-    <meta name="garment-core-api" content="">
-    <title>Abonelik — Dressifye × Garment Core</title>
+    <meta name="dressifye-saas-api" content="">
+    <title>Abonelik — Dressifye × Dressifye</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script src="https://unpkg.com/htmx.org@2.0.4/dist/ext/json-enc.js"></script>
@@ -53,11 +53,11 @@
 
     <main class="pt-24 pb-20 px-4 max-w-6xl mx-auto" x-data="pricingPage()">
         <header class="text-center mb-14">
-            <p class="text-primary text-sm font-semibold tracking-wide uppercase mb-2">Garment Core ile güçlendirildi</p>
+            <p class="text-primary text-sm font-semibold tracking-wide uppercase mb-2">Dressifye ile güçlendirildi</p>
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Abonelik <span class="gradient-text">planları</span></h1>
             <p class="text-gray-400 max-w-2xl mx-auto">
                 Ödeme formu iyzico güvenli altyapısındadır. Yetkilendirme ve plan hakları
-                <strong class="text-white">garment_core</strong> API üzerinden yönetilir.
+                <strong class="text-white">dressifye_saas</strong> API üzerinden yönetilir.
             </p>
         </header>
 
@@ -114,7 +114,7 @@
         </div>
 
         <section class="max-w-xl mx-auto glass-effect rounded-2xl p-8 border border-white/10 mb-12">
-            <h3 class="text-lg font-semibold mb-4">1. Garment Core hesabı</h3>
+            <h3 class="text-lg font-semibold mb-4">1. Dressifye hesabı</h3>
             <p class="text-gray-400 text-sm mb-4">JWT almak için e-posta ve şifrenizi girin (DressifyeUser).</p>
             <form id="login-form" hx-ext="json-enc" class="space-y-4">
                 <input type="email" name="email" required placeholder="E-posta"
@@ -132,7 +132,7 @@
             <h3 class="text-lg font-semibold mb-4">2. Ünvan (isteğe bağlı)</h3>
             <input type="text" x-model="customTitle" maxlength="120" placeholder="Örn. Princess Duygu"
                 class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 focus:ring-2 focus:ring-primary outline-none">
-            <p class="text-xs text-gray-500 mt-2">Profilinizde görünecek özel başlık (garment_core UserProfile).</p>
+            <p class="text-xs text-gray-500 mt-2">Profilinizde görünecek özel başlık (dressifye_saas UserProfile).</p>
         </section>
 
         <section class="max-w-3xl mx-auto">
@@ -141,7 +141,7 @@
             <form id="checkout-init-form" hx-ext="json-enc" class="hidden">
                 <input type="hidden" name="plan_slug" :value="selectedTier">
                 <input type="hidden" name="custom_title" :value="customTitle">
-                <!-- API: interval veya period (ikisi de garment_core’da kabul edilir) -->
+                <!-- API: interval veya period (ikisi de dressifye_saas’da kabul edilir) -->
                 <input type="hidden" name="interval" :value="period">
                 <input type="hidden" name="period" :value="period">
             </form>
@@ -150,7 +150,7 @@
         </section>
 
         <footer class="mt-20 text-center text-xs text-gray-500 max-w-2xl mx-auto">
-            <p>Callback: <code class="text-gray-400">dressifye.com/odeme/abonelik-callback/</code> → Worker → garment_core doğrulama.
+            <p>Callback: <code class="text-gray-400">dressifye.com/odeme/abonelik-callback/</code> → Worker → dressifye_saas doğrulama.
             Webhook imzaları yalnızca backend’de (<code class="text-gray-400">X-Iyz-Signature-V3</code>) doğrulanır.</p>
         </footer>
     </main>

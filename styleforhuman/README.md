@@ -7,4 +7,4 @@ Modern Stil & Yaşam — ErdenizTech ekosistemi `fashion_style` tenant.
 ## Ekosistem
 
 Bu servis [Multi-Tenant](https://github.com/isa-erdeniz/Multi-Tenant) mimarisinin `styleforhuman` kiracısıdır.
-Stil ve gardırop verisi garment-core üzerinden işlenir; Mehlr 1.0 AI kombin önerilerine entegre edilir.
+Stil ve gardırop verisi dressifye-saas üzerinden işlenir; Mehlr 1.0 AI kombin önerilerine entegre edilir.

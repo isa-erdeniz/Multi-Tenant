@@ -82,13 +82,13 @@ def on_conversation_deleted(sender, instance, **kwargs):
 @receiver(post_save, sender="mehlr.DressifyeGarment")
 def on_garment_saved(sender, instance, created, **kwargs):
     """
-    DressifyeGarment kaydedilince Celery üzerinden garment-core'a ilet.
+    DressifyeGarment kaydedilince Celery üzerinden dressifye-saas'a ilet.
     GARMENT_CORE_WEBHOOK_URL tanımlıysa aktif; yoksa sessiz geçer.
     """
     if not getattr(settings, "GARMENT_CORE_WEBHOOK_URL", ""):
         return
     try:
-        from mehlr.tasks_garment_core import push_garment_to_core
+        from mehlr.tasks_dressifye_saas import push_garment_to_core
         garment_data = {
             "name": instance.name,
             "category": instance.category,
@@ -103,22 +103,22 @@ def on_garment_saved(sender, instance, created, **kwargs):
             garment_data=garment_data,
             tenant_slug="dressifye",
         )
-        logger.debug("Signal: garment_core task kuyruğa alındı external_id=%s", instance.external_id)
+        logger.debug("Signal: dressifye_saas task kuyruğa alındı external_id=%s", instance.external_id)
     except Exception as exc:
-        logger.warning("Signal: garment_core task kuyruğa alınamadı: %s", exc)
+        logger.warning("Signal: dressifye_saas task kuyruğa alınamadı: %s", exc)
 
 
 @receiver(post_save, sender="mehlr.OutfitRecommendation")
 def on_recommendation_saved(sender, instance, created, **kwargs):
     """
-    Yeni kombin önerisi garment-core'a bildirilir (yalnızca ilk oluşturmada).
+    Yeni kombin önerisi dressifye-saas'a bildirilir (yalnızca ilk oluşturmada).
     """
     if not created:
         return
     if not getattr(settings, "GARMENT_CORE_WEBHOOK_URL", ""):
         return
     try:
-        from mehlr.tasks_garment_core import push_outfit_recommendation_to_core
+        from mehlr.tasks_dressifye_saas import push_outfit_recommendation_to_core
         push_outfit_recommendation_to_core.delay(
             recommendation_id=instance.pk,
             tenant_slug="dressifye",

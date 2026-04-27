@@ -134,7 +134,7 @@ def _detect_intent(user_message: str, capabilities: list) -> str:
 def get_project_context(project_slug: str | None = None) -> str:
     """
     Proje slug'ına göre AI bağlam metnini döndürür.
-    garment_core / garment-core uyumsuzluğunu da çözer.
+    dressifye_saas / dressifye-saas uyumsuzluğunu da çözer.
     """
     if not project_slug or project_slug == "general":
         return PROJECT_CONTEXTS.get("general", "")
@@ -500,13 +500,13 @@ def _cache_key(user_id: str, occasion: str | None, include_profile: bool, season
     return f"{DRESSIFYE_CONTEXT_CACHE_PREFIX}:{user_id}:{h}"
 
 
-def _fetch_from_garment_core(user_id: str) -> list[dict[str, Any]]:
+def _fetch_from_dressifye_saas(user_id: str) -> list[dict[str, Any]]:
     """
-    garment-core API'den tüm izin verilen tenant'lar için gardırop çeker.
+    dressifye-saas API'den tüm izin verilen tenant'lar için gardırop çeker.
     GARMENT_CORE_API_URL/KEY yoksa boş döner — sistem mock'a düşer.
     """
     from django.conf import settings as _settings
-    from mehlr.integrations.garment_core_context_source import fetch_garments_from_core
+    from mehlr.integrations.dressifye_saas_context_source import fetch_garments_from_core
 
     tenant_slugs: list[str] = getattr(_settings, "GARMENT_CORE_TENANT_SLUGS", [])
     if not tenant_slugs:
@@ -519,11 +519,11 @@ def _fetch_from_garment_core(user_id: str) -> list[dict[str, Any]]:
             merged.extend(items)
         except Exception as exc:
             logger.warning(
-                "_fetch_from_garment_core: tenant=%s user_id=%s hata: %s", slug, user_id, exc
+                "_fetch_from_dressifye_saas: tenant=%s user_id=%s hata: %s", slug, user_id, exc
             )
     if merged:
         logger.info(
-            "_fetch_from_garment_core: %s parça çekildi user_id=%s", len(merged), user_id
+            "_fetch_from_dressifye_saas: %s parça çekildi user_id=%s", len(merged), user_id
         )
     return merged
 
@@ -569,9 +569,9 @@ def get_dressifye_context(
         raw_wardrobe = []
         profile = {}
 
-    # Dressifye API boş döndüyse garment-core'dan dene
+    # Dressifye API boş döndüyse dressifye-saas'dan dene
     if not raw_wardrobe:
-        raw_wardrobe = _fetch_from_garment_core(user_id)
+        raw_wardrobe = _fetch_from_dressifye_saas(user_id)
 
     wardrobe_source = "api" if raw_wardrobe else "mock"
     if not raw_wardrobe:
