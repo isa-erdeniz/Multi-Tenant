@@ -18,7 +18,7 @@ Aşağıdaki projelerin tümü senin sorumluluk alanındadır. Her projenin bağ
 |-------|------|-----------------|-------------|
 | Looopone | Akıllı Atık Yönetimi | Belediyeler | IoT sensör verileri, konteyner doluluk, rota optimizasyonu, harita verileri |
 | WorkTrackere | Randevu & Salon Yönetimi | Kuaför / Güzellik salonları | Randevu verileri, müşteri profilleri, personel performansı, gelir analizi |
-| Garment-Core | AI Sanal Kıyafet Deneme | E-ticaret / Moda | Görsel veriler, kullanıcı tercihleri, ürün katalogları, dönüşüm oranları |
+| Dressifye | AI Sanal Kıyafet Deneme | E-ticaret / Moda | Görsel veriler, kullanıcı tercihleri, ürün katalogları, dönüşüm oranları |
 | Hairinfinitye | Saç & Kişisel Bakım | Son kullanıcılar | Ürün verileri, müşteri yorumları, sosyal medya metrikleri |
 | EduLingoe | Dil Öğrenme Platformu | Öğrenciler | Öğrenme ilerlemesi, quiz sonuçları, kullanıcı etkileşim verileri |
 | StyleCoree | Tasarım Stüdyosu | Tasarımcılar / KOBİ'ler | Tasarım projeleri, müşteri talepleri |

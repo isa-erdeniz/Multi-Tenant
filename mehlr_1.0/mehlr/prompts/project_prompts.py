@@ -12,7 +12,7 @@ PROJECT_CONTEXTS = {
         'Kuaför ve güzellik salonları hedef kitle.'
     ),
     'dressifye_saas': (
-        'Garment-Core — AI sanal kıyafet deneme. Görsel analiz, ürün kataloğu, dönüşüm verileri. '
+        'Dressifye — AI sanal kıyafet deneme. Görsel analiz, ürün kataloğu, dönüşüm verileri. '
         'E-ticaret / moda hedef kitle.'
     ),
     'hairinfinitye': (
@@ -37,14 +37,14 @@ PROJECT_CONTEXTS = {
     ),
     'erdeniztech': (
         'ErdenizTech — kurumsal web ve ürün ekosistemi. SaaS, güvenlik, veri, otomasyon; '
-        'Dressifye, Garment-Core, MEHLR ve marka siteleriyle ilişkili mühendislik teslimatı.'
+        'Dressifye, MEHLR ve marka siteleriyle ilişkili mühendislik teslimatı.'
     ),
     'evidenceandtransparency': (
         'evidenceandtransparency — Dijital kanıt yönetimi ve kurumsal şeffaflık. Kanıt yükleme, '
         'sınıflandırma, zaman damgası, denetim raporları.'
     ),
     'general': (
-        'ErdenizTech genel — Tüm projelerin özet verileri. Looopone, WorkTrackere, Garment-Core, '
+        'ErdenizTech genel — Tüm projelerin özet verileri. Looopone, WorkTrackere, Dressifye, '
         'Hairinfinitye, EduLingoe, StyleCoree, DriveTrackere, Dressifye, evidenceandtransparency.'
     ),
 }
@@ -140,21 +140,21 @@ PROJECT_PROMPTS = {
     },
 
     # ─────────────────────────────────────────────
-    # Garment-Core — Giysi Yönetim Altyapısı
+    # Dressifye — Giysi Yönetim Altyapısı
     # ─────────────────────────────────────────────
     "dressifye-saas": {
         "name": "dressifye-saas",
         "domain": "garment_infrastructure",
         "website": "https://dressifye-saas.com",
-        "display_name": "Garment-Core",
+        "display_name": "Dressifye",
         "description": (
-            "Garment-Core, Dressifye ekosisteminin temel altyapı katmanıdır. "
+            "Dressifye platformu, Dressifye ekosisteminin temel altyapı katmanıdır. "
             "Kıyafet verilerini, beden tablolarını, kumaş özelliklerini ve "
             "ürün meta verilerini merkezi olarak yönetir. "
             "Diğer ErdenizTech fashion projelerine veri API'si sağlar."
         ),
         "system_prompt": (
-            "Sen Garment-Core platformunun AI asistanısın. "
+            "Sen Dressifye platformunun AI asistanısın. "
             "Görevin: kıyafet verilerini sınıflandırmak, beden tablolarını "
             "normalize etmek, ürün meta verilerini doğrulamak ve "
             "fashion data pipeline'larını optimize etmek. "
@@ -427,7 +427,7 @@ PROJECT_PROMPTS = {
         "display_name": "ErdenizTech",
         "description": (
             "ErdenizTech; ölçeklenebilir dijital ürünler, güvenlik, veri ve otomasyon "
-            "odaklı mühendislik şirketidir. Dressifye, Garment-Core, MEHLR ve "
+            "odaklı mühendislik şirketidir. Dressifye, MEHLR ve "
             "marka vitrin siteleriyle entegre bir ürün portföyü sunar."
         ),
         "system_prompt": (

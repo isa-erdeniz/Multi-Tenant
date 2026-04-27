@@ -15,7 +15,7 @@ alwaysApply: true
 ## 2. Kiracı (tenant) bağlamı
 
 - `request.tenant`, `TenantContextMiddleware` tarafından atanır; aynı istekte `set_current_tenant` / `reset_current_tenant` ile ORM manager ile uyumludur.
-- Yeni API veya view eklerken **`X-Garment-Core-Tenant-Slug`** / **`X-Tenant-Slug`** ve **domain** ile tenant çözümünü bozmayın; gerekirse aynı öncelik sırasını koruyun.
+- Yeni API veya view eklerken **`X-Dressifye-Tenant-Slug`** / **`X-Tenant-Slug`** ve **domain** ile tenant çözümünü bozmayın; gerekirse aynı öncelik sırasını koruyun.
 
 ## 3. Kota ve abonelik
 

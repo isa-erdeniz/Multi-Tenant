@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                     "slug",
                     models.SlugField(
                         db_index=True,
-                        help_text="URL ve X-Garment-Core-Tenant-Slug header ile eşleme",
+                        help_text="URL ve X-Dressifye-Tenant-Slug header ile eşleme",
                         max_length=120,
                         unique=True,
                     ),

@@ -359,7 +359,7 @@ def format_wardrobe_for_prompt(
 
 def build_core_context(user_id: str) -> dict[str, Any]:
     """
-    Garment-Core için birleşik bağlam: MEHLR tarafında saklanan HairInfinity + cross-tenant saç verisi.
+    Dressifye için birleşik bağlam: MEHLR tarafında saklanan HairInfinity + cross-tenant saç verisi.
     """
     try:
         user = DressifyeUser.objects.filter(external_id=str(user_id)).first()

@@ -12,7 +12,7 @@ PROJECT_CONTEXTS = {
         'Kuaför ve güzellik salonları hedef kitle.'
     ),
     'dressifye_saas': (
-        'Garment-Core — AI sanal kıyafet deneme. Görsel analiz, ürün kataloğu, dönüşüm verileri. '
+        'Dressifye — AI sanal kıyafet deneme. Görsel analiz, ürün kataloğu, dönüşüm verileri. '
         'E-ticaret / moda hedef kitle.'
     ),
     'hairinfinitye': (
@@ -32,7 +32,7 @@ PROJECT_CONTEXTS = {
         'Araç sahipleri hedef kitle.'
     ),
     'general': (
-        'ErdenizTech genel — Tüm projelerin özet verileri. Looopone, WorkTrackere, Garment-Core, '
+        'ErdenizTech genel — Tüm projelerin özet verileri. Looopone, WorkTrackere, Dressifye, '
         'Hairinfinitye, EduLingoe, StyleCoree, DriveTrackere.'
     ),
 }

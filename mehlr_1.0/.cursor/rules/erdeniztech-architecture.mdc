@@ -5,7 +5,7 @@ alwaysApply: true
 
 # ErdenizTech Multi-Tenant & AI Security Hub
 
-Tek **Railway** instance; dört domain aynı backend’e bağlanır, veri **Dressifye (Garment-Core / master)** altında birleşir.
+Tek **Railway** instance; dört domain aynı backend’e bağlanır, veri **Dressifye (Dressifye / master)** altında birleşir.
 
 ## Mimari özet
 

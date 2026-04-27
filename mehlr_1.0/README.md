@@ -39,7 +39,7 @@ python manage.py runserver
 
 ## Proje Bağlamları
 
-Admin panelinden **Projeler** ekleyebilir veya varsayılan bağlamlar kodda tanımlıdır (Looopone, WorkTrackere, Garment-Core, Hairinfinitye, EduLingoe, StyleCoree, DriveTrackere). Sohbet sırasında proje seçilerek ilgili bağlam Gemini'ye verilir.
+Admin panelinden **Projeler** ekleyebilir veya varsayılan bağlamlar kodda tanımlıdır (Looopone, WorkTrackere, Dressifye, Hairinfinitye, EduLingoe, StyleCoree, DriveTrackere). Sohbet sırasında proje seçilerek ilgili bağlam Gemini'ye verilir.
 
 ## Test
 

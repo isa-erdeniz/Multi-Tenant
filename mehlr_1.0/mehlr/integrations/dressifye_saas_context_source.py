@@ -1,6 +1,6 @@
 """
 dressifye-saas → Mehlr bağlam kaynağı.
-Garment-Core API'den (veya yerel DressifyeGarment) gardırop verisi çeker;
+Dressifye API'den (veya yerel DressifyeGarment) gardırop verisi çeker;
 mevcut DressifyeClient ile aynı arayüzü döndürür.
 """
 from __future__ import annotations

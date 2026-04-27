@@ -23,7 +23,7 @@ class TenantContextMiddleware:
     request.tenant: Tenant | None
 
     Çözüm sırası:
-    1) X-Garment-Core-Tenant-Slug veya X-Tenant-Slug
+    1) X-Dressifye-Tenant-Slug veya X-Tenant-Slug
     2) Origin → ecosystem registry → slug → Tenant
     3) Host eşlemesi (Tenant.domain, www. öneki atılır)
     4) Giriş yapmış kullanıcının tenant'ı (geliştirme / ana domain)
