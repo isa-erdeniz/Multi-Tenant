@@ -180,7 +180,7 @@ MEHLR_CONFIG = {
     'LOG_LEVEL': config('MEHLR_LOG_LEVEL', default='INFO'),
 }
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
-INTER_SERVICE_API_KEY = config('INTER_SERVICE_API_KEY', config('INTER_SERVICE_SECRET', default=''))
+INTER_SERVICE_API_KEY = config('INTER_SERVICE_API_KEY', default='')
 
 # Dressifye — harici API (Adım 2: dressifye_client)
 DRESSIFYE_API_URL = config('DRESSIFYE_API_URL', default='https://api.dressifye.com/v1')
