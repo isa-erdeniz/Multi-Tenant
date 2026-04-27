@@ -377,7 +377,7 @@ def api_chat_send(request):
     # Inter-service API key kontrolü
     if not request.user.is_authenticated:
         api_key = request.headers.get("X-API-Key", "")
-        inter_service_secret = getattr(settings, "INTER_SERVICE_SECRET", "")
+        inter_service_secret = getattr(settings, "INTER_SERVICE_API_KEY", "")
         if not inter_service_secret or api_key != inter_service_secret:
             return JsonResponse({"error": "Unauthorized"}, status=401)
 
